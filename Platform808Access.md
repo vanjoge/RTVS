@@ -41,7 +41,7 @@ RTVS会按照以下规则通过Post请求批量发送0x9105通知，需要网关
 
 |  字段   | 说明  |例子|
 |  ----  | ----  | ----  |
-| Content  |[JT0x9105SimItem](#JT0x9105SimItem) <b>数组</b>的JSON格式  |[{"Sim":"013777883221","NotifyList":[{"Channel":1,"PacketLossRate":0},{"Channel":2,"PacketLossRate":10}]},{"Sim":"013777883210","NotifyList":[{"Channel":1,"PacketLossRate":0}]}] |
+| Content  |[JT0x9105SimItem](#JT0x9105SimItem) <b>数组</b>的JSON  |[{"Sim":"013777883221","NotifyList":[{"Channel":1,"PacketLossRate":0},{"Channel":2,"PacketLossRate":10}]},{"Sim":"013777883210","NotifyList":[{"Channel":1,"PacketLossRate":0}]}] |
 
 返回要求，类型String 值如下表：
 
@@ -135,7 +135,7 @@ TODO：未来考虑取消此接口，与上级平台Redis相关接口整合。
 |  ----  | ----  |
 | 数据类型  | Hash |
 | Key  | AVParameters:[手机号] |
-| 值  | [JTRTAVParametersUpload](#JTRTAVParametersUpload) |
+| 值  | [JTRTAVParametersUpload](#JTRTAVParametersUpload) 的JSON |
 
 #### JTRTAVParametersUpload
 ```
@@ -316,7 +316,7 @@ RTVS向808平台发送查询音视频属性指令后，808平台收到设备应�
 |  ----  | ----  |
 | 数据类型  | Hash |
 | Key  | storage_settings |
-| 值  | [JTStorageSettings](#JTStorageSettings) |
+| 值  | [JTStorageSettings](#JTStorageSettings) 的JSON|
 #### JTStorageSettings
 ```
         /// <summary>
@@ -371,7 +371,7 @@ AUTHORIZE_CODE_2 为 跨域地区政府平台使用的时效口令
 |  ----  | ----  |
 | 类型  | String |
 | Key  | [车牌号码].[车牌颜色].[逻辑通道号].[音视频标志]|
-| 值  |real@[[JTSDownRealVideoRequest](#JTSDownRealVideoRequest) 的JSON格式]  |
+| 值  |real@[[JTSDownRealVideoRequest](#JTSDownRealVideoRequest) 的JSON]  |
 
 ##### JTSDownRealVideoRequest
 ```
@@ -398,7 +398,7 @@ AUTHORIZE_CODE_2 为 跨域地区政府平台使用的时效口令
 |  ----  | ----  |
 | 类型  | String |
 | Key  | [车牌号码].[车牌颜色].[逻辑通道号].[音视频标志]|
-| 值  |back@[[JTRTDownPlayBackMsgStartUp](#JTRTDownPlayBackMsgStartUp) 的JSON格式]  |
+| 值  |back@[[JTRTDownPlayBackMsgStartUp](#JTRTDownPlayBackMsgStartUp) 的JSON]  |
 ##### JTRTDownPlayBackMsgStartUp
 ```
     /// <summary>
@@ -436,7 +436,7 @@ AUTHORIZE_CODE_2 为 跨域地区政府平台使用的时效口令
 |  ----  | ----  |
 | 类型  | Publish |
 | Key  | transcode_mp4_upload_ftp_start |
-| 值  | [TranscodeUploadStart](#TranscodeUploadStart) |
+| 值  | [TranscodeUploadStart](#TranscodeUploadStart) 的JSON|
 ```
 
     public class TranscodeUploadStart
@@ -510,7 +510,7 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
 |  ----  | ----  |
 | 类型  | Subscribe 或 String 由 [TranscodeUploadStart.redis_mode]决定 |
 | Key  | [TranscodeUploadStart指定的redis_key] |
-| 值  | [TranscodeUploadFinish](#TranscodeUploadFinish) |
+| 值  | [TranscodeUploadFinish](#TranscodeUploadFinish) 的JSON|
 
 #### TranscodeUploadFinish
 ```
@@ -535,7 +535,7 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
 |  ----  | ----  |
 | 类型  | String |
 | Key  | SIM_CONFIG_FOR_RTVS_[手机号] |
-| 值  | [SimLimiteConfig](#SimLimiteConfig) |
+| 值  | [SimLimiteConfig](#SimLimiteConfig) 的JSON|
 ```
     /// <summary>
     /// 每个设备sim一个配置
