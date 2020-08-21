@@ -26,7 +26,7 @@ RTVS会按照以下规则通过Get请求发送0x9101、0x9201、0x9202等808指�
 |  消息ID   | 类型 | 返回数据  |
 |  ----  | ----  | ----  |
 | 0x9206   |String| "0"：车辆不在线<br> "-1"：失败<br> 其他：应答流水号 |
-| 0x9201,0x9205 |String|  "0"：车辆不在线<br>  "-1"：失败<br> 其他：指令ID | 
+| 0x9201,0x9205 |String|  "0"：车辆不在线<br>  "-1"：失败<br> 其他：指令ID(redis接口中[录像列表应答](#录像列表应答)会用到此ID) | 
 | 其他  |String|"0"：车辆不在线<br> "-1"：失败<br>  "1"：成功（仅指将指令成功发送到网关） | 
 
 ### 0x9105实时音视频传输状态通知
@@ -203,7 +203,7 @@ RTVS向808平台发送查询音视频属性指令后，808平台收到设备应�
 |  类别   | 值  |
 |  ----  | ----  |
 | 数据类型  | String |
-| Key  | OCX_ORDERINFO_[录像列表查询ID] |
+| Key  | OCX_ORDERINFO_[发起指令时HTTP接口返回的指令ID] |
 | 值  | [VideoOrderAck](#VideoOrderAck) 的JSON ,其中Data为[JTVideoListInfo](#JTVideoListInfo) 的JSON|
 
 #### VideoOrderAck
