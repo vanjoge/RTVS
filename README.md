@@ -7,8 +7,9 @@
 > JT/T 1078-2016 道路运输车辆卫星定位系统 视频通讯协议
 
 ## 808平台接入指南
-[请参阅文档](Platform808Access.md)
+[808平台(网关)接入文档](Platform808Access.md)
 
+[页面(js)接入文档](JsAccess.md)
 
 
 ## 特色：
