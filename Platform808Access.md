@@ -10,7 +10,7 @@ RTVS会按照以下规则通过Get请求发送0x9101、0x9201、0x9202等808指�
 
     [配置的网关HTTP接口地址]VideoControl?Content=808协议16进制字符串&IsSuperiorPlatformSend=是否是上级平台发送
 
-    例1:http://127.0.0.1:8888/WebService/VideoControl?Content=9101001401377788321025C20C31302E31302E31302E3233304CF40000010001
+    例1:http://127.0.0.1:8888/WebService/VideoControl?Content=9101001401377788321025C20C31302E31302E31302E3233304CF40000010001&IsSuperiorPlatformSend=true
 
     例2:http://127.0.0.1:8888/WebService/VideoControl?Content=920200090112464004260003030500200820172042
 
