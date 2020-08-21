@@ -6,7 +6,7 @@
 * [根据车牌和车牌颜色获取手机号](#根据车牌和车牌颜色获取手机号)
 
 ### 808指令
-RTVS会按照以下规则通过Get请求发送0x9101、0x9201、0x9202等808指令，需要网关实现以下HTTP接口。
+RTVS会按照以下规则通过Get请求发送0x9101、0x9201、0x9202、0x9205等1078规定走808通道指令，需要网关实现以下HTTP接口。
 
     [配置的网关HTTP接口地址]VideoControl?Content=808协议16进制字符串&IsSuperiorPlatformSend=是否是上级平台发送
 
@@ -18,7 +18,7 @@ RTVS会按照以下规则通过Get请求发送0x9101、0x9201、0x9202等808指�
 
 |  字段   | 说明  |例子|
 |  ----  | ----  | ----  |
-| Content  | 808协议16进制字符串(包头+包体)<br>包头不含7E、未转义、<font color=red>流水号需要808平台替换</font>  | 9101001401377788321025C20C31302E31302E31302E3233304CF40000010001|
+| Content  | 808协议16进制字符串(包头+包体)<br>包头不含7E、未转义、<b>流水号需要808平台替换</b>  | 9101001401377788321025C20C31302E31302E31302E3233304CF40000010001|
 | IsSuperiorPlatformSend  | 是否是上级平台发送，网关可用此字段确定是否由上级平台发起。<br>一般为true才会包含此字段，为false时此字段不传 | true|
 
 返回要求，类型String 值如下表：
@@ -41,7 +41,7 @@ RTVS会按照以下规则通过Post请求批量发送0x9105通知，需要网关
 
 |  字段   | 说明  |例子|
 |  ----  | ----  | ----  |
-| Content  |[JT0x9105SimItem](#JT0x9105SimItem) <font color=red>数组</font>的JSON格式  |[{"Sim":"013777883221","NotifyList":[{"Channel":1,"PacketLossRate":0},{"Channel":2,"PacketLossRate":10}]},{"Sim":"013777883210","NotifyList":[{"Channel":1,"PacketLossRate":0}]}] |
+| Content  |[JT0x9105SimItem](#JT0x9105SimItem) <b>数组</b>的JSON格式  |[{"Sim":"013777883221","NotifyList":[{"Channel":1,"PacketLossRate":0},{"Channel":2,"PacketLossRate":10}]},{"Sim":"013777883210","NotifyList":[{"Channel":1,"PacketLossRate":0}]}] |
 
 返回要求，类型String 值如下表：
 
