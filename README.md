@@ -26,10 +26,10 @@
 
 ## 已测试
 
-> Windows： Chrome Firefox 
-> Linux： Chrome Firefox
-> Android： Chrome Firefox 微信网页 QQ网页
-> Mac： Safari Chrome
+> Windows： Chrome Firefox  
+> Linux： Chrome Firefox  
+> Android： Chrome Firefox 微信网页 QQ网页  
+> Mac： Safari Chrome  
 > IOS： Safari
 
 ## 延迟测试
