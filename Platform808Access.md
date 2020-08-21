@@ -204,7 +204,7 @@ RTVS向808平台发送查询录像列表指令后，808平台收到设备应答�
 |  ----  | ----  |
 | 数据类型  | String |
 | Key  | OCX_ORDERINFO_[发起指令时HTTP接口返回的指令ID] |
-| 值  | [VideoOrderAck](#VideoOrderAck) 的JSON ,其中Data为[JTVideoListInfo](#JTVideoListInfo) 的JSON|
+| 值  | [VideoOrderAck](#VideoOrderAck) 的JSON ,其中Data为[JTVideoListInfo](#JTVideoListInfo) 的JSON,如果指令失败将Data置为null|
 
 #### VideoOrderAck
 ```
