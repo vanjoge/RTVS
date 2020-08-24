@@ -135,7 +135,7 @@ TODO：未来考虑取消此接口，与上级平台Redis相关接口整合。
 |  ----  | ----  |
 | 数据类型  | Hash |
 | Key  | AVParameters:[手机号] |
-| 值  | [JTRTAVParametersUpload](#JTRTAVParametersUpload) 的JSON |
+| 值  | [JTRTAVParametersUpload](#JTRTAVParametersUpload)  |
 
 #### JTRTAVParametersUpload
 ```
@@ -316,7 +316,7 @@ RTVS向808平台发送查询录像列表指令后，808平台收到设备应答�
 |  ----  | ----  |
 | 数据类型  | Hash |
 | Key  | storage_settings |
-| 值  | [JTStorageSettings](#JTStorageSettings) 的JSON|
+| 值  | [JTStorageSettings](#JTStorageSettings) |
 #### JTStorageSettings
 ```
         /// <summary>
