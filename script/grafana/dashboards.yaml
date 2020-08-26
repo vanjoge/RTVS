@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+- name: '在线数量图表'
+  orgId: 1
+  folder: ''
+  type: file
+  disableDeletion: false
+  updateIntervalSeconds: 10 #how often Grafana will scan for changed dashboards
+  options:
+    path: /etc/grafana/provisioning/dashboards/zaixin.json

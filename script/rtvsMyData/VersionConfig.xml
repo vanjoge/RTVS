@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VersionConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <VersionFirst>1</VersionFirst>
+  <VersionSecond>2</VersionSecond>
+  <VersionThird>3</VersionThird>
+  <UpgradeTag>VersionThird</UpgradeTag>
+  <CurrentVersion>1.0.0</CurrentVersion>
+  <UpgradeContent>RTVS1.0版本</UpgradeContent>
+  <UpgradeDatetime>2020-08-25 16:09:00</UpgradeDatetime>
+</VersionConfig>
