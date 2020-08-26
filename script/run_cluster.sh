@@ -4,7 +4,7 @@ echo "当前执行文件......$0"
 ##################################变量定义##################################
 DOCKER_CONTAINER_NAME=${DOCKER_CONTAINER_NAME:-"cvcluster-1"}
 DOCKER_CONTAINER_PATH=${DOCKER_CONTAINER_PATH:-"/etc/service/$DOCKER_CONTAINER_NAME"}
-DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME:-"vanjoge/rtvs:1.0.0"}
+DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME:-"vanjoge/cvcluster:1.0.0"}
 #外网IP
 
 #端口  
@@ -56,7 +56,7 @@ function init_system_files_path()
  
 function docker_run(){
     #启动RTVS
-    docker run  --name $DOCKER_CONTAINER_NAME --net $DOCKER_NETWORK --ip $DOCKER_CVCLUSTER_IP --restart always  --privileged=true  -v $DOCKER_CONTAINER_PATH:/MyData  -e MyDataPath=/MyData -p $DOCKER_HTTP_PORT:80 -p $DOCKER_HTTPS_PORT:443  -p $DOCKER_WEBSOCKET_PORT:17000  -d DOCKER_IMAGE_NAME
+    docker run  --name $DOCKER_CONTAINER_NAME --net $DOCKER_NETWORK --ip $DOCKER_CVCLUSTER_IP --restart always  --privileged=true  -v $DOCKER_CONTAINER_PATH:/MyData  -e MyDataPath=/MyData -p $DOCKER_HTTP_PORT:80 -p $DOCKER_HTTPS_PORT:443  -p $DOCKER_WEBSOCKET_PORT:17000  -d $DOCKER_IMAGE_NAME
 }
 function main(){
     echo "依耐文件检查...."
