@@ -4,7 +4,7 @@ JS视频播放插件
 ----
 引用
 ```
- <script type="text/javascript" src="/dist/CvNetVideo.js"></script>
+ <script type="text/javascript" src="http://lib.cvtsp.com/video/CVNetVideoJs/1.1.0/CvNetVideo.js"></script>
 
 ```
 API说明
