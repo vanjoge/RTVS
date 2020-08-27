@@ -13,7 +13,7 @@
 ## 808平台接入指南
 [前端页面接入文档](JsAccess.md)
 
-[js控件测试页面说明](test/README.md)
+[js控件测试页面说明](test/)
 
 
 [后台接入文档](Platform808Access.md)
