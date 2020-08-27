@@ -1,0 +1,585 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>CvNetVideo_js_1.1.0控件测试</title>
+    <script type="text/javascript" src="http://lib.cvtsp.com/video/CVNetVideoJs/1.1.0/CvNetVideo.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+    <style>
+        select, input {
+            width: 160px;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h1>播放测试</h1>
+        <div>
+            <h3>控件参数</h3>
+            <table style="table-layout:fixed">
+                <tr>
+                    <td>分屏数量:</td>
+                    <td>
+                        <select id="cmbScreenNumbers" onchange="Screens(this.value)">
+                            <option value="1">1=1x1</option>
+                            <option value="4" selected="selected">4=2x2</option>
+                            <option value="6">6=1+5</option>
+                            <option value="8">8=1+7</option>
+                            <option value="9">9=3x3</option>
+                            <option value="10">10=1+9</option>
+                            <option value="13">13=1+12</option>
+                            <option value="16">16=4x4</option>
+                        </select>
+                    </td>
+                    <td>播放器类型:</td>
+                    <td>
+                        <select id="cmdPlayerType" onchange="PlayerChanged()">
+                            <option value="0" selected="selected">实时流播放器</option>
+                            <option value="1">历史流播放器</option>
+                        </select>
+                    </td>
+                    <td>服务器:</td>
+                    <td>
+                        <input id="txtserveradd" value="127.0.0.1" />
+                    </td>
+                    <td>端口:</td>
+                    <td>
+                        <input id="txtport" value="17000" />
+                    </td>
+                </tr>
+            </table>
+            <h3>指令参数</h3>
+            <table style="table-layout:fixed">
+                <tr>
+                    <td>
+                        <button onclick="Connect(0)" disabled>实时视频(0x9101)</button>
+                    </td>
+                    <td>SIM卡号:</td>
+                    <td><input id="txtsim" value="013777883241" /></td>
+                    <td>通道:</td>
+                    <td>
+                        <select id="cmbChannel">
+                            <option value="1" selected="selected">通道1</option>
+                            <option value="2">通道2</option>
+                            <option value="3">通道3</option>
+                            <option value="4">通道4</option>
+                            <option value="5">通道5</option>
+                            <option value="6">通道6</option>
+                            <option value="7">通道7</option>
+                            <option value="8">通道8</option>
+                        </select>
+                    </td>
+                    <td>码流类型:</td>
+                    <td>
+                        <select id="cmbStreamType">
+                            <option value="0">主码流</option>
+                            <option value="1" selected="selected">子码流</option>
+                        </select>
+                    </td>
+                    <td>音视频类型:</td>
+                    <td>
+                        <select id="cmbMideaType">
+                            <option value="0" selected="selected">音视频</option>
+                            <option value="1">音频</option>
+                            <option value="2">视频</option>
+                            <option value="3">音频或视频</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+
+                        <button onclick="AVTransferControl(0)" disabled>实时控制(0x9102)</button>
+                    </td>
+                    <td>控制指令:</td>
+                    <td>
+                        <select id="cmbControlCommand">
+                            <option value="0" selected="selected">关闭音视频传输指令</option>
+                            <option value="1">切换码流（增加暂停和继续）</option>
+                            <option value="2">暂停该通道所有流的发送</option>
+                            <option value="3">恢复暂停前流的发送，与暂停前的流类型一致</option>
+                            <option value="4">关闭双向对讲</option>
+                        </select>
+                    </td>
+                    <td>关闭类型:</td>
+                    <td>
+                        <select id="cmbTurnOffMediaType">
+                            <option value="0" selected="selected">关闭该通道有关的音视频数据</option>
+                            <option value="1">只关闭该通道有关的音频，保留该通道有关的视频</option>
+                            <option value="2">只关闭该通道有关的视频，保留该通道有关的音频</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+
+            <table style="table-layout:fixed">
+                <tr>
+                    <td>
+
+                        <button onclick="QueryVideoFileList(0)" disabled>查询列表(0x9205)</button>
+                    </td>
+                    <td>开始时间:</td>
+                    <td><input id="txtStarttime" value="2018-10-29 00:00:00" type="datetime" /></td>
+                    <td>结束时间:</td>
+                    <td><input id="txtEndtime" value="2018-10-29 17:00:00" type="datetime" /></td>
+                    <td>报警标志:</td>
+                    <td>
+                        <input id="numAlarm" value="1892833243" type="number" />
+                    </td>
+                    <td>存储器类型:</td>
+                    <td>
+                        <select id="cmbStorageType">
+                            <option value="0">主存储器或灾备存储器</option>
+                            <option value="1" selected="selected">主存储器</option>
+                            <option value="2">灾备储器</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+
+                    <td>
+                        <button onclick="PlaybackVideo(0)" disabled>开始回放(0x9201)</button>
+                    </td>
+
+                    <td>回放方式:</td>
+                    <td>
+                        <select id="cmbPlaybackMode">
+                            <option value="0" selected="selected">正常回放</option>
+                            <option value="1">快进回放</option>
+                            <option value="2">关键帧快退回放</option>
+                            <option value="3">关键帧播放</option>
+                            <option value="4">单帧上传</option>
+                        </select>
+                    </td>
+                    <td>快进或快退倍数:</td>
+                    <td>
+                        <select id="cmbMultiple">
+                            <option value="1" selected="selected">1倍</option>
+                            <option value="2">2倍</option>
+                            <option value="3">4倍</option>
+                            <option value="4">8倍</option>
+                            <option value="5">16倍</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button onclick="PlaybackVideoControl(0)" disabled>回放控制(0x9202)</button>
+                    </td>
+                    <td>回放控制:</td>
+                    <td>
+                        <select id="cmbPlaybackControl">
+                            <option value="0" selected="selected">开始回放</option>
+                            <option value="1">暂停回放</option>
+                            <option value="2">结束回放</option>
+                            <option value="3">快进回放</option>
+                            <option value="4">关键帧快退回放</option>
+                            <option value="5">拖动回放</option>
+                            <option value="6">关键帧播放</option>
+                        </select>
+                    </td>
+                    <td>拖放回位置:</td>
+                    <td><input id="txtDragPlaybackPosition" value="2018-10-29 16:00:00" type="datetime" /></td>
+                </tr>
+            </table>
+            <table style="table-layout:fixed">
+                <tr>
+                    <td>
+                        <button onclick="FtpVideoFileUpload(0)" disabled>FTP上传(0x9206)</button>
+                    </td>
+                    <td>FTP服务器:</td>
+                    <td><input id="ftpAddress" value="117.74.136.34" type="text" /></td>
+                    <td>FTP端口:</td>
+                    <td><input id="ftpPort" value="21" type="number" /></td>
+                    <td>文件上传路径:</td>
+                    <td> <input id="ftpUploadPath" value="ftp://117.74.136.34/mediaFilesUpload" type="text" /></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>用户名:</td>
+                    <td><input id="ftpUsr" value="ftpusr" type="text" /></td>
+                    <td>密码:</td>
+                    <td><input id="ftpPwd" value="hangsheng@Ftp" type="password" /></td>
+                    <td>执行条件:</td>
+                    <td>
+                        <select id="taskCondition">
+                            <option value="0" selected="selected">WIFI</option>
+                            <option value="1">LAN</option>
+                            <option value="2">3G/4G</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button onclick="FtpVideoFileUploadControl(0)" disabled>FTP控制(0x9207)</button>
+                    </td>
+                    <td>应答流水号:</td>
+                    <td><input id="cmdSerialNumber" type="number" /></td>
+                    <td>上传控制:</td>
+                    <td>
+                        <select id="cmdUploadControl">
+                            <option value="0" selected="selected">暂停</option>
+                            <option value="1">继续</option>
+                            <option value="2">取消</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+        <div id="btns">
+            <div>
+                <h3>控制</h3>
+                <button onclick="Colse(0)" disabled>关闭当前选中视频</button>
+                <button onclick="Colse(-1)" disabled>关闭所有视频</button>
+            </div>
+            <div id="playbackbyday" style="display:none">
+                <h3>按天回放</h3>
+                回放日期:<input id="txtPlayBackDatetime" value="2019-03-06" type="datetime" />
+                <button onclick="StartBackVideo(0)" disabled>显示当天可播放视频</button>
+            </div>
+            <div id="player" style="width:1200px;height:982px;background:rgb(0, 0, 0);">
+            </div>
+            <div id="videoFileList" style="height:auto;width:100%;"></div>
+        </div>
+    </div>
+    <script>
+
+        window.onload = function () {
+            console.log(CvNetVideo.version);
+            //this.setTimeout(init, 2000);
+            init();
+
+        };
+
+        function WindowResize() {
+            var width = document.body.clientWidth - 10;
+            var height = width * 2 / 3;
+            document.getElementById("player").style.width = width + 'px';
+            document.getElementById("player").style.height = height + 'px';
+            CvNetVideo.Resize(width, height);
+        }
+
+        window.addEventListener("resize", WindowResize);
+
+        function PlayerChanged() {
+            if (document.querySelector('#cmdPlayerType').value == "0") {
+                CvNetVideo.SetRealOrBack(true);
+                document.querySelector("#playbackbyday").style.display = "none";
+            } else {
+                CvNetVideo.SetRealOrBack(false);
+                document.querySelector("#playbackbyday").style.display = "";
+            }
+        } function getPlayerMode() {
+            var playerMode = getQueryString("m");
+            if (playerMode == null) {
+                return 4;
+            }
+            return parseInt(playerMode);
+        }
+        function getQueryString(name) {
+            var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) {
+                return unescape(r[2]);
+            }
+            return null;
+        }
+
+        function init() {
+            CvNetVideo.Init(document.querySelector("#player"),document.querySelector("#cmbScreenNumbers").value,
+                {
+                    callback: function () {
+                        [].forEach.call(document.querySelectorAll("button"), function (btn) {
+                            btn.disabled = false;
+                        });
+                    },
+                    playerMode: getPlayerMode()
+                });
+            //CvNetVideo.SetRealOrBack(false);
+            //CvNetVideo.SetBackDateTime(
+            //    document.querySelector('#txtsim').value,
+            //    parseInt(document.querySelector('#cmbChannel').value),
+            //    "2019-03-06",
+            //    1,
+            //    document.querySelector('#numAlarm').value,
+            //    parseInt(document.querySelector('#cmbMideaType').value),
+            //    parseInt(document.querySelector('#cmbStreamType').value),
+            //    parseInt(document.querySelector('#cmbStorageType').value),
+            //    {
+            //        clusterHost: document.querySelector("#txtserveradd").value,
+            //        clusterPort: document.querySelector("#txtport").value
+            //    });
+        }
+
+        function changeControls(controls) {
+            document.querySelectorAll("video").forEach(function(p)
+			{
+				p.controls = true; 
+			}
+			);
+        }
+        //实时流
+        function Connect(id) {
+            CvNetVideo.StartRealTimeVideo(
+                document.querySelector('#txtsim').value,
+                parseInt(document.querySelector('#cmbChannel').value),
+                parseInt(document.querySelector('#cmbStreamType').value),
+                true,
+                id,
+                {
+                    clusterHost: document.querySelector("#txtserveradd").value,
+                    clusterPort: document.querySelector("#txtport").value
+                }
+            );
+        }
+        //开始历史
+        function StartBackVideo(id) {
+
+            CvNetVideo.SetBackDateTime(
+                document.querySelector('#txtsim').value,
+                parseInt(document.querySelector('#cmbChannel').value),
+                document.querySelector('#txtPlayBackDatetime').value,
+                id,
+                document.querySelector('#numAlarm').value,
+                parseInt(document.querySelector('#cmbMideaType').value),
+                parseInt(document.querySelector('#cmbStreamType').value),
+                parseInt(document.querySelector('#cmbStorageType').value),
+                {
+                    clusterHost: document.querySelector("#txtserveradd").value,
+                    clusterPort: document.querySelector("#txtport").value
+                    //remoteHost: "127.0.0.1",
+                    //remotePortWs: "18002",
+                    //usingCluster: false
+                }
+            );
+        }
+        function AVTransferControl(id) {
+            CvNetVideo.AVTransferControl(
+                document.querySelector('#txtsim').value,
+                parseInt(document.querySelector('#cmbChannel').value),
+                parseInt(document.querySelector('#cmbControlCommand').value),
+                parseInt(document.querySelector('#cmbStreamType').value),
+                parseInt(document.querySelector('#cmbTurnOffMediaType').value),
+                id,
+                {
+                    clusterHost: document.querySelector("#txtserveradd").value,
+                    clusterPort: document.querySelector("#txtport").value
+                }
+            );
+        }
+        function PlaybackVideo(id) {
+            CvNetVideo.PlaybackVideo(
+                document.querySelector('#txtsim').value,
+                parseInt(document.querySelector('#cmbChannel').value),
+                parseInt(document.querySelector('#cmbMideaType').value),
+                parseInt(document.querySelector('#cmbStreamType').value),
+                parseInt(document.querySelector('#cmbStorageType').value),
+                parseInt(document.querySelector('#cmbPlaybackMode').value),
+                parseInt(document.querySelector('#cmbMultiple').value),
+                document.querySelector('#txtStarttime').value,
+                document.querySelector('#txtEndtime').value,
+                id,
+                {
+                    clusterHost: document.querySelector("#txtserveradd").value,
+                    clusterPort: document.querySelector("#txtport").value
+                }
+            );
+        }
+        function PlaybackVideoControl(id) {
+            CvNetVideo.PlaybackVideoControl(
+                document.querySelector('#txtsim').value,
+                parseInt(document.querySelector('#cmbChannel').value),
+                parseInt(document.querySelector('#cmbPlaybackControl').value),
+                parseInt(document.querySelector('#cmbMultiple').value),
+                document.querySelector('#txtDragPlaybackPosition').value,
+                id,
+                {
+                    clusterHost: document.querySelector("#txtserveradd").value,
+                    clusterPort: document.querySelector("#txtport").value
+                }
+            );
+        }
+        function QueryVideoFileList(id) {
+            CvNetVideo.QueryVideoFileList(
+                document.querySelector('#txtsim').value,
+                parseInt(document.querySelector('#cmbChannel').value),
+                DateToUnixLong(document.querySelector('#txtStarttime').value),
+                DateToUnixLong(document.querySelector('#txtEndtime').value),
+                document.querySelector('#numAlarm').value,
+                parseInt(document.querySelector('#cmbMideaType').value),
+                parseInt(document.querySelector('#cmbStreamType').value),
+                parseInt(document.querySelector('#cmbStorageType').value),
+                QueryVideoFileListCallback,
+                id,
+                {
+                    clusterHost: document.querySelector("#txtserveradd").value,
+                    clusterPort: document.querySelector("#txtport").value
+                    //remoteHost: "127.0.0.1",
+                    //remotePortWs: "18002",
+                    //usingCluster: false
+                }
+            );
+        }
+        function QueryVideoFileListCallback(data) {
+            alert("查询音视频文件列表成功!");
+            // 填充HTML展示数据
+            FillDataToShow(data);
+            // 页面滚动至至指定位置
+            document.querySelector("#videoFileList").scrollIntoView();
+        }
+        function FillDataToShow(data) {
+            var div = document.getElementById("videoFileList");
+            div.innerHTML = "";
+            var p = document.createElement("p");
+            p.innerHTML = "<h2 align='left'>音视频查询结果信息：<h2>";
+            div.appendChild(p);
+            var p_total = document.createElement("p");
+            p_total.innerHTML = "序列号(SerialNumber):" + data.SerialNumber + "\t 文件数量(FileCount):" + data.FileCount + "\t文件集合数据个数(FileList.length):" + data.FileList.length;
+            div.appendChild(p_total);
+            // 定义表格和头
+            var table = document.createElement("table");
+            table.border = "1px";
+            var tr = document.createElement("tr");
+            var td1 = document.createElement("th");
+            td1.innerText = "通道号(Channel)";
+            var td2 = document.createElement("th");
+            td2.innerText = "开始时间(StartTime)";
+            var td3 = document.createElement("th");
+            td3.innerText = "结束时间(EndTime)";
+            var td4 = document.createElement("th");
+            td4.innerText = "报警类型(Alarm)";
+            var td5 = document.createElement("th");
+            td5.innerText = "媒体类型(MediaType)";
+            var td6 = document.createElement("th");
+            td6.innerText = "码流类型(StreamType)";
+            var td7 = document.createElement("th");
+            td7.innerText = "存储器类型(StorageType)";
+            var td8 = document.createElement("th");
+            td8.innerText = "文件大小(FileSize)";
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            tr.appendChild(td3);
+            tr.appendChild(td4);
+            tr.appendChild(td5);
+            tr.appendChild(td6);
+            tr.appendChild(td7);
+            tr.appendChild(td8);
+            table.appendChild(tr);
+            // 遍历文件信息
+            if (data.FileList.length > 0) {
+                for (var i = 0, j = data.FileList.length; i < j; i++) {
+                    var item = data.FileList[i];
+                    var tr = document.createElement("tr");
+                    var td1 = document.createElement("td");
+                    td1.innerText = item.Channel;
+                    var td2 = document.createElement("td");
+                    td2.innerText = item.StartTime;
+                    var td3 = document.createElement("td");
+                    td3.innerText = item.EndTime;
+                    var td4 = document.createElement("td");
+                    td4.innerText = item.Alarm;
+                    var td5 = document.createElement("td");
+                    td5.innerText = item.MediaType;
+                    var td6 = document.createElement("td");
+                    td6.innerText = item.StreamType;
+                    var td7 = document.createElement("td");
+                    td7.innerText = item.StorageType;
+                    var td8 = document.createElement("td");
+                    td8.innerText = item.FileSize;
+                    tr.appendChild(td1);
+                    tr.appendChild(td2);
+                    tr.appendChild(td3);
+                    tr.appendChild(td4);
+                    tr.appendChild(td5);
+                    tr.appendChild(td6);
+                    tr.appendChild(td7);
+                    tr.appendChild(td8);
+                    table.appendChild(tr);
+                }
+                table.style.color = "green";
+            } else {
+                var tr = document.createElement("tr");
+                var td = document.createElement("td");
+                td.innerText = "FileList集合数据为空，无法遍历相应的列表数据!";
+                td.setAttribute("colspan", 8);
+                tr.appendChild(td);
+                table.appendChild(tr);
+                table.style.color = "red";
+            }
+            div.appendChild(table);
+        }
+        function FtpVideoFileUpload(id) {
+            CvNetVideo.FtpVideoFileUpload(
+                document.querySelector('#txtsim').value,
+                parseInt(document.querySelector('#cmbChannel').value),
+                document.querySelector('#ftpAddress').value,
+                parseInt(document.querySelector('#ftpPort').value),
+                document.querySelector('#ftpUsr').value,
+                document.querySelector('#ftpPwd').value,
+                document.querySelector('#ftpUploadPath').value,
+                ParseDate(document.querySelector('#txtStarttime').value),
+                ParseDate(document.querySelector('#txtEndtime').value),
+                document.querySelector('#numAlarm').value,
+                parseInt(document.querySelector('#cmbMideaType').value),
+                parseInt(document.querySelector('#cmbStreamType').value),
+                parseInt(document.querySelector('#cmbStorageType').value),
+                parseInt(document.querySelector("#taskCondition").value),
+                FtpVideoFileUploadCallback,
+                id,
+                {
+                    clusterHost: document.querySelector("#txtserveradd").value,
+                    clusterPort: document.querySelector("#txtport").value
+                }
+            );
+        }
+        function FtpVideoFileUploadCallback(data) {
+            if (data.Result === 0) {
+                document.getElementById("cmdSerialNumber").value = data.SerialNumber;
+                alert("FTP上传成功(SerialNumber=" + data.SerialNumber + ")!");
+            } else if (data.Result === 1) {
+                alert("FTP上传失败!");
+            }
+            if (data.Result === 2) {
+                document.getElementById("cmdSerialNumber").value = data.SerialNumber;
+                alert("FTP上传指令下发成功(SerialNumber=" + data.SerialNumber + ")!");
+            }
+
+        }
+        function FtpVideoFileUploadControl(id) {
+            CvNetVideo.FtpVideoFileUploadControl(
+                document.querySelector('#txtsim').value,
+                parseInt(document.querySelector('#cmdSerialNumber').value),
+                parseInt(document.querySelector('#cmdUploadControl').value),
+                id,
+                {
+                    clusterHost: document.querySelector("#txtserveradd").value,
+                    clusterPort: document.querySelector("#txtport").value
+                }
+            );
+        }
+        function Colse(id) {
+            CvNetVideo.Stop(id);
+        }
+        function Screens(num) {
+            CvNetVideo.LayoutByScreens(num);
+        }
+
+        function ParseDate(date) {
+            var t = Date.parse(date);
+            if (isNaN(t)) {
+                return new Date(Date.parse(date.replace(/-/g, "/")));
+            } else {
+                return new Date(t);
+            }
+        }
+
+        function DateToUnixLong(date) {
+            return Date.parse(ParseDate(date)) / 1000;
+        }
+    </script>
+</body>
+</html>
