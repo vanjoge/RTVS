@@ -6,12 +6,15 @@
 > 
 > JT/T 1078-2016 道路运输车辆卫星定位系统 视频通讯协议
 
-## 启动脚本
+## 启动方法
 [启动脚本见此文档](script/README.md)
 
 
 ## 808平台接入指南
 [前端页面接入文档](JsAccess.md)
+
+[js控件测试页面说明](test/README.md)
+
 
 [后台接入文档](Platform808Access.md)
 
