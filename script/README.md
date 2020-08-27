@@ -26,7 +26,7 @@ export GatewayBaseAPI=http://10.10.10.110:8888/WebService/
 #设置redis连接字符串
 export RedisExchangeHosts=10.10.10.126:7000,10.10.10.126:7001,10.10.10.126:7002,10.10.10.126:7003,10.10.10.126:7004,10.10.10.126:7005,connectTimeout=20000,syncTimeout=20000,responseTimeout=20000
 
-#其他参数请自定查看脚本 一般无需修改
+#其他参数请自行查看脚本 一般无需修改
 sudo -E ./run_rtvs.sh
 ```
 
