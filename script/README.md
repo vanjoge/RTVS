@@ -9,9 +9,9 @@ sudo ./docker_network.sh
 2. 启动集群管理
 ```bash
 #DOCKER_HTTP_PORT HTTP映射端口 默认30888
-#DOCKER_HTTP_PORT=30888
+#export DOCKER_HTTP_PORT=30888
 #DOCKER_WEBSOCKET_PORT 设备连接端口 默认17000
-#DOCKER_WEBSOCKET_PORT=17000
+#export DOCKER_WEBSOCKET_PORT=17000
 
 sudo -E ./run_cluster.sh
 ```
@@ -22,7 +22,7 @@ sudo -E ./run_cluster.sh
 此脚本会自动启动一个redis，连接地址为172.29.108.245:6379
 ``` bash
 #DOCKER_808_PORT 808设备接入端口 默认9300
-#DOCKER_808_PORT=9300
+#export DOCKER_808_PORT=9300
 
 sudo -E ./run_gw.sh
 ```
