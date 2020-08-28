@@ -21,6 +21,8 @@ DOCKER_REDIS_IP=${DOCKER_REDIS_IP:-"172.29.108.245"}
 function docker_run(){
     #启动redis
     docker run  --name $DOCKER_REDIS_NAME --net $DOCKER_NETWORK --ip $DOCKER_REDIS_IP --restart always  --privileged=true   -d $DOCKER_REDIS_IMAGE_NAME
+    
+    docker rm -f $DOCKER_CONTAINER_NAME
     #启动gw
     docker run  --name $DOCKER_CONTAINER_NAME --net $DOCKER_NETWORK --ip $DOCKER_GW_IP --restart always  --privileged=true  -p $DOCKER_808_PORT:9300 -d $DOCKER_IMAGE_NAME
 }
