@@ -21,6 +21,8 @@ sudo -E ./run_cluster.sh
 
 此脚本会自动启动一个redis，连接地址为172.29.108.245:6379
 ``` bash
+#DOCKER_808_PORT 808设备接入端口 默认9300
+#DOCKER_808_PORT=9300
 
 sudo -E ./run_gw.sh
 ```
