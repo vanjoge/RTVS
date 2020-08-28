@@ -3,6 +3,8 @@
 
 需支持lsof命令
 1. 添加docker自定义网络172.29.108.X网段(仅首次需要)
+
+注意：执行此脚本会重启docker服务，如有还有其他docker服务在运行请谨慎操作。
 ```
 sudo ./docker_network.sh
 ```
