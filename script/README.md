@@ -15,16 +15,25 @@ sudo ./docker_network.sh
 
 sudo -E ./run_cluster.sh
 ```
-3. 启动rtvs
+3. (可选)开启测试网关
+
+为了方便演示，我放了一个已经和RTVS对接808网关，可通过以下脚本步骤启动，此脚本会自动启动一个redis，连接地址为172.29.108.245:6379
 ``` bash
-#设置服务器IP地址或域名
+
+sudo -E run_gw.sh
+```
+
+
+4. 启动rtvs
+``` bash
+#设置服务器IP地址或域名(内网测试无需映射端口 外网请映射端口)
 export IPADDRESS=10.10.10.228
 #设置服务器对应备案域名，防止某些IDC对未备案IP拦截，如果不设置则取IPADDRESS值。
 export BeianAddress=yourdomain.xxx
 #设置网关接口地址
-export GatewayBaseAPI=http://10.10.10.110:8888/WebService/
+export GatewayBaseAPI=http://172.29.108.249/api/
 #设置redis连接字符串
-export RedisExchangeHosts=10.10.10.126:7000,10.10.10.126:7001,10.10.10.126:7002,10.10.10.126:7003,10.10.10.126:7004,10.10.10.126:7005,connectTimeout=20000,syncTimeout=20000,responseTimeout=20000
+export RedisExchangeHosts=172.29.108.245:6379,connectTimeout=20000,syncTimeout=20000,responseTimeout=20000
 
 #其他参数请自行查看脚本 一般无需修改
 sudo -E ./run_rtvs.sh
