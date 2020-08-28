@@ -4,7 +4,7 @@ echo "当前执行文件......$0"
 ##################################变量定义##################################
 DOCKER_CONTAINER_NAME=${DOCKER_CONTAINER_NAME:-"tstgw808-1"}
 DOCKER_CONTAINER_PATH=${DOCKER_CONTAINER_PATH:-"/etc/service/$DOCKER_CONTAINER_NAME"}
-DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME:-"vanjoge/gw808:1.0.1"}
+DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME:-"vanjoge/gw808"}
 
 DOCKER_REDIS_NAME=${DOCKER_REDIS_NAME:-"tstgw_redis"}
 
