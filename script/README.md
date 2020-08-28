@@ -22,7 +22,7 @@ sudo -E ./run_cluster.sh
 此脚本会自动启动一个redis，连接地址为172.29.108.245:6379
 ``` bash
 
-sudo -E run_gw.sh
+sudo -E ./run_gw.sh
 ```
 
 
