@@ -2,7 +2,7 @@
 以下在Centos7下测试通过，其他环境可能需要修改docker_network.sh脚本，主要需解决docker容器访问宿主机"No route to host"问题。
 
 需支持lsof命令
-1. 添加docker自定义网络(仅首次需要)
+1. 添加docker自定义网络172.29.108.X网段(仅首次需要)
 ```
 sudo ./docker_network.sh
 ```
