@@ -802,6 +802,8 @@ function main(){
     #启动镜像
     docker_run
     
+	echo "RTVS启动完成"
+	echo ""
 }
 function helpinfo(){
 	echo "help 待完善"
