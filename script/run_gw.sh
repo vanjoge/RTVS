@@ -4,7 +4,7 @@ echo "当前执行文件......$0"
 ##################################变量定义##################################
 DOCKER_GW_NAME=${DOCKER_GW_NAME:-"tstgw808-1"}
 DOCKER_GW_PATH=${DOCKER_GW_PATH:-"/etc/service/$DOCKER_GW_NAME"}
-DOCKER_GW_NAME=${DOCKER_GW_NAME:-"vanjoge/gw808"}
+DOCKER_GW_IMAGE_NAME=${DOCKER_GW_IMAGE_NAME:-"vanjoge/gw808"}
 
 DOCKER_REDIS_NAME=${DOCKER_REDIS_NAME:-"tstgw_redis"}
 
@@ -24,7 +24,7 @@ function docker_run(){
     
     docker rm -f $DOCKER_GW_NAME
     #启动gw
-    docker run  --name $DOCKER_GW_NAME --net $DOCKER_NETWORK --ip $DOCKER_GW_IP --restart always  --privileged=true  -p $DOCKER_808_PORT:9300 -d $DOCKER_GW_NAME
+    docker run  --name $DOCKER_GW_NAME --net $DOCKER_NETWORK --ip $DOCKER_GW_IP --restart always  --privileged=true  -p $DOCKER_808_PORT:9300 -d $DOCKER_GW_IMAGE_NAME
 }
 function main(){
 	
