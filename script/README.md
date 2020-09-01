@@ -43,3 +43,14 @@ export RedisExchangeHosts=172.29.108.245:6379,connectTimeout=20000,syncTimeout=2
 sudo -E ./run_rtvs.sh
 ```
 
+
+## 清理方法
+
+如果运行不正常，请执行下面清理脚本后再次尝试重新启动
+``` bash
+#清理(不包含数据)
+sudo -E ./clear.sh
+
+#完全清理(包含所有数据)
+sudo -E ./clear.sh all
+```
