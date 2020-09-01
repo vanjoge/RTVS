@@ -2,9 +2,9 @@
 echo "当前执行文件......$0"
 
 ##################################变量定义##################################
-DOCKER_CONTAINER_NAME=${DOCKER_CONTAINER_NAME:-"tstgw808-1"}
-DOCKER_CONTAINER_PATH=${DOCKER_CONTAINER_PATH:-"/etc/service/$DOCKER_CONTAINER_NAME"}
-DOCKER_IMAGE_NAME=${DOCKER_IMAGE_NAME:-"vanjoge/gw808:1.0.1"}
+DOCKER_GW_NAME=${DOCKER_GW_NAME:-"tstgw808-1"}
+DOCKER_GW_PATH=${DOCKER_GW_PATH:-"/etc/service/$DOCKER_GW_NAME"}
+DOCKER_GW_NAME=${DOCKER_GW_NAME:-"vanjoge/gw808:1.0.1"}
 
 DOCKER_REDIS_NAME=${DOCKER_REDIS_NAME:-"tstgw_redis"}
 
@@ -22,7 +22,7 @@ function docker_run(){
     #启动redis
     docker run  --name $DOCKER_REDIS_NAME --net $DOCKER_NETWORK --ip $DOCKER_REDIS_IP --restart always  --privileged=true   -d $DOCKER_REDIS_IMAGE_NAME
     #启动gw
-    docker run  --name $DOCKER_CONTAINER_NAME --net $DOCKER_NETWORK --ip $DOCKER_GW_IP --restart always  --privileged=true  -p $DOCKER_808_PORT:9300 -d $DOCKER_IMAGE_NAME
+    docker run  --name $DOCKER_GW_NAME --net $DOCKER_NETWORK --ip $DOCKER_GW_IP --restart always  --privileged=true  -p $DOCKER_808_PORT:9300 -d $DOCKER_GW_NAME
 }
 function main(){
 	
