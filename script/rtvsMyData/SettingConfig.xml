@@ -111,7 +111,8 @@
   <Ver>1.0.0</Ver>
   <WebRTCUrl>rtp://172.29.108.240</WebRTCUrl>
   <WebRTCIP>1.1.1.1</WebRTCIP>
-  <WebRTCPort>14001</WebRTCPort>
+  <WebRTCPort>4080</WebRTCPort>
+  <WebRTCSslPort>4443</WebRTCSslPort>
   <Chk1078TimeInterval>5000</Chk1078TimeInterval>
   <ChkFDTimeInterval>5000</ChkFDTimeInterval>
   <CloseTimeOutSocket>true</CloseTimeOutSocket>
@@ -135,4 +136,6 @@
   <IsSendPlayRealControlMsgToGW>true</IsSendPlayRealControlMsgToGW>
   <IsWriteLog>true</IsWriteLog>
   <MaxTestSec>600</MaxTestSec>
+  <X509FileName></X509FileName>
+  <X509Password></X509Password>
 </ConfigModel>
