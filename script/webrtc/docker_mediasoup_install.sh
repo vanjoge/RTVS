@@ -98,7 +98,7 @@ function docker_mediasoup_checkAndRun(){
         -v $WEBRTC_DOCKER_PATH/config.js:/server/config.js \
         -v $WEBRTC_DOCKER_PATH/source/server.js:/server/server.js \
         -v $WEBRTC_DOCKER_PATH/source/lib/Room.js:/server/lib/Room.js \
-		-v $WEBRTC_DOCKER_PATH/cert/:/server/certs/ \
+        -v $WEBRTC_DOCKER_PATH/cert/:/server/certs/ \
         --net $DOCKER_NETWORK \
         --ip $WEBRTC_DOCKER_IP\
         --init \
@@ -138,8 +138,8 @@ function init_base(){
     if [[ ! -d "$WEBRTC_DOCKER_PATH/cert" ]]; then
         mkdir $WEBRTC_DOCKER_PATH/cert
     fi
-	
-	
+    
+    
     # 复制证书
     if [ -n "$CV_PEM_PATH" ]; then
         if [[ -f "$CV_PEM_PATH" ]]; then
@@ -157,7 +157,7 @@ function init_base(){
             exit 1
         fi
     fi
-	
+
     cp -f config.js config.js.tmp
     #设置配置
     #ip地址

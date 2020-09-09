@@ -45,9 +45,9 @@ Webrtc_Port_Start=${Webrtc_Port_Start:-14001}
 Webrtc_Port_End=${Webrtc_Port_End:-14200}
 
 if  [ ! -n "$GatewayBaseAPI" ] ;then
-	echo "GatewayBaseAPI 未设置，无需更改VideoControlUrl"
+    echo "GatewayBaseAPI 未设置，无需更改VideoControlUrl"
 else
-	VideoControlUrl=${GatewayBaseAPI}"VideoControl?Content="
+    VideoControlUrl=${GatewayBaseAPI}"VideoControl?Content="
 fi
 
 
@@ -488,8 +488,8 @@ function update_config(){
     #DOCKER_GATEWAY_HOST=` docker inspect --format '{{ .NetworkSettings.Gateway }}' $MYSQL_DOCKER_CONTAINER_NAME`
     echo "docker 内部可通过 $DOCKER_GATEWAY_HOST访问宿主"
     let "PORT_DEV_START=PORT_DEV_START+(DOCKER_RUN_ID-1)*30"
-	let "DOCKER_RTVS_IP=9+DOCKER_RUN_ID*2"
-	let "DOCKER_RTMP_IP=10+DOCKER_RUN_ID*2"
+    let "DOCKER_RTVS_IP=9+DOCKER_RUN_ID*2"
+    let "DOCKER_RTMP_IP=10+DOCKER_RUN_ID*2"
     get_free_port
     DOCKER_HTTP_PORT=$PORT_DEV_START
     let "PORT_DEV_START++"
@@ -699,7 +699,7 @@ function update_config(){
     
     #修改版本
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml Ver $DOCKER_RTVSWEB_VERSION
-	
+    
     #证书
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml X509FileName "/MyData/certificate.pfx"
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml X509Password "$CV_PXF_PWD"
@@ -730,15 +730,15 @@ function update_config(){
     else
         update_cluster_conf $DOCKER_RTVSWEB_PATH/Config/ClusterServer.json $ClusterServer
     fi
-	
-	
+    
+    
     if  [ ! -n "$WebUsrName" ] ;then
         echo "WebUsrName无需修改"
     else
         updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml WebUsrName $WebUsrName
     fi
-	
-	
+    
+    
     if  [ ! -n "$WebUsrPwd" ] ;then
         echo "WebUsrPwd无需修改"
     else
@@ -753,16 +753,16 @@ function docker_run(){
     -p $DOCKER_RTMP_STATE_PORT:8080 \
     -v $DOCKER_NGINX_PATH/nginx.conf:/opt/nginx/conf/nginx.conf \
     --name $DOCKER_NGINX_CONTAINER_NAME \
-	--net $DOCKER_NETWORK \
-	--ip $DOCKER_NETWORK_IPS.$DOCKER_RTMP_IP\
+    --net $DOCKER_NETWORK \
+    --ip $DOCKER_NETWORK_IPS.$DOCKER_RTMP_IP\
     --restart on-failure:5  \
     jasonrivers/nginx-rtmp
     
     #启动RTVS
     docker run  \
     --name $DOCKER_RTVSWEB_CONTAINER_NAME \
-	--net $DOCKER_NETWORK \
-	--ip $DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP\
+    --net $DOCKER_NETWORK \
+    --ip $DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP\
     --restart on-failure:5  \
     --privileged=true  \
     -v $DOCKER_RTVSWEB_PATH:/MyData \
@@ -823,11 +823,11 @@ function main(){
     #启动镜像
     docker_run
     
-	echo "RTVS启动完成"
-	echo ""
+    echo "RTVS启动完成"
+    echo ""
 }
 function helpinfo(){
-	echo "help 待完善"
+    echo "help 待完善"
 }
 ###################################脚本入口#######################################
 
@@ -843,10 +843,10 @@ elif [ ! -n "$RedisExchangeHosts" ] ; then
     echo "必须传入RedisExchangeHosts"
     helpinfo
 else
-	if [ ! -n "$BeianAddress" ] ; then
-		echo "未传入备案域名，默认为IPADDRESS值$IPADDRESS"
-		BeianAddress=$IPADDRESS
-	fi
+    if [ ! -n "$BeianAddress" ] ; then
+        echo "未传入备案域名，默认为IPADDRESS值$IPADDRESS"
+        BeianAddress=$IPADDRESS
+    fi
     main 
 fi
 
