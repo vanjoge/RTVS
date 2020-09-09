@@ -4,7 +4,7 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>CvNetVideo_js_1.1.0控件测试</title>
-    <script type="text/javascript" src="http://lib.cvtsp.com/video/CVNetVideoJs/1.1.0/CvNetVideo.js"></script>
+    <script type="text/javascript" src="https://lib.cvtsp.com/video/CVNetVideoJs/1.2.0/CvNetVideo.js"></script>
     <link rel="stylesheet" type="text/css" href="css/base.css" />
     <style>
         select, input {
@@ -121,9 +121,9 @@
                         <button onclick="QueryVideoFileList(0)" disabled>查询列表(0x9205)</button>
                     </td>
                     <td>开始时间:</td>
-                    <td><input id="txtStarttime" value="2018-10-29 00:00:00" type="datetime" /></td>
+                    <td><input id="txtStarttime" value="2020-08-04 00:00:00" type="datetime" /></td>
                     <td>结束时间:</td>
-                    <td><input id="txtEndtime" value="2018-10-29 17:00:00" type="datetime" /></td>
+                    <td><input id="txtEndtime" value="2020-08-04 14:00:00" type="datetime" /></td>
                     <td>报警标志:</td>
                     <td>
                         <input id="numAlarm" value="1892833243" type="number" />
@@ -229,6 +229,72 @@
                 </tr>
             </table>
 
+            <table style="table-layout:fixed">
+                <tr>
+                    <td>
+                        <button onclick="SetOsdText(0)" disabled>设置Osd文本</button>
+                    </td>
+                    <td>Osd文本:</td>
+                    <td><input id="osdtext" value="通道名称" type="text" /></td>
+                    <td>
+                        <button onclick="SetOsdVisible(true)" disabled>显示Osd文本</button>
+                    </td>
+                    <td>
+                        <button onclick="SetOsdVisible(false)" disabled>隐藏Osd文本</button>
+                    </td>
+                    <td>优先级（0-100）:</td>
+                    <td><input id="prioritytext" value="1" type="text" /></td>
+                    <td>
+                        <button onclick="SetPriority()" disabled>设置优先级</button>
+                    </td>
+                </tr>
+            </table>
+
+            <table style="table-layout:fixed">
+                <tr>
+                    <td>
+                        <button onclick="SetRotate(0)" disabled>设置旋转</button>
+                    </td>
+                    <td>旋转角度:</td>
+                    <td>
+                        <select id="cmbRotateAngle" onchange="Screens(this.value)">
+                            <option value="0" selected="selected">0</option>
+                            <option value="90">90</option>
+                            <option value="180">180</option>
+                            <option value="270">270</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button onclick="SetMirrorInver(0)" disabled>镜面反转</button>
+                    </td>
+                </tr>
+            </table>
+
+            <table style="table-layout:fixed">
+                <tr>
+                    <td>player类型:</td>
+                    <td>
+                        <select id="cmbPlayermode">
+                            <option value="0" selected="selected">default</option>
+                            <option value="4">fmp4</option>
+                            <option value="5">webrtc</option>
+                            <option value="6">hls</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+
+            <table style="table-layout:fixed">
+                <tr>
+                    <td>对讲:</td>
+                    <td>
+                        <button onclick="SpeekAudio()" disabled>开始对讲</button>
+                        <button onclick="StopAudio()" disabled>关闭对讲</button>
+                    </td>
+                </tr>
+            </table>
+
+
         </div>
         <div id="btns">
             <div>
@@ -250,7 +316,6 @@
 
         window.onload = function () {
             console.log(CvNetVideo.version);
-            //this.setTimeout(init, 2000);
             init();
 
         };
@@ -273,32 +338,26 @@
                 CvNetVideo.SetRealOrBack(false);
                 document.querySelector("#playbackbyday").style.display = "";
             }
-        } function getPlayerMode() {
-            var playerMode = getQueryString("m");
-            if (playerMode == null) {
-                return 4;
-            }
-            return parseInt(playerMode);
         }
-        function getQueryString(name) {
-            var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
-            var r = window.location.search.substr(1).match(reg);
-            if (r != null) {
-                return unescape(r[2]);
-            }
-            return null;
+
+        function CvNetVideoSelectedEventCallback(id) {
+            var selected = id;
         }
 
         function init() {
-            CvNetVideo.Init(document.querySelector("#player"),document.querySelector("#cmbScreenNumbers").value,
+            CvNetVideo.Init(document.querySelector("#player"), document.querySelector("#cmbScreenNumbers").value,
                 {
                     callback: function () {
                         [].forEach.call(document.querySelectorAll("button"), function (btn) {
                             btn.disabled = false;
                         });
                     },
-                    playerMode: getPlayerMode()
+                    selectedEvent: function (e) {
+                        var selected = e;
+                    },
+                    playerMode: 0
                 });
+
             //CvNetVideo.SetRealOrBack(false);
             //CvNetVideo.SetBackDateTime(
             //    document.querySelector('#txtsim').value,
@@ -310,17 +369,14 @@
             //    parseInt(document.querySelector('#cmbStreamType').value),
             //    parseInt(document.querySelector('#cmbStorageType').value),
             //    {
-            //        clusterHost: document.querySelector("#txtserveradd").value,
-            //        clusterPort: document.querySelector("#txtport").value
+            //         clusterHost: document.querySelector("#txtserveradd").value,
+            //         clusterPort: document.querySelector("#txtport").value
+            //
             //    });
         }
 
         function changeControls(controls) {
-            document.querySelectorAll("video").forEach(function(p)
-			{
-				p.controls = true; 
-			}
-			);
+            document.querySelectorAll("video").forEach((p) => { p.controls = true; });
         }
         //实时流
         function Connect(id) {
@@ -333,7 +389,10 @@
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
                     clusterPort: document.querySelector("#txtport").value
-                }
+
+                },
+                null,
+                parseInt(document.querySelector('#cmbPlayermode').value)
             );
         }
         //开始历史
@@ -351,9 +410,7 @@
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
                     clusterPort: document.querySelector("#txtport").value
-                    //remoteHost: "127.0.0.1",
-                    //remotePortWs: "18002",
-                    //usingCluster: false
+
                 }
             );
         }
@@ -368,10 +425,12 @@
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
                     clusterPort: document.querySelector("#txtport").value
+
                 }
             );
         }
         function PlaybackVideo(id) {
+
             CvNetVideo.PlaybackVideo(
                 document.querySelector('#txtsim').value,
                 parseInt(document.querySelector('#cmbChannel').value),
@@ -386,8 +445,11 @@
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
                     clusterPort: document.querySelector("#txtport").value
-                }
-            );
+
+                },
+                null,
+                parseInt(document.querySelector('#cmbPlayermode').value)
+            )
         }
         function PlaybackVideoControl(id) {
             CvNetVideo.PlaybackVideoControl(
@@ -400,6 +462,7 @@
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
                     clusterPort: document.querySelector("#txtport").value
+
                 }
             );
         }
@@ -418,9 +481,7 @@
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
                     clusterPort: document.querySelector("#txtport").value
-                    //remoteHost: "127.0.0.1",
-                    //remotePortWs: "18002",
-                    //usingCluster: false
+
                 }
             );
         }
@@ -533,6 +594,7 @@
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
                     clusterPort: document.querySelector("#txtport").value
+
                 }
             );
         }
@@ -558,9 +620,29 @@
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
                     clusterPort: document.querySelector("#txtport").value
+
                 }
             );
         }
+        function SetOsdText(id) {
+            CvNetVideo.SetOsdColor("#00ff00");
+            CvNetVideo.SetOsdText(id, document.querySelector('#osdtext').value);
+        }
+        function SetRotate(id) {
+            CvNetVideo.SetRotate(id, document.querySelector('#cmbRotateAngle').value);
+        }
+        function SetMirrorInver(id) {
+            CvNetVideo.SetMirrorInver(id);
+        }
+
+        function SetOsdVisible(is_visible) {
+            CvNetVideo.SetOsdVisible(is_visible);
+        }
+
+        function SetPriority() {
+            CvNetVideo.SetPriority(parseInt(document.querySelector('#prioritytext').value))
+        }
+
         function Colse(id) {
             CvNetVideo.Stop(id);
         }
@@ -580,6 +662,24 @@
         function DateToUnixLong(date) {
             return Date.parse(ParseDate(date)) / 1000;
         }
+
+        function SpeekAudio() {
+            CvNetVideo.StartSpeek(
+                document.querySelector('#txtsim').value,
+                parseInt(document.querySelector('#cmbChannel').value),
+                {
+                    clusterHost: document.querySelector("#txtserveradd").value,
+                    clusterPort: document.querySelector("#txtport").value
+
+                }
+            );
+        }
+
+        function StopAudio() {
+            CvNetVideo.StopSpeak();
+        }
+
     </script>
+
 </body>
 </html>

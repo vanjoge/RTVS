@@ -15,6 +15,12 @@ sudo ./docker_network.sh
 #DOCKER_WEBSOCKET_PORT 设备连接端口 默认17000
 #export DOCKER_WEBSOCKET_PORT=17000
 
+#H5对讲必须HTTPS  集群管理需要pxf证书
+#CV_PXF_PATH pxf证书路径
+#export CV_PXF_PATH=/XXX/certificate.pfx
+#CV_PXF_PWD pxf证书密码
+#export CV_PXF_PWD=XXXX
+
 sudo -E ./run_cluster.sh
 ```
 3. (可选)开启测试网关
@@ -32,6 +38,19 @@ sudo -E ./run_gw.sh
 
 4. 启动rtvs
 ``` bash
+#H5对讲必须HTTPS 需要pxf和pem证书
+
+#CV_PXF_PATH pxf证书路径 一般为*.pfx
+#export CV_PXF_PATH=/XXX/certificate.pfx
+#CV_PXF_PWD pxf证书密码
+#export CV_PXF_PWD=XXXX
+
+#CV_PEM_PATH pem证书路径 一般为*.crt或*.pem
+#export CV_PEM_PATH=/XXX/certificate.crt
+#CV_PEMKEY_PATH pem证书私钥路径 一般为*.pem或*.key
+#export CV_PEMKEY_PATH=/XXX/privkey.pem
+
+
 #设置服务器IP地址或域名(内网测试无需映射端口 外网请映射端口)
 export IPADDRESS=10.10.10.228
 #设置服务器对应备案域名，防止某些IDC对未备案IP拦截，如果不设置则取IPADDRESS值。

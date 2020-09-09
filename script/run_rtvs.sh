@@ -30,6 +30,12 @@ GRAFANA_DOCKER_PATH=${GRAFANA_DOCKER_PATH:-"/etc/grafana"}
 DOCKER_NETWORK=${DOCKER_NETWORK:-"cvnetwork"}
 DOCKER_NETWORK_IPS=${DOCKER_NETWORK_IPS:-"172.29.108"}
 DOCKER_GATEWAY_HOST=${DOCKER_GATEWAY_HOST:-"172.29.108.1"}
+
+
+#证书
+CV_PXF_PATH=${CV_PXF_PATH:-""}
+CV_PXF_PWD=${CV_PXF_PWD:-""}
+
 #外网IP
 
 #端口  
@@ -52,7 +58,7 @@ DOCKER_RTVSWEB_CONTAINER_NAME=$RTVSWEB_DOCKER_CONTAINER_NAME_TEMPLATE"1"
 DOCKER_RTVSWEB_PATH=$RTVSWEB_DOCKER_PATH_TEMPLATE"1"
 DOCKER_NGINX_PATH=$NGINX_DOCKER_PATH_TEMPLATE"1"
 DOCKER_NGINX_CONTAINER_NAME=$NGINX_DOCKER_CONTAINER_NAME_TEMPLATE"1";
-DOCKER_RTVSWEB_VERSION="1.0.0"
+DOCKER_RTVSWEB_VERSION="1.2.0"
 
 DOCKER_RTVS_IP=11
 DOCKER_RTMP_IP=12
@@ -174,6 +180,16 @@ function init_system_files_path()
         exit 1
     fi
     
+    # 复制证书
+    if [ -n "$CV_PXF_PATH" ]; then
+        if [[ -f "$CV_PXF_PATH" ]]; then
+            echo "拷贝证书文件： $CV_PXF_PATH $DOCKER_RTVSWEB_PATH/certificate.pfx"
+            cp -f $CV_PXF_PATH $DOCKER_RTVSWEB_PATH/certificate.pfx
+        else
+            echo "缺少$CV_PXF_PATH文件...已退出安装!"
+            exit 1
+        fi
+    fi
     
     # 复制集群管理文件
     if [[ ! -d $DOCKER_RTVSWEB_PATH/Config ]]; then
@@ -658,8 +674,9 @@ function update_config(){
     
     #Webrtc地址
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml WebRTCUrl "$WEBRTC_RTP_URL"
-    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml WebRTCIP "$IPADDRESS"
-    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml WebRTCPort "$Webrtc_Port_Start"
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml WebRTCIP "$BeianAddress"
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml WebRTCSslPort "$Webrtc_Port_Start"
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml WebRTCPort "$((Webrtc_Port_Start+1))"
     
     #
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml FDTCPPort $DOCKER_OCX_PORT
@@ -682,6 +699,10 @@ function update_config(){
     
     #修改版本
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml Ver $DOCKER_RTVSWEB_VERSION
+	
+    #证书
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml X509FileName "/MyData/certificate.pfx"
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml X509Password "$CV_PXF_PWD"
     
     #修改传入参数
     if  [ ! -n "$VideoControlUrl" ] ;then

@@ -3,19 +3,15 @@
 
 DOCKER_MediaSoup_CONTAINER_NAME="vanjoge/mediasoup-demo"
 
-
-export DEBUG=${DEBUG:="mediasoup:INFO* *WARN* *ERROR*"}
-export INTERACTIVE=${INTERACTIVE:="true"}
-export HTTPS_CERT_FULLCHAIN=${HTTPS_CERT_FULLCHAIN:="/server/certs/fullchain.pem"}
-export HTTPS_CERT_PRIVKEY=${HTTPS_CERT_PRIVKEY:="/server/certs/privkey.pem"}
-export MEDIASOUP_LISTEN_IP=${MEDIASOUP_LISTEN_IP:="0.0.0.0"}
-
-
 DOCKER_NETWORK=${DOCKER_NETWORK:-"cvnetwork"}
 
 WEBRTC_DOCKER_CONTAINER_NAME=${WEBRTC_DOCKER_CONTAINER_NAME:-"sfu-mediasoup"}
 WEBRTC_DOCKER_PATH=${WEBRTC_DOCKER_PATH:-"/etc/service/mediasoup"}
 WEBRTC_DOCKER_IP=${WEBRTC_DOCKER_IP:-"172.29.108.240"}
+
+#证书
+CV_PEM_PATH=${CV_PEM_PATH:-""}
+CV_PEMKEY_PATH=${CV_PEMKEY_PATH:-""}
 
 cvconf_onlyTcp=${cvconf_onlyTcp:-"false"}
 cvconf_onlyUdp=${cvconf_onlyUdp:-"false"}
@@ -97,28 +93,26 @@ function docker_mediasoup_checkAndRun(){
         --privileged=true \
         --restart always \
         --name=$WEBRTC_DOCKER_CONTAINER_NAME \
-        -p ${PROTOO_LISTEN_PORT}:${PROTOO_LISTEN_PORT}/tcp \
-        -p ${MEDIASOUP_MIN_PORT}-${MEDIASOUP_MAX_PORT}:${MEDIASOUP_MIN_PORT}-${MEDIASOUP_MAX_PORT}/udp \
-        -p ${MEDIASOUP_MIN_PORT}-${MEDIASOUP_MAX_PORT}:${MEDIASOUP_MIN_PORT}-${MEDIASOUP_MAX_PORT}/tcp \
+        -p ${Webrtc_Port_Start}-${Webrtc_Port_End}:${Webrtc_Port_Start}-${Webrtc_Port_End}/udp \
+        -p ${Webrtc_Port_Https}-${Webrtc_Port_End}:${Webrtc_Port_Https}-${Webrtc_Port_End}/tcp \
         -v $WEBRTC_DOCKER_PATH/config.js:/server/config.js \
         -v $WEBRTC_DOCKER_PATH/source/server.js:/server/server.js \
         -v $WEBRTC_DOCKER_PATH/source/lib/Room.js:/server/lib/Room.js \
+		-v $WEBRTC_DOCKER_PATH/cert/:/server/certs/ \
         --net $DOCKER_NETWORK \
         --ip $WEBRTC_DOCKER_IP\
         --init \
-        -e DEBUG \
-        -e INTERACTIVE \
-        -e DOMAIN \
-        -e PROTOO_LISTEN_PORT \
-        -e HTTPS_CERT_FULLCHAIN \
-        -e HTTPS_CERT_PRIVKEY \
-        -e MEDIASOUP_LISTEN_IP \
-        -e MEDIASOUP_ANNOUNCED_IP \
-        -e MEDIASOUP_MIN_PORT \
-        -e MEDIASOUP_MAX_PORT \
-        -e MEDIASOUP_USE_VALGRIND \
-        -e MEDIASOUP_VALGRIND_OPTIONS \
-        -e MEDIASOUP_WORKER_BIN \
+        -e DEBUG="mediasoup:INFO* *WARN* *ERROR*" \
+        -e INTERACTIVE="true" \
+        -e DOMAIN="$HTTP_DOMAIN" \
+        -e PROTOO_LISTEN_PORT="$Webrtc_Port_Https" \
+        -e PROTOO_LISTEN_PORT_HTTP:="$Webrtc_Port_Http" \
+        -e HTTPS_CERT_FULLCHAIN="/server/certs/certificate.crt" \
+        -e HTTPS_CERT_PRIVKEY="/server/certs/privkey.pem" \
+        -e MEDIASOUP_LISTEN_IP="0.0.0.0" \
+        -e MEDIASOUP_ANNOUNCED_IP="$IPADDRESS" \
+        -e MEDIASOUP_MIN_PORT="$Webrtc_Port_Start" \
+        -e MEDIASOUP_MAX_PORT="$Webrtc_Port_End" \
         -it \
         -d \
         $DOCKER_MediaSoup_CONTAINER_NAME
@@ -141,18 +135,43 @@ function init_base(){
     if [[ ! -d "$WEBRTC_DOCKER_PATH/source/lib" ]]; then
         mkdir $WEBRTC_DOCKER_PATH/source/lib
     fi
+    if [[ ! -d "$WEBRTC_DOCKER_PATH/cert" ]]; then
+        mkdir $WEBRTC_DOCKER_PATH/cert
+    fi
+	
+	
+    # 复制证书
+    if [ -n "$CV_PEM_PATH" ]; then
+        if [[ -f "$CV_PEM_PATH" ]]; then
+            echo "拷贝证书文件： $CV_PEM_PATH $WEBRTC_DOCKER_PATH/cert/certificate.crt"
+            cp -f $CV_PEM_PATH $WEBRTC_DOCKER_PATH/cert/certificate.crt
+        else
+            echo "缺少$CV_PEM_PATH文件...已退出安装!"
+            exit 1
+        fi
+        if [[ -f "$CV_PEMKEY_PATH" ]]; then
+            echo "拷贝证书私钥： $CV_PEMKEY_PATH $WEBRTC_DOCKER_PATH/cert/privkey.pem"
+            cp -f $CV_PEMKEY_PATH $WEBRTC_DOCKER_PATH/cert/privkey.pem
+        else
+            echo "缺少$CV_PEMKEY_PATH文件...已退出安装!"
+            exit 1
+        fi
+    fi
+	
     cp -f config.js config.js.tmp
     #设置配置
     #ip地址
     config_replace config.js.tmp 1.2.3.4 $IPADDRESS
     #http端口
     config_replace config.js.tmp 9.9.9.9 $Webrtc_Port_Http
+    #https端口
+    config_replace config.js.tmp 9.9.9.10 $Webrtc_Port_Https
     #码流起始端口
     config_replace config.js.tmp 1.1.1.1 $Webrtc_Port_Start
     #码流结束端口
     config_replace config.js.tmp 2.2.2.2 $Webrtc_Port_End
     #域名
-    config_replace config.js.tmp 3.3.3.3 $HTTP_DOMAIN
+    config_replace config.js.tmp "localhost" $HTTP_DOMAIN
     
     config_replace config.js.tmp process.env.cvconf_onlyTcp $cvconf_onlyTcp
     
@@ -225,8 +244,9 @@ do
             HTTP_DOMAIN=$OPTARG
         ;;
         n)
-            Webrtc_Port_Http=$OPTARG
-            Webrtc_Port_Start=$((Webrtc_Port_Http+1))
+            Webrtc_Port_Https=$OPTARG
+            Webrtc_Port_Http=$((Webrtc_Port_Https+1))
+            Webrtc_Port_Start=$((Webrtc_Port_Https+2))
         ;;
         m)
             Webrtc_Port_End=$OPTARG
@@ -248,11 +268,6 @@ elif [ ! -n "$IPADDRESS" ] ; then
     echo "必须输入IP地址"
     helpinfo
 else
-    export MEDIASOUP_MIN_PORT=${MEDIASOUP_MIN_PORT:="$Webrtc_Port_Start"}
-    export MEDIASOUP_MAX_PORT=${MEDIASOUP_MAX_PORT:="$Webrtc_Port_End"}
-    export PROTOO_LISTEN_PORT=${PROTOO_LISTEN_PORT:="$Webrtc_Port_Http"}
-    export DOMAIN="$HTTP_DOMAIN"
-    export MEDIASOUP_ANNOUNCED_IP="$IPADDRESS"
     main 
 fi
 

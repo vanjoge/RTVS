@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ConfModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <WsPort>17000</WsPort>
+  <X509FileName>/MyData/certificate.pfx</X509FileName>
+  <X509Password></X509Password>
+</ConfModel>
