@@ -53,7 +53,7 @@ sudo -E ./run_gw.sh
 
 #设置服务器IP地址或域名(内网测试无需映射端口 外网请映射端口)
 export IPADDRESS=10.10.10.228
-#设置服务器对应备案域名，防止某些IDC对未备案IP拦截，如果不设置则取IPADDRESS值。
+#设置服务器域名，用于HTTPS和防止某些IDC对未备案IP拦截，如果不设置则取IPADDRESS值。
 export BeianAddress=yourdomain.xxx
 #设置网关接口地址
 export GatewayBaseAPI=http://172.29.108.249/api/
