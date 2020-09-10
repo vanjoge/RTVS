@@ -22,47 +22,55 @@ dom:视频控件插入节点，一般是div
 VideoNums:显示视频控件数量，后期可调整，支持1, 4, 6, 9, 10, 16
 config:配置项
 defaultConfig = {
-                //与dom参数一致
+                //以下只可初始化传入 后期不可改
+                //与dom参数一致 
                 media: null,
                 //视频显示宽度
                 videoWidth: 352,
                 //视频显示高度
                 videoHeight: 288,
-                //服务器地址(集群版本之后不需设置，会自动从集群管理获取)
-                remoteHost: "127.0.0.1",
-                //服务器Ws端口 默认18002(集群版本之后不需设置，会自动从集群管理获取)
-                remotePortWs: 18002,
-                //服务器FMP4端口 默认18003(集群版本之后不需设置，会自动从集群管理获取)
-                remotePortFmp4: 18003,
-                prority: 0,
-                recordVideo: false,
-                screenshot: false,
-                yuntaiCtrl: false,
-                networkSpeaking: true,
-                //1 WASM软解(canvas+audioAPI) 2 js封装FMP4(h264Demuxer+audioAPI) 3 WASM封装FMP4(WASM2FMP4) 4 服务器推fmp4流 5 webrtc
-                playerMode: 5,
-                //h264Demuxer 模式2时有效 按关键帧打pts
-                forceKeyFrameOnDiscontinuity: true,
                 //wasm库加载地址
                 libffmpegUrl: "/Scripts/libffmpeg.js",
                 //css地址 如需修改控件样式，请自行指定css地址
                 cssUrl: "/css/CVNetVideo.css",
+                recordVideo: false,
+                screenshot: false,
+                yuntaiCtrl: false,
+                networkSpeaking: true,
+
+
+                //以下参数可调用方法时修改
+
+
+                //0 自动 1 WASM软解(canvas+audioAPI) 2 js封装FMP4(h264Demuxer+audioAPI) 3 WASM封装FMP4(WASM2FMP4) 4 服务器推fmp4流 5 webrtc 6 hls
+                //模式1 2 3已经停止更新，新版本可能存在不兼容情况，不推荐使用
+                playerMode: 0,
                 //是否使用集群管理分配服务器信息
                 usingCluster: true,
                 //集群管理地址
                 clusterHost: "127.0.0.1",
                 //集群管理端口
                 clusterPort: 17000,
+                //服务器地址(集群版本之后不需设置，会自动从集群管理获取)
+                remoteHost: "127.0.0.1",
+                //服务器Ws端口 默认18002(集群版本之后不需设置，会自动从集群管理获取)
+                remotePortWs: 18002,
+                //服务器FMP4端口 默认18003(集群版本之后不需设置，会自动从集群管理获取)
+                remotePortFmp4: 18003,
                 //优先级
                 priority: 0,
-                //选中事件
-                selectedEvent: null,
+                //h264Demuxer 模式2时有效 按关键帧打pts
+                forceKeyFrameOnDiscontinuity: true,
+                //
+                maxPcmQueueCount: 30,
+                //播放过程中是否显示正在加载loading框
+                showLoadingByPlay: true,
                 //追帧模式 0 跳到最新 其他 倍速加速
                 seekMode: 1,
                 //最大允许延迟秒 超过则开始追帧
                 maxDelay: 2,
-                //播放过程中是否显示正在加载loading框
-                showLoadingByPlay: true
+                //选中事件
+                selectedEvent: null
             };
 ```
    示例
@@ -459,4 +467,4 @@ Flag:0:调大 1调小
 
 功能测试页面
 ===
-等待更新
+[js控件测试页面](test/)
