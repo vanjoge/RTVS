@@ -205,18 +205,18 @@ async function createExpressApp() {
 	 */
     expressApp.param(
         'roomId', (req, res, next, roomId) => {
-        // The room must exist for all API requests.
-        if (!rooms.has(roomId)) {
-            const error = new Error(`room with id "${roomId}" not found`);
+            // The room must exist for all API requests.
+            if (!rooms.has(roomId)) {
+                const error = new Error(`room with id "${roomId}" not found`);
 
-            error.status = 404;
-            throw error;
-        }
+                error.status = 404;
+                throw error;
+            }
 
-        req.room = rooms.get(roomId);
+            req.room = rooms.get(roomId);
 
-        next();
-    });
+            next();
+        });
 
 	/**
 	 * API GET resource that returns the mediasoup Router RTP capabilities of
@@ -224,10 +224,10 @@ async function createExpressApp() {
 	 */
     expressApp.get(
         '/rooms/:roomId', (req, res) => {
-        const data = req.room.getRouterRtpCapabilities();
+            const data = req.room.getRouterRtpCapabilities();
 
-        res.status(200).json(data);
-    });
+            res.status(200).json(data);
+        });
 
     return;
 	/*
@@ -302,40 +302,40 @@ async function createExpressApp() {
 	 */
     expressApp.post(
         '/rooms/:roomId/broadcasters', async (req, res, next) => {
-        const {
-            id,
-            displayName,
-            device,
-            rtpCapabilities
-        } = req.body;
+            const {
+                id,
+                displayName,
+                device,
+                rtpCapabilities
+            } = req.body;
 
-        try {
-            const data = await req.room.createBroadcaster(
-                {
-                    id,
-                    displayName,
-                    device,
-                    rtpCapabilities
-                });
+            try {
+                const data = await req.room.createBroadcaster(
+                    {
+                        id,
+                        displayName,
+                        device,
+                        rtpCapabilities
+                    });
 
-            res.status(200).json(data);
-        }
-        catch (error) {
-            next(error);
-        }
-    });
+                res.status(200).json(data);
+            }
+            catch (error) {
+                next(error);
+            }
+        });
 
 	/**
 	 * DELETE API to delete a Broadcaster.
 	 */
     expressApp.delete(
         '/rooms/:roomId/broadcasters/:broadcasterId', (req, res) => {
-        const { broadcasterId } = req.params;
+            const { broadcasterId } = req.params;
 
-        req.room.deleteBroadcaster({ broadcasterId });
+            req.room.deleteBroadcaster({ broadcasterId });
 
-        res.status(200).send('broadcaster deleted');
-    });
+            res.status(200).send('broadcaster deleted');
+        });
 
 	/**
 	 * POST API to create a mediasoup Transport associated to a Broadcaster.
@@ -516,7 +516,7 @@ async function runProtooWebSocketServer() {
     // Handle connections from clients.
     protooWebSocketServer.on('connectionrequest', on_connectionrequest);
 
-    if(httpsServer != null){
+    if (httpsServer != null) {
         // Create the protoo WebSocket server.
         protooWebSocketServer_wss = new protoo.WebSocketServer(httpsServer,
             {
@@ -573,7 +573,7 @@ function on_connectionrequest(info, accept, reject) {
     // the same time with the same roomId create two separate rooms with same
     // roomId.
     queue.push(async () => {
-        const room = await getOrCreateRoom({ sim, channel, describe, startTime, endTime, guid, rtvsIP, rtvsPort, streamType });
+        const room = await getOrCreateRoom({ sim, channel, describe, startTime, endTime, guid, rtvsIP, rtvsPort, streamType, socket: info.socket });
         if (room === undefined) {
             return;
         }
@@ -607,7 +607,7 @@ function getMediasoupWorker() {
  * Get a Room instance (or create one if it does not exist).
  * if not exist request stream from rtvs, if suc craete room else not 
  */
-async function getOrCreateRoom({ sim, channel, describe, startTime, endTime, guid, rtvsIP, rtvsPort, streamType }) {
+async function getOrCreateRoom({ sim, channel, describe, startTime, endTime, guid, rtvsIP, rtvsPort, streamType, socket }) {
     let roomId = "";
     if (guid == "undefined") {
         roomId = sim + '-' + channel + '-' + describe;
@@ -641,7 +641,11 @@ async function getOrCreateRoom({ sim, channel, describe, startTime, endTime, gui
                 "&vrtcpport=" + videortcpport +
                 "&artpport=" + audiortpport +
                 "&artcpport=" + audiortcpport +
-                "&roomid=" + roomId;
+                "&roomid=" + roomId +
+                "&IP=" + socket.remoteAddress +
+                "&Port=" + socket.remotePort;
+
+            ;
         } else {
             path = "/webrtc/videoplaystart?sim=" + sim +
                 "&channel=" + channel +
@@ -651,7 +655,9 @@ async function getOrCreateRoom({ sim, channel, describe, startTime, endTime, gui
                 "&vrtcpport=" + videortcpport +
                 "&artpport=" + audiortpport +
                 "&artcpport=" + audiortcpport +
-                "&roomid=" + roomId;
+                "&roomid=" + roomId +
+                "&IP=" + socket.remoteAddress +
+                "&Port=" + socket.remotePort;
         }
 
         logger.info('getOrCreateRoom request rtvs [url:%s]', path);
@@ -678,7 +684,7 @@ async function getOrCreateRoom({ sim, channel, describe, startTime, endTime, gui
                 rooms.delete(roomId);
                 let req = "/webrtc/videoplaystop?sim=" + sim +
                     "&channel=" + channel +
-                    "&describe=" + describe;
+                    "&roomid=" + roomId;
                 httpGetData(rtvsIP, rtvsPort, req, () => { });
             });
         })

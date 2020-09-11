@@ -90,6 +90,9 @@
   <PublishRtmp>true</PublishRtmp>
   <RtmpUrl>rtmp://172.29.108.12/mytv/</RtmpUrl>
   <RtmpUrlPull>rtmp://1.1.1.1:9602/mytv/</RtmpUrlPull>
+  <HlsUrlPull>http://127.0.0.1/mytv/</HlsUrlPull>
+  <LocIP>127.0.0.1</LocIP>
+  <LocPort>80</LocPort>
   <VideoCachePath>/VideoCache/</VideoCachePath>
   <IsSendOnlyIFrameDuring8Fasterplay>false</IsSendOnlyIFrameDuring8Fasterplay>
   <IsWriteCache>false</IsWriteCache>
