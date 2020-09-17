@@ -301,6 +301,7 @@
                 <h3>控制</h3>
                 <button onclick="Colse(0)" disabled>关闭当前选中视频</button>
                 <button onclick="Colse(-1)" disabled>关闭所有视频</button>
+                <button onclick="FullScreen()" disabled>全屏</button>
             </div>
             <div id="playbackbyday" style="display:none">
                 <h3>按天回放</h3>
@@ -321,11 +322,14 @@
         };
 
         function WindowResize() {
-            var width = document.body.clientWidth - 10;
-            var height = width * 2 / 3;
-            document.getElementById("player").style.width = width + 'px';
-            document.getElementById("player").style.height = height + 'px';
-            CvNetVideo.Resize(width, height);
+            let isFullscreen = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
+            if (!isFullscreen) {
+                var width = document.body.clientWidth - 10;
+                var height = width * 2 / 3;
+                document.getElementById("player").style.width = width + 'px';
+                document.getElementById("player").style.height = height + 'px';
+                CvNetVideo.Resize(width, height);
+            }
         }
 
         window.addEventListener("resize", WindowResize);
@@ -645,6 +649,9 @@
 
         function Colse(id) {
             CvNetVideo.Stop(id);
+        }
+        function FullScreen() {
+            CvNetVideo.FullScreen();
         }
         function Screens(num) {
             CvNetVideo.LayoutByScreens(num);
