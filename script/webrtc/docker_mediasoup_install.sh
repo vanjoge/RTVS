@@ -156,6 +156,9 @@ function init_base(){
             echo "缺少$CV_PEMKEY_PATH文件...已退出安装!"
             exit 1
         fi
+    else
+        rm $WEBRTC_DOCKER_PATH/cert/certificate.crt
+        rm $WEBRTC_DOCKER_PATH/cert/privkey.pem
     fi
 
     cp -f config.js config.js.tmp

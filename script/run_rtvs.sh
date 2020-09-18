@@ -189,6 +189,8 @@ function init_system_files_path()
             echo "缺少$CV_PXF_PATH文件...已退出安装!"
             exit 1
         fi
+    else
+        rm $DOCKER_RTVSWEB_PATH/certificate.pfx
     fi
     
     # 复制集群管理文件
