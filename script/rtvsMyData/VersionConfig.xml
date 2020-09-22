@@ -4,7 +4,7 @@
   <VersionSecond>2</VersionSecond>
   <VersionThird>3</VersionThird>
   <UpgradeTag>VersionThird</UpgradeTag>
-  <CurrentVersion>1.2.2</CurrentVersion>
+  <CurrentVersion>1.2.3</CurrentVersion>
   <UpgradeContent>RTVS1.2版本</UpgradeContent>
-  <UpgradeDatetime>2020-09-15 15:43:00</UpgradeDatetime>
+  <UpgradeDatetime>2020-09-22 17:40:00</UpgradeDatetime>
 </VersionConfig>
