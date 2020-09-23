@@ -111,7 +111,7 @@
   <BeianAddress>1.1.1.1</BeianAddress>
   <GovWebIp>+</GovWebIp>
   <GovPort>9604</GovPort>
-  <Ver>1.2.3</Ver>
+  <Ver>1.2.4</Ver>
   <WebRTCUrl>rtp://172.29.108.240</WebRTCUrl>
   <WebRTCIP>1.1.1.1</WebRTCIP>
   <WebRTCPort>4080</WebRTCPort>
