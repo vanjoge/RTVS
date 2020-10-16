@@ -6,6 +6,11 @@
 > 
 > JT/T 1078-2016 道路运输车辆卫星定位系统 视频通讯协议
 
+## 测试地址
+
+[测试地址](http://lib.cvtsp.com/video/CVNetVideoJs/test/tstrtvs.html)
+[测试地址(可对讲)](https://lib.cvtsp.com/video/CVNetVideoJs/test/tstrtvs.html)
+
 ## 更新
 
 ```diff
