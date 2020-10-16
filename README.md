@@ -8,10 +8,13 @@
 
 ## 测试地址
 
-[测试地址](http://lib.cvtsp.com/video/CVNetVideoJs/test/tstrtvs.html)
+
+[HTTP地址](http://lib.cvtsp.com/video/CVNetVideoJs/test/tstrtvs.html)
 
 
-[测试地址(可对讲)](https://lib.cvtsp.com/video/CVNetVideoJs/test/tstrtvs.html)
+[可对讲HTTPS地址](https://lib.cvtsp.com/video/CVNetVideoJs/test/tstrtvs.html)
+
+默认手机号为一个模拟设备，不一定随时打开着，建议自己挂一台真实设备上去，也方便看延迟。
 
 ## 更新
 
