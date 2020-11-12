@@ -172,7 +172,7 @@ class Room extends EventEmitter
             const plainTransportOptions =
             {
                 ...config.mediasoup.plainTransportOptions,
-                rtcpMux: false,
+                rtcpMux: true,
                 comedia: true
             };
 
@@ -181,7 +181,8 @@ class Room extends EventEmitter
             // Store it.
             broadcaster.data.transports.set(audioTransport.id, audioTransport);
             const audioRtpPort = audioTransport.tuple.localPort;
-            const audioRtcpPort = audioTransport.rtcpTuple.localPort;
+            //const audioRtcpPort = audioTransport.rtcpTuple.localPort;
+			const audioRtcpPort = audioRtpPort;
 
             const audioProducer = await audioTransport.produce(
                 {
@@ -227,7 +228,8 @@ class Room extends EventEmitter
             // Store it.
             broadcaster.data.transports.set(videoTransport.id, videoTransport);
             const videoRtpPort = videoTransport.tuple.localPort;
-            const videoRtcpPort = videoTransport.rtcpTuple.localPort;
+            //const videoRtcpPort = videoTransport.rtcpTuple.localPort;
+			const videoRtcpPort = videoRtpPort;
 
             const videoProducer = await videoTransport.produce(
                 {
@@ -240,7 +242,14 @@ class Room extends EventEmitter
                                     mimeType: 'video/H264',
                                     clockRate: 90000,
                                     payloadType: 102,
-                                    rtcpFeedback: [], // FFmpeg does not support NACK nor PLI/FIR.
+                                    rtcpFeedback: 
+									[
+                                        { type: 'nack' },
+                                        { type: 'nack', parameter: 'pli' },
+                                        { type: 'ccm', parameter: 'fir' },
+                                        { type: 'goog-remb' },
+                                        { type: 'transport-cc' }     
+									], // FFmpeg does not support NACK nor PLI/FIR.
                                     parameters:
                                     {
                                         "level-asymmetry-allowed": 1,
