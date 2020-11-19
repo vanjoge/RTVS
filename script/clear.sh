@@ -50,9 +50,11 @@ function main(){
 	echo "清理nginx"
 	docker rm -f $(docker ps -a | grep $NGINX_DOCKER_CONTAINER_NAME_TEMPLATE | awk '{print $1}')
 	
-	echo "清理sfu"
-	docker rm -f $WEBRTC_DOCKER_CONTAINER_NAME
-	rm -rf $WEBRTC_DOCKER_PATH
+	if [[ $RM_ALL != 0 ]]; then
+		echo "清理sfu"
+		docker rm -f $WEBRTC_DOCKER_CONTAINER_NAME
+		rm -rf $WEBRTC_DOCKER_PATH
+	fi
 	
 	
 	echo "清理网关"
