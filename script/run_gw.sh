@@ -23,6 +23,8 @@ function docker_run(){
     docker run  --name $DOCKER_REDIS_NAME --net $DOCKER_NETWORK --ip $DOCKER_REDIS_IP --restart always  --privileged=true   -d $DOCKER_REDIS_IMAGE_NAME
     
     docker rm -f $DOCKER_GW_NAME
+	
+	docker pull $DOCKER_GW_IMAGE_NAME
     #启动gw
     docker run  --name $DOCKER_GW_NAME --net $DOCKER_NETWORK --ip $DOCKER_GW_IP --restart always  --privileged=true  -p $DOCKER_808_PORT:9300 -d $DOCKER_GW_IMAGE_NAME
 }

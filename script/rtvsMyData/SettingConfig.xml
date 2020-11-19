@@ -105,13 +105,14 @@
   <FDUDPPort>18000</FDUDPPort>
   <FDWebSocketPort>9606</FDWebSocketPort>
   <FDFMP4Port>9607</FDFMP4Port>
+  <WssPort>9608</WssPort>
   <FDWebIP>http://172.29.108.1</FDWebIP>
   <FDWebPort>9600</FDWebPort>
   <IPAddress>1.1.1.1</IPAddress>
   <BeianAddress>1.1.1.1</BeianAddress>
   <GovWebIp>+</GovWebIp>
   <GovPort>9604</GovPort>
-  <Ver>1.2.7</Ver>
+  <Ver>1.2.8</Ver>
   <WebRTCUrl>rtp://172.29.108.240</WebRTCUrl>
   <WebRTCIP>1.1.1.1</WebRTCIP>
   <WebRTCPort>4080</WebRTCPort>

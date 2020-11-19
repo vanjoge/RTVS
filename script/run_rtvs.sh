@@ -35,6 +35,8 @@ DOCKER_GATEWAY_HOST=${DOCKER_GATEWAY_HOST:-"172.29.108.1"}
 #证书
 CV_PXF_PATH=${CV_PXF_PATH:-""}
 CV_PXF_PWD=${CV_PXF_PWD:-""}
+CV_PEM_PATH=${CV_PEM_PATH:-""}
+CV_PEMKEY_PATH=${CV_PEMKEY_PATH:-""}
 
 #外网IP
 
@@ -58,7 +60,7 @@ DOCKER_RTVSWEB_CONTAINER_NAME=$RTVSWEB_DOCKER_CONTAINER_NAME_TEMPLATE"1"
 DOCKER_RTVSWEB_PATH=$RTVSWEB_DOCKER_PATH_TEMPLATE"1"
 DOCKER_NGINX_PATH=$NGINX_DOCKER_PATH_TEMPLATE"1"
 DOCKER_NGINX_CONTAINER_NAME=$NGINX_DOCKER_CONTAINER_NAME_TEMPLATE"1";
-DOCKER_RTVSWEB_VERSION="1.2.7"
+DOCKER_RTVSWEB_VERSION="1.2.8"
 
 DOCKER_RTVS_IP=11
 DOCKER_RTMP_IP=12
@@ -70,6 +72,7 @@ DOCKER_GOV_PORT=17004
 DOCKER_OCX_PORT=17005
 DOCKER_WS_PORT=17006
 DOCKER_FMP4_PORT=17007
+DOCKER_WSS_PORT=17008
 DOCKER_DEV_PORT1=17010
 DOCKER_DEV_PORT2=17011
 DOCKER_DEV_PORT3=17012
@@ -140,14 +143,50 @@ function init_system_files_path()
     if [[ ! -d $DOCKER_NGINX_PATH ]]; then
         mkdir $DOCKER_NGINX_PATH
     fi
-    # 复制nginx.conf文件
-    if [[ -f "./nginx/nginx.conf" ]]; then
-        echo "拷贝一份nginx.conf：cp ./nginx/nginx.conf $DOCKER_NGINX_PATH/nginx.conf"
-        cp ./nginx/nginx.conf $DOCKER_NGINX_PATH/nginx.conf
-    else
-        echo "缺少./nginx/nginx.conf文件...已退出安装!"
-        exit 1
+	
+	
+    # 复制nginx证书
+	if [[ ! -d $DOCKER_NGINX_PATH/cert ]]; then
+        mkdir $DOCKER_NGINX_PATH/cert
     fi
+    if [ -n "$CV_PEM_PATH" ]; then
+        if [[ -f "$CV_PEM_PATH" ]]; then
+            echo "拷贝证书文件： $CV_PEM_PATH $DOCKER_NGINX_PATH/cert/certificate.crt"
+            cp -f $CV_PEM_PATH $DOCKER_NGINX_PATH/cert/certificate.crt
+        else
+            echo "缺少$CV_PEM_PATH文件...已退出安装!"
+            exit 1
+        fi
+		
+        if [[ -f "$CV_PEMKEY_PATH" ]]; then
+            echo "拷贝证书私钥： $CV_PEMKEY_PATH $DOCKER_NGINX_PATH/cert/privkey.pem"
+            cp -f $CV_PEMKEY_PATH $DOCKER_NGINX_PATH/cert/privkey.pem
+        else
+            echo "缺少$CV_PEMKEY_PATH文件...已退出安装!"
+            exit 1
+        fi
+		# 复制nginx.conf文件
+		if [[ -f "./nginx/nginx.conf" ]]; then
+			echo "拷贝一份nginx.conf：cp ./nginx/nginx.conf $DOCKER_NGINX_PATH/nginx.conf"
+			cp ./nginx/nginx.conf $DOCKER_NGINX_PATH/nginx.conf
+		else
+			echo "缺少./nginx/nginx.conf文件...已退出安装!"
+			exit 1
+		fi
+    else
+        rm $DOCKER_NGINX_PATH/cert/certificate.crt
+        rm $DOCKER_NGINX_PATH/cert/privkey.pem
+		# 复制未加密nginx.conf文件
+		if [[ -f "./nginx/nginx_nowss.conf" ]]; then
+			echo "拷贝一份nginx_nowss.conf：cp ./nginx/nginx_nowss.conf $DOCKER_NGINX_PATH/nginx.conf"
+			cp ./nginx/nginx_nowss.conf $DOCKER_NGINX_PATH/nginx.conf
+		else
+			echo "缺少./nginx/nginx_nowss.conf文件...已退出安装!"
+			exit 1
+		fi
+    fi
+	
+	
     # 创建rtvs目录
     if [[ ! -d $DOCKER_RTVSWEB_PATH ]]; then
         mkdir $DOCKER_RTVSWEB_PATH
@@ -455,11 +494,20 @@ function update_nginx()
 {
     val1=`echo "$2"| sed 's:\/:\\\/:g'`
     val2=`echo "$3"| sed 's:\/:\\\/:g'`
+    val3=`echo "$4"| sed 's:\/:\\\/:g'`
+    val4=`echo "$5"| sed 's:\/:\\\/:g'`
+    val5=`echo "$6"| sed 's:\/:\\\/:g'`
     echo "正在修改nginx配置文件:$1,on_play:$2,on_play_done:$3"
     sed -i "s/on_play .*/on_play $val1/g" $1
     sed -i "s/on_play_done .*/on_play_done $val2/g" $1
+    sed -i "s/listen 4443 ssl;/listen $val3 ssl;/g" $1
+    sed -i "s/server wss1002;/server $val4;/g" $1
+    sed -i "s/server wss1003;/server $val5;/g" $1
     unset val1
     unset val2
+    unset val3
+    unset val4
+    unset val5
 }
 function update_cluster_conf()
 {
@@ -507,6 +555,10 @@ function update_config(){
     get_free_port
     DOCKER_RTMP_STATE_PORT=$PORT_DEV_START
     let "PORT_DEV_START++"
+	
+    get_free_port
+    DOCKER_WSS_PORT=$PORT_DEV_START
+    let "PORT_DEV_START++"    
     
     get_free_port
     DOCKER_GOV_PORT=$PORT_DEV_START
@@ -676,6 +728,7 @@ function update_config(){
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml HlsUrlPull "http://$IPADDRESS:$DOCKER_RTMP_STATE_PORT/hls/"
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml LocIP "$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP"
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml LocPort "80"
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml WssPort "$DOCKER_WSS_PORT"
     
     #Webrtc地址
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml WebRTCUrl "$WEBRTC_RTP_URL"
@@ -696,7 +749,8 @@ function update_config(){
 
 
     #修改nginx-rtmp配置
-    update_nginx $DOCKER_NGINX_PATH/nginx.conf "http://$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP/WebService/NginxOnPlay;" "http://$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP/WebService/NginxOnPlayDown;" 
+    update_nginx $DOCKER_NGINX_PATH/nginx.conf "http://$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP/WebService/NginxOnPlay;" "http://$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP/WebService/NginxOnPlayDown;" "$DOCKER_WSS_PORT" "$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP:$DOCKER_WS_PORT"  "$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP:$DOCKER_FMP4_PORT" 
+    
     
     #修改InfluxdbBaseUrl配置
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml InfluxdbBaseUrl "http://$TSDB_DOCKER_IP:8086"
@@ -756,13 +810,16 @@ function docker_run(){
     docker run -d \
     -p $DOCKER_RTMP_PORT:1935 \
     -p $DOCKER_RTMP_STATE_PORT:8080 \
+    -p $DOCKER_WSS_PORT:$DOCKER_WSS_PORT \
     -v $DOCKER_NGINX_PATH/nginx.conf:/opt/nginx/conf/nginx.conf \
+    -v $DOCKER_NGINX_PATH/cert:/opt/nginx/conf/cert \
     --name $DOCKER_NGINX_CONTAINER_NAME \
     --net $DOCKER_NETWORK \
     --ip $DOCKER_NETWORK_IPS.$DOCKER_RTMP_IP\
     --restart on-failure:5  \
     jasonrivers/nginx-rtmp
     
+	docker pull $RTVSWEB_DOCKER_IMAGE_NAME:$DOCKER_RTVSWEB_VERSION
     #启动RTVS
     docker run  \
     --name $DOCKER_RTVSWEB_CONTAINER_NAME \
