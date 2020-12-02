@@ -271,12 +271,12 @@ RTVS向808平台发送查询录像列表指令后，808平台收到设备应答�
         [DataMember]
         public byte Channel { get; set; }
         /// <summary>
-        /// 开始时间（YY-MM-DD-HH-MM-SS，0表示无起始时间条件）
+        /// 开始时间（yyyy-MM-dd HH:mm:ss）
         /// </summary>
         [DataMember]
         public DateTime StartTime { get; set; }
         /// <summary>
-        /// 结束时间（YY-MM-DD-HH-MM-SS，0表示无终止时间条件）
+        /// 结束时间（yyyy-MM-dd HH:mm:ss）
         /// </summary>
         [DataMember]
         public DateTime EndTime { get; set; }
