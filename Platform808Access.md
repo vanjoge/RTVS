@@ -94,9 +94,11 @@ RTVS会按照以下规则通过Post请求批量发送0x9105通知，需要网关
 
 
 ### 根据车牌和车牌颜色获取手机号
+
+#### 可不实现此接口，已与上级平台Redis相关接口整合。
+
 RTVS响应上级平台时，需要拿车牌和车牌颜色换取手机号，需要网关实现以下HTTP接口。
 
-TODO：未来考虑取消此接口，与上级平台Redis相关接口整合。
 
     [配置的网关HTTP接口地址]GetVehicleSim?PlateCode=[车牌号码]=&PlateColor=[车牌颜色]
 
@@ -112,7 +114,7 @@ TODO：未来考虑取消此接口，与上级平台Redis相关接口整合。
 
 返回要求：
 
-    类型String，值 Sim卡号，如果不存在返回 null或空字符串。
+    类型String，值 手机号，如果不存在返回 null或空字符串。
  
     
 
@@ -380,15 +382,17 @@ AUTHORIZE_CODE_2 为 跨域地区政府平台使用的时效口令
     /// DOWN_REALVIDEO_MSG_STARTUP
     /// （0x9801）
     /// </summary>
-    [DataContract]
     public class JTSDownRealVideoRequest
     {
         /// <summary>
         /// 音视频类型
         /// 0x00:音视频；0x01:音频；0x02:视频
         /// </summary>
-        [DataMember]
         public byte AvitemType { get; set; }
+        /// <summary>
+        /// 手机号 如有不再调用http请求换取SIM接口
+        /// </summary>
+        public string Sim { get; set; }
     }
 ```
 
@@ -424,7 +428,10 @@ AUTHORIZE_CODE_2 为 跨域地区政府平台使用的时效口令
         /// </summary>
         /// <remarks></remarks>
         public UInt64 PLAYBACK_ENDTIME { get; set; }
-
+        /// <summary>
+        /// 手机号 如有不再调用http换取SIM接口
+        /// </summary>
+        public string Sim { get; set; }
     }
 ```
 
@@ -538,7 +545,7 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
 | 值  | [SimLimiteConfig](#SimLimiteConfig) 的JSON|
 ```
     /// <summary>
-    /// 每个设备sim一个配置
+    /// 每个设备手机号一个配置
     /// </summary>
     public class SimLimiteConfig
     {
@@ -652,7 +659,7 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
 
 接口地址：
 
-    [集群管理地址]api/GetBest?Type=1005&Tag=手机号
+    [集群管理地址]api/GetBest?Type=1005&Tag=[手机号]
 	
 	Tag可传可不传，传Tag会尽量保证同一个设备在一个RTVS上，建议加上。
 
@@ -665,4 +672,77 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
     [IP地址]:[端口]
 
     例: 10.10.10.228:6035
+
+
+## 网关响应上级平台关闭实时音视频接口(0x9802)
+网关在收到上级平台关闭实时音视频请求后，可以不与RTVS交互直接发给设备，但可能造成正在观看的其他客户端也被关闭。
+
+为解决此问题，可以将此指令转发给RTVS来处理关闭。
+
+接口地址：
+
+    [集群管理地址]ProxyTag/[Tag]/WebService/Gov0x9802?VehicleNO=[车牌号]&VehicleColor=[车牌颜色]&ChannelID=[通道号]&AvitemType=[音视频类型]
+	
+	Tag与获取GOV服务地址的Tag保持一致。
+
+    例:http://127.0.0.1:30888/ProxyTag/013300001111/WebService/Gov0x9802?VehicleNO=京A12345&VehicleColor=2&ChannelID=1&AvitemType=0
+
+
+
+接口参数 可查看1078协议中0x9802相关定义：
+
+|  字段   | 说明  |例子|
+|  ----  | ----  | ----  |
+| Tag  | Tag与获取GOV服务地址的Tag保持一致，建议为手机号  |013300001111|
+| VehicleNO  | 车牌号码  |京A12345|
+| VehicleColor  | 车牌颜色  | 2 |
+| ChannelID  | 逻辑通道号 0 表示所有  | 1 |
+| AvitemType  | 音视频类型  0x00:音视频；0x01:音频；0x02:视频  | 0 |
+
+
+
+返回数据格式如下
+
+
+ | 返回值 | 说明  |
+ | ----  | ----  |
+|-1|参数错误 | 
+|0|失败 | 
+|1|成功 | 
+
+
+
+## 网关响应上级平台远程录像控制接口(0x9A02)
+
+接口地址：
+
+    [集群管理地址]ProxyTag/[Tag]/WebService/Gov0x9A02?VehicleNO=[车牌号]&VehicleColor=[车牌颜色]&ControlType=[控制类型]&FastTime=[倍数]&DateTime=[拖动位置]
+	
+	Tag与获取GOV服务地址的Tag保持一致。
+
+    例:http://127.0.0.1:30888/ProxyTag/013300001111/WebService/Gov0x9A02?VehicleNO=京A12345&VehicleColor=2&ControlType=5&FastTime=0&DateTime=1606905169
+
+
+
+接口参数 可查看1078协议中0x9A02相关定义：
+
+|  字段   | 说明  |例子|
+|  ----  | ----  | ----  |
+| Tag  | Tag与获取GOV服务地址的Tag保持一致，建议为手机号  |013300001111|
+| VehicleNO  | 车牌号码  |京A12345|
+| VehicleColor  | 车牌颜色  | 2 |
+| ControlType  | 回放类型<br> 0x00:正常回放,0x01:暂停回放,0x02:结束回放,0x03:快进回放,0x04:关键帧快退回放,0x05:拖动回放,0x06:关键帧播放  | 5 |
+| FastTime  | 快进或快退倍数 回放类型为0x3或0x4时有效<br> 0x00:无效,0x01:1倍,0x02:2倍,0x03:4倍,0x04:8倍,0x05:16倍  | 0 |
+| DateTime  | 拖动位置，用UTC时间表示，回放控制为0x05时，此字段内容有效    | 1606905169 |
+
+
+
+返回数据格式如下
+
+
+ | 返回值 | 说明  |
+ | ----  | ----  |
+|-1|参数错误 | 
+|0|失败 | 
+|1|成功 | 
 
