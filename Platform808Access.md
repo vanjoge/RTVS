@@ -681,11 +681,11 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
 
 接口地址：
 
-    [集群管理地址]ProxyTag/[Tag]/WebService/Gov0x9802?VehicleNO=[车牌号]&VehicleColor=[车牌颜色]&ChannelID=[通道号]&AvitemType=[音视频类型]
+    [集群管理地址]ProxyTag/[Tag]/1004/WebService/Gov0x9802?VehicleNO=[车牌号]&VehicleColor=[车牌颜色]&ChannelID=[通道号]&AvitemType=[音视频类型]
 	
 	Tag与获取GOV服务地址的Tag保持一致。
 
-    例:http://127.0.0.1:30888/ProxyTag/013300001111/WebService/Gov0x9802?VehicleNO=京A12345&VehicleColor=2&ChannelID=1&AvitemType=0
+    例:http://127.0.0.1:30888/ProxyTag/013300001111/1004/WebService/Gov0x9802?VehicleNO=京A12345&VehicleColor=2&ChannelID=1&AvitemType=0
 
 
 
@@ -716,11 +716,11 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
 
 接口地址：
 
-    [集群管理地址]ProxyTag/[Tag]/WebService/Gov0x9A02?VehicleNO=[车牌号]&VehicleColor=[车牌颜色]&ControlType=[控制类型]&FastTime=[倍数]&DateTime=[拖动位置]
+    [集群管理地址]ProxyTag/[Tag]/1004/WebService/Gov0x9A02?VehicleNO=[车牌号]&VehicleColor=[车牌颜色]&ControlType=[控制类型]&FastTime=[倍数]&DateTime=[拖动位置]
 	
 	Tag与获取GOV服务地址的Tag保持一致。
 
-    例:http://127.0.0.1:30888/ProxyTag/013300001111/WebService/Gov0x9A02?VehicleNO=京A12345&VehicleColor=2&ControlType=5&FastTime=0&DateTime=1606905169
+    例:http://127.0.0.1:30888/ProxyTag/013300001111/1004/WebService/Gov0x9A02?VehicleNO=京A12345&VehicleColor=2&ControlType=5&FastTime=0&DateTime=1606905169
 
 
 
