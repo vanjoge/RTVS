@@ -285,8 +285,8 @@ class Room extends EventEmitter
         logger.info('running stopRoomForRtvs...');
 
         if (this._broadcasters.has(this._roomId)) {
-            broadcasterId = this._roomId;
-            deleteBroadcaster({ broadcasterId });
+            let broadcasterId = this._roomId;
+            this.deleteBroadcaster({ broadcasterId });
         }
     }
 

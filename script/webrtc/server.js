@@ -117,7 +117,7 @@ async function requestRtvsRoom(roomId) {
 function stopRtvsRoom(roomId) {
     let room = rooms.get(roomId);
     if (room) {
-        room.stopRtvsTransportf(roomId);
+        room.stopRtvsTransport();
     }
 }
 
@@ -681,6 +681,7 @@ async function getOrCreateRoom({ sim, channel, describe, startTime, endTime, gui
         }).then(function (value) {
             rooms.set(roomId, room);
             room.on('close', function () {
+				room.stopRtvsTransport();
                 rooms.delete(roomId);
                 let req = "/webrtc/videoplaystop?sim=" + sim +
                     "&channel=" + channel +
