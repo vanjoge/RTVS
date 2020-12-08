@@ -13,6 +13,8 @@ TSDB_DOCKER_CONTAINER_NAME=${TSDB_DOCKER_CONTAINER_NAME:-"influxdb"}
 TSDB_DOCKER_PATH=${TSDB_DOCKER_PATH:-"/etc/influxdb"}
 TSDB_DOCKER_IP=${TSDB_DOCKER_IP:-"172.29.108.242"}
 
+#传入表示映射出端口
+#TSDB_Server_PORT
 
 # ========================下载镜像======================================
 for i in [ `docker images ` ]; do
@@ -47,7 +49,11 @@ if [[ $IS_EXISTS_INFLUXDB_CONTAINER == "false" ]]; then
 	        # 执行容器创建
 			# 运行容器实例 --privileged=true 获取管理员权限
 			echo "创建influxdb容器实例..."
-			docker run -d --restart always --name $TSDB_DOCKER_CONTAINER_NAME --net $DOCKER_NETWORK --ip $TSDB_DOCKER_IP   --privileged=true -v $TSDB_DOCKER_PATH/dockerdata:/var/lib/influxdb -v $TSDB_DOCKER_PATH/scripts:/etc/influxdb/scripts influxdb:$INFLUXDB_VERSION
+			if  [ -n "$TSDB_Server_PORT" ] ;then
+				docker run -d --restart always -p $TSDB_Server_PORT:8086 --name $TSDB_DOCKER_CONTAINER_NAME --net $DOCKER_NETWORK --ip $TSDB_DOCKER_IP   --privileged=true -v $TSDB_DOCKER_PATH/dockerdata:/var/lib/influxdb -v $TSDB_DOCKER_PATH/scripts:/etc/influxdb/scripts influxdb:$INFLUXDB_VERSION
+            else
+				docker run -d --restart always  --name $TSDB_DOCKER_CONTAINER_NAME --net $DOCKER_NETWORK --ip $TSDB_DOCKER_IP   --privileged=true -v $TSDB_DOCKER_PATH/dockerdata:/var/lib/influxdb -v $TSDB_DOCKER_PATH/scripts:/etc/influxdb/scripts influxdb:$INFLUXDB_VERSION
+            fi
 			# 休10秒钟
 			echo "休眠等待10s以便Docker完成容器运行......"
 			sleep 10s
