@@ -70,7 +70,7 @@ DOCKER_RTVSWEB_CONTAINER_NAME=$RTVSWEB_DOCKER_CONTAINER_NAME_TEMPLATE"1"
 DOCKER_RTVSWEB_PATH=$RTVSWEB_DOCKER_PATH_TEMPLATE"1"
 DOCKER_NGINX_PATH=$NGINX_DOCKER_PATH_TEMPLATE"1"
 DOCKER_NGINX_CONTAINER_NAME=$NGINX_DOCKER_CONTAINER_NAME_TEMPLATE"1";
-DOCKER_RTVSWEB_VERSION="1.2.10"
+DOCKER_RTVSWEB_VERSION="1.2.11"
 
 DOCKER_RTVS_IP=11
 DOCKER_RTMP_IP=12
@@ -813,6 +813,11 @@ function update_config(){
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml X509Password "$CV_PXF_PWD"
     
     #修改传入参数
+    if  [ ! -n "$GovWebIp" ] ;then
+        updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml GovWebIp $BeianAddress
+    else
+        updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml GovWebIp $GovWebIp
+    fi
     if  [ ! -n "$FDWebIP" ] ;then
         updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml FDWebIP http://$DOCKER_GATEWAY_HOST
     else
