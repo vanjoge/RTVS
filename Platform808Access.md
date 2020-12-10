@@ -432,6 +432,11 @@ AUTHORIZE_CODE_2 为 跨域地区政府平台使用的时效口令
         /// 手机号 如有不再调用http换取SIM接口
         /// </summary>
         public string Sim { get; set; }
+        /// <summary>
+        /// 音视频类型
+	/// 0x00:音视频；0x01:音频；0x02:视频；0x03:视频或音视频
+        /// </summary>
+        public AudioVideoFlag AVITEM_TYPE { get; set; }
     }
 ```
 
