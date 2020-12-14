@@ -774,8 +774,8 @@ function update_config(){
     
     #Rtmp地址修改
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml RtmpUrl "rtmp://$DOCKER_NETWORK_IPS.$DOCKER_RTMP_IP/mytv/"
-    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml RtmpUrlPull "rtmp://$IPADDRESS:$DOCKER_RTMP_PORT/mytv/"
-    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml HlsUrlPull "http://$IPADDRESS:$DOCKER_RTMP_STATE_PORT/hls/"
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml RtmpUrlPull "rtmp://$BeianAddress:$DOCKER_RTMP_PORT/mytv/"
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml HlsUrlPull "http://$BeianAddress:$DOCKER_RTMP_STATE_PORT/hls/"
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml LocIP "$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP"
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml LocPort "80"
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml WssPort "$DOCKER_WSS_PORT"
