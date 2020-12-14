@@ -37,6 +37,21 @@ defaultConfig = {
                 screenshot: false,
                 yuntaiCtrl: false,
                 networkSpeaking: true,
+                //超时警告时间 默认4.5分钟通知
+                timeoutWarningMsec: 270000,
+                //超时时间 默认5分钟
+                timeoutCloseMsec: 300000,
+                //事件通知
+                events: {
+                    //超时警告通知 仅通知
+                    //参数1 leftMsec 剩余关闭毫秒, 参数2 time 上次有动作时间
+                    timeoutWarning: null,
+                    //超时警告取消 表示警告通知后用户有了操作 重新开始计时
+                    timeoutCanceled: null,
+                    //超时通知 仅通知，如需关闭需用户在此事件响应中自行调用关闭接口
+                    //参数 time 上次有动作时间
+                    timeoutClose: null
+                },
 
 
                 //以下参数可调用方法时修改
@@ -61,8 +76,12 @@ defaultConfig = {
                 priority: 0,
                 //h264Demuxer 模式2时有效 按关键帧打pts
                 forceKeyFrameOnDiscontinuity: true,
+                //PCM播放缓冲时间(秒)
+                pcmCacheSec: 0.2,
                 //
-                maxPcmQueueCount: 30,
+                maxPcmQueueCount: 15,
+                //0 不延迟 其他按时间戳延迟
+                speekSendMode: 0,
                 //播放过程中是否显示正在加载loading框
                 showLoadingByPlay: true,
                 //追帧模式 0 跳到最新 其他 倍速加速
