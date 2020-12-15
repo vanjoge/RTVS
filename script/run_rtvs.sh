@@ -770,7 +770,7 @@ function update_config(){
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml MappingPort $DOCKER_DEV_PORT20 19719
     
     
-    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml IsTestMode true
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml IsTestMode false
     
     #Rtmp地址修改
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml RtmpUrl "rtmp://$DOCKER_NETWORK_IPS.$DOCKER_RTMP_IP/mytv/"
