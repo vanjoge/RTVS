@@ -100,7 +100,7 @@
   <IsTestMode>false</IsTestMode>
   <IsDisableCluster>false</IsDisableCluster>
   <StartFD>true</StartFD>
-  <FDMaxCount>300</FDMaxCount>
+  <FDMaxCount>65535</FDMaxCount>
   <FDTCPPort>9605</FDTCPPort>
   <FDUDPPort>18000</FDUDPPort>
   <FDWebSocketPort>9606</FDWebSocketPort>
