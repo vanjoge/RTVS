@@ -44,13 +44,47 @@ defaultConfig = {
                 //事件通知
                 events: {
                     //超时警告通知 仅通知
-                    //参数1 leftMsec 剩余关闭毫秒, 参数2 time 上次有动作时间
+                    //参数1 leftMsec 剩余关闭毫秒
+                    //参数2 time 上次有动作时间
                     timeoutWarning: null,
                     //超时警告取消 表示警告通知后用户有了操作 重新开始计时
                     timeoutCanceled: null,
                     //超时通知 仅通知，如需关闭需用户在此事件响应中自行调用关闭接口
                     //参数 time 上次有动作时间
-                    timeoutClose: null
+                    timeoutClose: null,
+                    //截图时事件
+                    //参数1 base64png base64编码的png图片
+                    //参数2 id 表示第几个分屏 从1开始 -1表示对讲通道
+                    //参数3 UCVideo对象
+                    //返回值表示是否取消默认后续下载操作，为真时表示取消
+                    onCapture: null,
+                    //停止视频时事件
+                    //参数1 id 表示第几个分屏 从1开始 -1表示对讲通道
+                    //参数2 停止的UCVideo对象
+                    onStop: null,
+                    //设备开始传输视频事件
+                    //参数1 id 表示第几个分屏 从1开始 -1表示对讲通道
+                    //参数2 UCVideo对象
+                    onDevConnect: null,
+                    //设备断开传输视频事件
+                    //参数1 id 表示第几个分屏 从1开始 -1表示对讲通道
+                    //参数2 UCVideo对象
+                    onDevDisconnect: null,
+                    //Websocket通道关闭事件
+                    //参数1 id 表示第几个分屏 从1开始 -1表示对讲通道
+                    //参数2 UCVideo对象
+                    onWsClose: null,
+                    //服务端通知事件
+                    //参数1 事件类型 字符串(onDevConnect onDevDisconnect onWsClose)之一
+                    //参数2 id 表示第几个分屏 从1开始 -1表示对讲通道
+                    //参数3 UCVideo对象
+                    onServerNotice: null,
+                    //服务端结束
+                    //参数1 结束原因 字符串
+                    //参数2 id 表示第几个分屏 从1开始 -1表示对讲通道
+                    //参数3 UCVideo对象
+                    //返回值表示是否取消自动停止，为真时表示取消
+                    onEndByServer: null
                 },
 
 
