@@ -84,7 +84,16 @@ defaultConfig = {
                     //参数2 id 表示第几个分屏 从1开始 -1表示对讲通道
                     //参数3 UCVideo对象
                     //返回值表示是否取消自动停止，为真时表示取消
-                    onEndByServer: null
+                    onEndByServer: null,
+                    //hls模式获取到HLS地址时触发
+                    //参数1 id 表示第几个分屏 从1开始
+                    //参数2 UCVideo对象
+                    //参数3 hls_http地址
+                    //参数4 hls_https地址
+                    //参数5 rtmp地址
+                    //参数6 clinetID 客户端ID 每次请求会不一样
+                    //返回值表示是否取消自动播放，为真时表示取消
+                    onHlsPlay: null
                 },
 
 
