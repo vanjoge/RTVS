@@ -71,7 +71,7 @@ RTVS可部署版本已打包成docker镜像并上传到dockerhub，可以通过�
 11. 性能优秀，单节点4核8G即可通过交通部压力测试，即至少200路并发视频；
 12. 支持服务端缓存，播放/上传过的历史视频无需从设备传输；
 13. 完整运维后台支持，每一次视频请求均有记录，通过日志可快速定位问题；
-14. 支持多种播放模式(FMP4/Webrtc/RTMP/HLS)，并支持自动根据当前浏览器环境选择最优方案。
+14. 支持多种播放模式(FMP4/Webrtc/RTMP/HLS)，并支持自动根据当前浏览器环境选择最优方案；
 
 
 ## 已测试
@@ -88,20 +88,20 @@ RTVS可部署版本已打包成docker镜像并上传到dockerhub，可以通过�
 *注：延迟与设备和网络均有关系，这里的测试环境是设备通过有线连接，服务端为远端IDC机房，其他环境延迟值更低或更高均有可能。* 
 
 > Windows Chrome
-![windows Chrome](https://img-blog.csdnimg.cn/20200817154414395.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3ZhbmpvZ2U=,size_16,color_FFFFFF,t_70#pic_center)
+![windows Chrome](test/img/Windows_Chrome.jpg)
 
 > Windows Firefox
-![windows firefox](https://img-blog.csdnimg.cn/20200817154454106.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3ZhbmpvZ2U=,size_16,color_FFFFFF,t_70#pic_center)
+![windows firefox](test/img/Windows_Firefox.jpg)
 
 > Linux Chrome
-![Linux chrome](https://img-blog.csdnimg.cn/20200817170544901.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3ZhbmpvZ2U=,size_16,color_FFFFFF,t_70#pic_center)
+![Linux chrome](test/img/Linux_Chrome.jpg)
 
 ## 移动端测试 
 > Android Firefox
-![Android Firefox](https://img-blog.csdnimg.cn/20200820104203412.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3ZhbmpvZ2U=,size_16,color_FFFFFF,t_70#pic_center)
+![Android Firefox](test/img/Android_Firefox.jpg)
 
 > Android Chrome
-![Android Chrome](https://img-blog.csdnimg.cn/2020082010424656.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3ZhbmpvZ2U=,size_16,color_FFFFFF,t_70#pic_center)
+![Android Chrome](test/img/Android_Chrome.jpg)
 
 
 ## 前端播放性能测试
@@ -111,13 +111,15 @@ RTVS可部署版本已打包成docker镜像并上传到dockerhub，可以通过�
 > 测试机 I7-5500U 940M 8G 
 > 
 > Chrome CPU占用约 65% GPU 40% 
-![16路720P](https://img-blog.csdnimg.cn/20200820101716110.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3ZhbmpvZ2U=,size_16,color_FFFFFF,t_70#pic_center)
+![16路720P](test/img/PlayStress.jpg)
 
 ## 压力测试
 
 > 测试机 I7-5500U 940M 8G 
 > 
-![压力截图](test/Stress.png)
+![压力截图](test/img/Stress.png)
+
+
 
 
 QQ交流群：614308923
