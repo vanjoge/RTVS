@@ -159,6 +159,48 @@ window.onload = function () {
        }
 ```
 
+
+自定义分屏
+----
+     接口
+```
+CustomScreens(screenIndex, callback);
+```
+   参数说明
+```
+screenIndex:分屏key，与CvNetVideo.LayoutByScreens参数对应。
+不要为数值，否则可能与默认分屏冲突。
+
+callback:分屏计算回调
+```
+     示例
+```
+   CvNetVideo.CustomScreens("3X2", function(width, height) {
+            width = parseInt((width - 4) / 3);
+            height = parseInt((height - 4) / 2);
+            for (var i = 1; i <= 16; i++) {
+                var video_div = CvNetVideo.Videos[i].GetVideoDiv();
+                if (i > 6) {
+                    //超过分屏数量隐藏掉
+                    video_div.style.display = "none";
+                } else {
+                    //计算当前分屏所在位置
+                    video_div.style.display = "block";
+                    let index = i - 1;
+                    let left = 2 + (index % 3) * width;
+                    let top = 2 + parseInt(index / 3) * height;
+                    video_div.style.left = left + "px";
+                    video_div.style.top = top + "px";
+                    video_div.style.width = (width - 4) + "px";
+                    video_div.style.height = (height - 4) + "px";
+                    CvNetVideo.Videos[i].Resize();
+                }
+            }
+        });
+   CvNetVideo.LayoutByScreens("3X2");
+```
+
+
 发起实时视频
 ----
      接口
