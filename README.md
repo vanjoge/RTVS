@@ -29,6 +29,7 @@
 
 默认手机号为一个模拟设备，不一定随时打开着，建议自己挂一台真实设备上去，也方便看延迟。
 
+
 ## 更新
 
 ```diff
@@ -45,6 +46,10 @@
 RTVS可部署版本已打包成docker镜像并上传到dockerhub，可以通过本项目的启动脚本可快速运行RTVS。
 
 [启动脚本见此文档](script/README.md)
+
+### 部署示例
+
+[阿里云部署例子](https://blog.csdn.net/vanjoge/article/details/108319078)
 
 
 ## 808平台接入指南
