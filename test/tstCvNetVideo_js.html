@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width" />
     <title>CvNetVideo_js_1.2.0控件测试</title>
     <script type="text/javascript" src="https://lib.cvtsp.com/video/CVNetVideoJs/1.2.0/CvNetVideo.js"></script>
-  
+
     <style>
         select, input {
             width: 160px;
@@ -24,6 +24,7 @@
                     <td>
                         <select id="cmbScreenNumbers" onchange="Screens(this.value)">
                             <option value="1">1=1x1</option>
+                            <option value="2">2=1+1</option>
                             <option value="4" selected="selected">4=2x2</option>
                             <option value="6">6=1+5</option>
                             <option value="8">8=1+7</option>
@@ -31,6 +32,8 @@
                             <option value="10">10=1+9</option>
                             <option value="13">13=1+12</option>
                             <option value="16">16=4x4</option>
+                            <option value="3X2">自定义3x2</option>
+                            <option value="1+1">自定义1+1(左上)</option>
                         </select>
                     </td>
                     <td>播放器类型:</td>
@@ -117,8 +120,15 @@
             <table style="table-layout:fixed">
                 <tr>
                     <td>
-
                         <button onclick="QueryVideoFileList(0)" disabled>查询列表(0x9205)</button>
+                    </td>
+                    <td>回放码流类型:</td>
+                    <td>
+                        <select id="cmbStreamType_back">
+                            <option value="0" selected="selected">所有码流</option>
+                            <option value="1">主码流</option>
+                            <option value="2">子码流</option>
+                        </select>
                     </td>
                     <td>开始时间:</td>
                     <td><input id="txtStarttime" value="2020-08-04 00:00:00" type="datetime" /></td>
@@ -126,14 +136,25 @@
                     <td><input id="txtEndtime" value="2020-08-04 14:00:00" type="datetime" /></td>
                     <td>报警标志:</td>
                     <td>
-                        <input id="numAlarm" value="1892833243" type="number" />
+                        <input id="numAlarm" value="0" type="number" />
                     </td>
+                </tr>
+                <tr>
+                    <td></td>
                     <td>存储器类型:</td>
                     <td>
                         <select id="cmbStorageType">
                             <option value="0">主存储器或灾备存储器</option>
                             <option value="1" selected="selected">主存储器</option>
                             <option value="2">灾备储器</option>
+                        </select>
+                    </td>
+                    <td>来源:</td>
+                    <td>
+                        <select id="cmbDataSource">
+                            <option value="0" selected="selected">默认</option>
+                            <option value="1">设备</option>
+                            <option value="2">服务器缓存</option>
                         </select>
                     </td>
                 </tr>
@@ -299,8 +320,8 @@
         <div id="btns">
             <div>
                 <h3>控制</h3>
-                <button onclick="Colse(0)" disabled>关闭当前选中视频</button>
-                <button onclick="Colse(-1)" disabled>关闭所有视频</button>
+                <button onclick="Close(0)" disabled>关闭当前选中视频</button>
+                <button onclick="Close(-1)" disabled>关闭所有视频</button>
                 <button onclick="FullScreen()" disabled>全屏</button>
             </div>
             <div id="playbackbyday" style="display:none">
@@ -319,6 +340,12 @@
             console.log(CvNetVideo.version);
             init();
 
+            var myDate = new Date();
+            document.getElementById("txtStarttime").value = myDate.toLocaleDateString().split('/').join('-') + " 00:00:00";
+
+            var time = myDate.getTime() + 24 * 60 * 60 * 1000;
+            var nextday = new Date(time);
+            document.getElementById("txtEndtime").value = nextday.toLocaleDateString().split('/').join('-') + " 00:00:00";
         };
 
         function WindowResize() {
@@ -348,6 +375,91 @@
             var selected = id;
         }
 
+        var oldTitle = document.title;
+        function timeoutWarning(leftMsec, time) {
+            //leftMsec 剩余关闭毫秒
+            //time     上次有动作时间
+            document.title = leftMsec / 1000 + '秒后将自动关闭';
+        }
+        //time     上次有动作时间
+        function timeoutClose(time) {
+            Close(-1);
+            alert('长时间无操作，已自动关闭！');
+            document.title = oldTitle;
+        }
+        function timeoutCanceled() {
+            document.title = oldTitle;
+        }
+        function onVideoStop(id, ucVideo) {
+            //alert(id + '分屏已关闭！');
+        }
+        function onServerNotice(type, id, ucVideo) {
+            console.log("event:" + type + " videoid:" + id);
+        }
+        function onEndByServer(msg, id, ucVideo) {
+            alert(id + "分屏播放结束，原因：" + msg);
+        }
+        function onCapture(base64png, id, ucVideo) {
+            console.log(id + "分屏截图 sim:" + ucVideo.Sim + " Channel:" + ucVideo.Channel);
+            //console.log(base64png);
+        }
+        function onHlsPlay(id, ucVideo, hlshttp, hlshttps, rtmpurl, cid) {
+            console.log(hlshttp, hlshttps, rtmpurl, cid);
+            //console.log(base64png);
+        } //分屏回调
+        function Split3X2(width, height) {
+            width = parseInt((width - 4) / 3);
+            height = parseInt((height - 4) / 2);
+            for (var i = 1; i <= 16; i++) {
+                var video_div = CvNetVideo.Videos[i].GetVideoDiv();
+                if (i > 6) {
+                    //超过分屏数量隐藏掉
+                    video_div.style.display = "none";
+                } else {
+                    //计算当前分屏所在位置
+                    video_div.style.display = "block";
+                    let index = i - 1;
+                    let left = 2 + (index % 3) * width;
+                    let top = 2 + parseInt(index / 3) * height;
+                    video_div.style.left = left + "px";
+                    video_div.style.top = top + "px";
+                    video_div.style.width = (width - 4) + "px";
+                    video_div.style.height = (height - 4) + "px";
+                    CvNetVideo.Videos[i].Resize();
+                }
+            }
+        }
+        function Split2(width, height) {
+            width = width - 4;
+            height = height - 4;
+            for (var i = 1; i <= 16; i++) {
+                var video_div = CvNetVideo.Videos[i].GetVideoDiv();
+                if (i > 2) {
+                    video_div.style.display = "none";
+                } else if (i == 1) {
+                    video_div.style.display = "block";
+
+                    video_div.style.left = "2px";
+                    video_div.style.top = "2px";
+                    video_div.style.width = (width - 4) + "px";
+                    video_div.style.height = (height - 4) + "px";
+                    video_div.style.zIndex = 0;
+                    CvNetVideo.Videos[i].Resize();
+                } else if (i == 2) {
+                    video_div.style.display = "block";
+
+                    let w = parseInt(width / 3);
+                    let h = parseInt(height / 3);
+
+                    video_div.style.left = "5px";
+                    video_div.style.top = "5px";
+                    video_div.style.width = w + "px";
+                    video_div.style.height = h + "px";
+                    video_div.style.zIndex = 1;
+                    CvNetVideo.Videos[i].Resize();
+                }
+            }
+        }
         function init() {
             CvNetVideo.Init(document.querySelector("#player"), document.querySelector("#cmbScreenNumbers").value,
                 {
@@ -359,8 +471,32 @@
                     selectedEvent: function (e) {
                         var selected = e;
                     },
-                    playerMode: 0
+                    //事件通知
+                    events: {
+                        //截图事件
+                        onCapture: onCapture,
+                        //超时前警告通知
+                        timeoutWarning: timeoutWarning,
+                        //超时警告取消
+                        timeoutCanceled: timeoutCanceled,
+                        //超时通知
+                        timeoutClose: timeoutClose,
+                        //停止播放通知
+                        onStop: onVideoStop,
+                        //服务端通知
+                        onServerNotice: onServerNotice,
+                        //被服务端结束播放通知
+                        onEndByServer: onEndByServer,
+                        //HLS模式播放前通知 可获取RTMP HLS 等URL
+                        onHlsPlay: onHlsPlay
+                    }
                 });
+
+            //自定义分屏
+            //参数1为分屏key， 与CvNetVideo.LayoutByScreens参数对应。 不要为数值，否则可能与默认分屏冲突。
+            //参数2为分屏计算回调
+            CvNetVideo.CustomScreens("3X2", Split3X2);
+            CvNetVideo.CustomScreens("1+1", Split2);
 
             //CvNetVideo.SetRealOrBack(false);
             //CvNetVideo.SetBackDateTime(
@@ -409,13 +545,13 @@
                 id,
                 document.querySelector('#numAlarm').value,
                 parseInt(document.querySelector('#cmbMideaType').value),
-                parseInt(document.querySelector('#cmbStreamType').value),
+                parseInt(document.querySelector('#cmbStreamType_back').value),
                 parseInt(document.querySelector('#cmbStorageType').value),
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
                     clusterPort: document.querySelector("#txtport").value
-
-                }
+                },
+                parseInt(document.querySelector('#cmbDataSource').value)
             );
         }
         function AVTransferControl(id) {
@@ -439,7 +575,7 @@
                 document.querySelector('#txtsim').value,
                 parseInt(document.querySelector('#cmbChannel').value),
                 parseInt(document.querySelector('#cmbMideaType').value),
-                parseInt(document.querySelector('#cmbStreamType').value),
+                parseInt(document.querySelector('#cmbStreamType_back').value),
                 parseInt(document.querySelector('#cmbStorageType').value),
                 parseInt(document.querySelector('#cmbPlaybackMode').value),
                 parseInt(document.querySelector('#cmbMultiple').value),
@@ -449,10 +585,10 @@
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
                     clusterPort: document.querySelector("#txtport").value
-
                 },
                 null,
-                parseInt(document.querySelector('#cmbPlayermode').value)
+                parseInt(document.querySelector('#cmbPlayermode').value),
+                parseInt(document.querySelector('#cmbDataSource').value)
             )
         }
         function PlaybackVideoControl(id) {
@@ -478,15 +614,15 @@
                 DateToUnixLong(document.querySelector('#txtEndtime').value),
                 document.querySelector('#numAlarm').value,
                 parseInt(document.querySelector('#cmbMideaType').value),
-                parseInt(document.querySelector('#cmbStreamType').value),
+                parseInt(document.querySelector('#cmbStreamType_back').value),
                 parseInt(document.querySelector('#cmbStorageType').value),
                 QueryVideoFileListCallback,
                 id,
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
                     clusterPort: document.querySelector("#txtport").value
-
-                }
+                },
+                parseInt(document.querySelector('#cmbDataSource').value)
             );
         }
         function QueryVideoFileListCallback(data) {
@@ -525,6 +661,8 @@
             td7.innerText = "存储器类型(StorageType)";
             var td8 = document.createElement("th");
             td8.innerText = "文件大小(FileSize)";
+            var td9 = document.createElement("th");
+            td9.innerText = "操作";
             tr.appendChild(td1);
             tr.appendChild(td2);
             tr.appendChild(td3);
@@ -533,6 +671,7 @@
             tr.appendChild(td6);
             tr.appendChild(td7);
             tr.appendChild(td8);
+            tr.appendChild(td9);
             table.appendChild(tr);
             // 遍历文件信息
             if (data.FileList.length > 0) {
@@ -555,6 +694,19 @@
                     td7.innerText = item.StorageType;
                     var td8 = document.createElement("td");
                     td8.innerText = item.FileSize;
+                    var td9 = document.createElement("td");
+                    var aaa = document.createElement("a");
+                    aaa.href = "javascript:CvNetVideo.PlaybackVideo(document.querySelector('#txtsim').value,"
+                        + item.Channel + ","
+                        + item.MediaType + ","
+                        + item.StreamType + ","
+                        + item.StorageType + ","
+                        + "parseInt(document.querySelector('#cmbPlaybackMode').value),parseInt(document.querySelector('#cmbMultiple').value),"
+                        + "Time1078ToTime('" + item.StartTime + "'),"
+                        + "Time1078ToTime('" + item.EndTime + "'),0,"
+                        + "{clusterHost: document.querySelector('#txtserveradd').value,clusterPort: document.querySelector('#txtport').value},null,parseInt(document.querySelector('#cmbPlayermode').value),parseInt(document.querySelector('#cmbDataSource').value))";
+                    aaa.innerText = "播放";
+                    td9.appendChild(aaa);
                     tr.appendChild(td1);
                     tr.appendChild(td2);
                     tr.appendChild(td3);
@@ -563,6 +715,7 @@
                     tr.appendChild(td6);
                     tr.appendChild(td7);
                     tr.appendChild(td8);
+                    tr.appendChild(td9);
                     table.appendChild(tr);
                 }
                 table.style.color = "green";
@@ -577,6 +730,10 @@
             }
             div.appendChild(table);
         }
+        function Time1078ToTime(time1078) {
+            return ParseDate("20" + time1078.substring(0, 2) + "-" + time1078.substring(2, 4) + "-" + time1078.substring(4, 6)
+                + " " + time1078.substring(6, 8) + ":" + time1078.substring(8, 10) + ":" + time1078.substring(10, 12));
+        }
         function FtpVideoFileUpload(id) {
             CvNetVideo.FtpVideoFileUpload(
                 document.querySelector('#txtsim').value,
@@ -590,7 +747,7 @@
                 ParseDate(document.querySelector('#txtEndtime').value),
                 document.querySelector('#numAlarm').value,
                 parseInt(document.querySelector('#cmbMideaType').value),
-                parseInt(document.querySelector('#cmbStreamType').value),
+                parseInt(document.querySelector('#cmbStreamType_back').value),
                 parseInt(document.querySelector('#cmbStorageType').value),
                 parseInt(document.querySelector("#taskCondition").value),
                 FtpVideoFileUploadCallback,
@@ -598,7 +755,6 @@
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
                     clusterPort: document.querySelector("#txtport").value
-
                 }
             );
         }
@@ -647,7 +803,7 @@
             CvNetVideo.SetPriority(parseInt(document.querySelector('#prioritytext').value))
         }
 
-        function Colse(id) {
+        function Close(id) {
             CvNetVideo.Stop(id);
         }
         function FullScreen() {
