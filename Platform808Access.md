@@ -25,9 +25,9 @@ RTVS会按照以下规则通过Get请求发送0x9101、0x9201、0x9202、0x9205�
 
 |  消息ID   | 类型 | 返回数据  |
 |  ----  | ----  | ----  |
-| 0x9206   |String| "0"：车辆不在线<br> "-1"：失败<br> 其他：应答流水号(下发9206指令的流水号) |
-| 0x9201,0x9205 |String|  "0"：车辆不在线<br>  "-1"：失败<br> 其他：指令ID(redis接口中[录像列表应答](#录像列表应答)会用到此ID) | 
-| 其他  |String|"0"：车辆不在线<br> "-1"：失败<br>  "1"：成功（仅指将指令成功发送到网关） | 
+| 0x9206   |String| 0：车辆不在线<br> -1：失败<br> 其他：应答流水号(下发9206指令的流水号) |
+| 0x9201,0x9205 |String|  0：车辆不在线<br>  -1：失败<br> 其他：指令ID(redis接口中[录像列表应答](#录像列表应答)会用到此ID) | 
+| 其他  |String|0：车辆不在线<br> -1：失败<br>  1：成功（仅指将指令成功发送到网关） | 
 
 ### 0x9105实时音视频传输状态通知
 RTVS会按照以下规则通过Post请求批量发送0x9105通知，需要网关实现以下HTTP接口。
@@ -206,7 +206,7 @@ RTVS向808平台发送查询录像列表指令后，808平台收到设备应答�
 |  ----  | ----  |
 | 数据类型  | String |
 | Key  | OCX_ORDERINFO_[发起指令时HTTP接口返回的指令ID] |
-| 值  | [VideoOrderAck](#VideoOrderAck) 的JSON ,其中Data为[JTVideoListInfo](#JTVideoListInfo) 的JSON,如果指令失败将Data置为null|
+| 值  | [VideoOrderAck](#VideoOrderAck) 的JSON ,如果指令失败将VideoList置为null|
 
 #### VideoOrderAck
 ```
@@ -221,9 +221,9 @@ RTVS向808平台发送查询录像列表指令后，808平台收到设备应答�
         public int Status { get; set; }
 
         /// <summary>
-        /// 返回数据
+        /// 录像列表
         /// </summary>
-        public string Data { get; set; }
+        public JTVideoListInfo VideoList { get; set; }
 
         /// <summary>
         /// 错误消息
@@ -240,9 +240,9 @@ public class VideoOrderAck {
     public int Status;
 
     /**
-     * 返回数据
+     * 录像列表
      */
-    public String Data;
+    public JTVideoListInfo VideoList;
 
     /**
      * 错误消息
