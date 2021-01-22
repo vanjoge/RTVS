@@ -59,7 +59,7 @@ CvNetVideo.Init(dom, VideoNums = 4, config = {});
    参数说明
 ```
 dom:视频控件插入节点，一般是div
-VideoNums:显示视频控件数量，后期可调整，支持1, 4, 6, 9, 10, 16
+VideoNums:显示视频控件数量，后期可调整，支持1, 2, 4, 6, 9, 10, 16
 config:配置项
 defaultConfig = {
                 //以下只可初始化传入 后期不可改
