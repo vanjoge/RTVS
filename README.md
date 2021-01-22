@@ -33,7 +33,10 @@
 > 
 > AMR_NB(仅解码)
 
+## 项目地址
 
+[https://github.com/vanjoge/RTVS](https://github.com/vanjoge/RTVS)
+[https://gitee.com/vanjoge/RTVS](https://gitee.com/vanjoge/RTVS)
 
 
 ## 特色：
@@ -50,6 +53,7 @@
 11. 完整运维后台支持，每一次视频请求均有记录，运维人员通过日志可快速定位问题，无需开发人员参与；
 12. **支持4K**实时/历史视频。
 
+![拖拽切换](test/img/drag.gif)
 
 
 ## 测试地址
