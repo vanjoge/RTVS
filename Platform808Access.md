@@ -1,6 +1,11 @@
 # RTVS与808平台对接说明
 视频平台(以下简称RTVS)只负责与设备的音视频流通信，并不支持808通道接入，808通道需要808网关支持，RTVS与808网关通过以下方式进行通信。
 
+RTVS自带的测试808网关已开源，可参考对应实现，地址：
+
+[https://github.com/vanjoge/JT808GW](https://github.com/vanjoge/JT808GW)
+
+[https://gitee.com/vanjoge/JT808GW](https://gitee.com/vanjoge/JT808GW)
 
 |  功能   | 必须实现  |可能用到|
 |  ----  | ----  | ----  |
