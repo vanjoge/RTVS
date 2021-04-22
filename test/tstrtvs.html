@@ -3,8 +3,8 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>CvNetVideo_js_1.2.0控件测试</title>
-    <script type="text/javascript" src="https://lib.cvtsp.com/video/CVNetVideoJs/1.2.0/CvNetVideo.js"></script>
+    <title>CvNetVideo_js_1.3.0控件测试</title>
+    <script type="text/javascript" src="https://lib.cvtsp.com/video/CVNetVideoJs/1.3.0/CvNetVideo.js"></script>
 
     <style>
         select, input {
@@ -16,6 +16,7 @@
 <body>
     <div>
         <h1>播放测试</h1>
+        <h2>设备接入地址(808协议) 116.228.114.206:15000 </h2>
         <div>
             <h3>控件参数</h3>
             <table style="table-layout:fixed">
@@ -45,11 +46,11 @@
                     </td>
                     <td>服务器:</td>
                     <td>
-                        <input id="txtserveradd" value="127.0.0.1" />
+                        <input id="txtserveradd" value="et.test.cvtsp.com" />
                     </td>
                     <td>端口:</td>
                     <td>
-                        <input id="txtport" value="17000" />
+                        <input id="txtport" value="15001" />
                     </td>
                 </tr>
             </table>
@@ -408,8 +409,12 @@
             //console.log(base64png);
         } //分屏回调
         function Split3X2(width, height) {
-            width = parseInt((width - 4) / 3);
-            height = parseInt((height - 4) / 2);
+
+            CvNetVideo.Container.style.width = width - parseInt((width - CvNetVideo.m_border * 4) % 3) + "px";
+            CvNetVideo.Container.style.height = height - parseInt((height - CvNetVideo.m_border * 3) % 2) + "px";
+
+            width = parseInt((width - CvNetVideo.m_border * 4) / 3);
+            height = parseInt((height - CvNetVideo.m_border * 3) / 2);
             for (var i = 1; i <= 16; i++) {
                 var video_div = CvNetVideo.Videos[i].GetVideoDiv();
                 if (i > 6) {
@@ -419,31 +424,37 @@
                     //计算当前分屏所在位置
                     video_div.style.display = "block";
                     let index = i - 1;
-                    let left = 2 + (index % 3) * width;
-                    let top = 2 + parseInt(index / 3) * height;
+                    let left = (index % 3) * (width + CvNetVideo.m_border);
+                    let top = parseInt(index / 3) * (height + CvNetVideo.m_border);
                     video_div.style.left = left + "px";
                     video_div.style.top = top + "px";
-                    video_div.style.width = (width - 4) + "px";
-                    video_div.style.height = (height - 4) + "px";
+
+                    video_div.style.width = width + "px";
+                    video_div.style.height = height + "px";
                     CvNetVideo.Videos[i].Resize();
                 }
             }
         }
         function Split2(width, height) {
-            width = width - 4;
-            height = height - 4;
+            CvNetVideo.SelectChangeZIndex = false;
+
+            CvNetVideo.Container.style.width = width + "px";
+            CvNetVideo.Container.style.height = height + "px";
+
+            width = width - CvNetVideo.m_border * 2;
+            height = height - CvNetVideo.m_border * 2;
             for (var i = 1; i <= 16; i++) {
-                var video_div = CvNetVideo.Videos[i].GetVideoDiv();
+                var video_div = CvNetVideo.videos[i].GetVideoDiv();
                 if (i > 2) {
                     video_div.style.display = "none";
                 } else if (i == 1) {
                     video_div.style.display = "block";
 
-                    video_div.style.left = "2px";
-                    video_div.style.top = "2px";
-                    video_div.style.width = (width - 4) + "px";
-                    video_div.style.height = (height - 4) + "px";
-                    video_div.style.zIndex = 0;
+                    video_div.style.left = "0px";
+                    video_div.style.top = "0px";
+                    video_div.style.width = width + "px";
+                    video_div.style.height = height + "px";
+                    video_div.style.zIndex = i;
                     CvNetVideo.Videos[i].Resize();
                 } else if (i == 2) {
                     video_div.style.display = "block";
@@ -455,7 +466,7 @@
                     video_div.style.top = "5px";
                     video_div.style.width = w + "px";
                     video_div.style.height = h + "px";
-                    video_div.style.zIndex = 1;
+                    video_div.style.zIndex = i;
                     CvNetVideo.Videos[i].Resize();
                 }
             }
@@ -471,6 +482,7 @@
                     selectedEvent: function (e) {
                         var selected = e;
                     },
+                    enableDbcZoom: true,
                     //事件通知
                     events: {
                         //截图事件
@@ -520,11 +532,19 @@
         }
         //实时流
         function Connect(id) {
+            var mideaType;
+            if (document.querySelector('#cmbMideaType').value == 1) {
+                mideaType = 203;
+            } else if (document.querySelector('#cmbMideaType').value == 0) {
+                mideaType = true;
+            } else {
+                mideaType = false;
+            }
             CvNetVideo.StartRealTimeVideo(
                 document.querySelector('#txtsim').value,
                 parseInt(document.querySelector('#cmbChannel').value),
                 parseInt(document.querySelector('#cmbStreamType').value),
-                true,
+                mideaType,
                 id,
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
@@ -785,7 +805,7 @@
             );
         }
         function SetOsdText(id) {
-            CvNetVideo.SetOsdColor("#00ff00");
+            CvNetVideo.SetOsdColor("#00ff00", id);
             CvNetVideo.SetOsdText(id, document.querySelector('#osdtext').value);
         }
         function SetRotate(id) {
@@ -796,7 +816,7 @@
         }
 
         function SetOsdVisible(is_visible) {
-            CvNetVideo.SetOsdVisible(is_visible);
+            CvNetVideo.SetOsdVisible(is_visible, 0);
         }
 
         function SetPriority() {

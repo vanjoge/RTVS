@@ -42,7 +42,7 @@ JS视频播放插件
 ----
 引用
 ```
- <script type="text/javascript" src="http://lib.cvtsp.com/video/CVNetVideoJs/1.2.0/CvNetVideo.js"></script>
+ <script type="text/javascript" src="http://lib.cvtsp.com/video/CVNetVideoJs/1.3.0/CvNetVideo.js"></script>
 
 ```
 ## API说明
@@ -73,10 +73,12 @@ defaultConfig = {
                 libffmpegUrl: "/Scripts/libffmpeg.js",
                 //css地址 如需修改控件样式，请自行指定css地址
                 cssUrl: "/css/CVNetVideo.css",
-                recordVideo: false,
-                screenshot: false,
-                yuntaiCtrl: false,
+                recordVideo: true,
+                screenshot: true,
+                yuntaiCtrl: true,
                 networkSpeaking: true,
+                //启用双击放大单窗口
+                enableDbcZoom: true,
                 //超时警告时间 默认4.5分钟通知
                 timeoutWarningMsec: 270000,
                 //超时时间 默认5分钟
@@ -133,14 +135,17 @@ defaultConfig = {
                     //参数5 rtmp地址
                     //参数6 clinetID 客户端ID 每次请求会不一样
                     //返回值表示是否取消自动播放，为真时表示取消
-                    onHlsPlay: null
+                    onHlsPlay: null,
+                    //对讲开始 与设备链路建立完成，且可开始对讲时触发
+                    //参数 无
+                    onStartSpeek: null
                 },
 
 
                 //以下参数可调用方法时修改
 
 
-                //0 自动 1 WASM软解(canvas+audioAPI) 2 js封装FMP4(h264Demuxer+audioAPI) 3 WASM封装FMP4(WASM2FMP4) 4 服务器推fmp4流 5 webrtc 6 hls
+                //0 自动 1 WASM软解(canvas+audioAPI) 2 js封装FMP4(h264Demuxer+audioAPI) 3 WASM封装FMP4(WASM2FMP4) 4 服务器推fmp4流 5 webrtc 6 hls 
                 //模式1 2 3已经停止更新，新版本可能存在不兼容情况，不推荐使用
                 playerMode: 0,
                 //是否使用集群管理分配服务器信息
@@ -167,12 +172,18 @@ defaultConfig = {
                 speekSendMode: 0,
                 //播放过程中是否显示正在加载loading框
                 showLoadingByPlay: true,
-                //追帧模式 0 跳到最新 其他 倍速加速
+                //显示loading延迟毫秒
+                showLoadDelayMs: 1000,
+                //追帧模式 小于0 不追帧 0 跳到最新 其他 倍速加速
                 seekMode: 1,
                 //最大允许延迟秒 超过则开始追帧
-                maxDelay: 2,
+                maxDelay: 8,
                 //选中事件
-                selectedEvent: null
+                selectedEvent: null,
+                //截图图片类型 0 png, 1 jpeg, 2 webp
+                captureType: 0,
+                //截图图片质量 0-1 jpeg和webp时有效
+                captureQuality: null
             };
 ```
    示例

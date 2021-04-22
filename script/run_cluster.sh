@@ -4,7 +4,7 @@ echo "当前执行文件......$0"
 ##################################变量定义##################################
 DOCKER_CLUSTER_NAME=${DOCKER_CLUSTER_NAME:-"cvcluster-1"}
 DOCKER_CLUSTER_PATH=${DOCKER_CLUSTER_PATH:-"/etc/service/$DOCKER_CLUSTER_NAME"}
-DOCKER_CLUSTER_IMAGE_NAME=${DOCKER_CLUSTER_IMAGE_NAME:-"vanjoge/cvcluster:1.2.12"}
+DOCKER_CLUSTER_IMAGE_NAME=${DOCKER_CLUSTER_IMAGE_NAME:-"vanjoge/cvcluster:1.3.0"}
 
 #证书
 CV_PXF_PATH=${CV_PXF_PATH:-""}
