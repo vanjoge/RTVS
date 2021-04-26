@@ -767,7 +767,7 @@ CvNetVideo.SetPriority(priority, videoId = 0);
 ```
    参数说明
 ```
-priority: 优先级0-255 越大优先级越高
+priority: 优先级0-100 越大优先级越高
 videoId:0为选中窗口，其它为窗口索引号从1开始
 ```
 
