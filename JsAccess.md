@@ -77,8 +77,6 @@ defaultConfig = {
                 screenshot: true,
                 yuntaiCtrl: true,
                 networkSpeaking: true,
-                //启用双击放大单窗口
-                enableDbcZoom: true,
                 //超时警告时间 默认4.5分钟通知
                 timeoutWarningMsec: 270000,
                 //超时时间 默认5分钟
@@ -140,12 +138,16 @@ defaultConfig = {
                     //参数 无
                     onStartSpeek: null
                 },
+                //初始化完成通知
+                callback: null,
 
 
                 //以下参数可调用方法时修改
 
 
-                //0 自动 1 WASM软解(canvas+audioAPI) 2 js封装FMP4(h264Demuxer+audioAPI) 3 WASM封装FMP4(WASM2FMP4) 4 服务器推fmp4流 5 webrtc 6 hls 
+                //启用双击放大单窗口
+                enableDbcZoom: true,
+                //0 自动 1 WASM软解(canvas+audioAPI) 2 js封装FMP4(h264Demuxer+audioAPI) 3 WASM封装FMP4(WASM2FMP4) 4 服务器推fmp4流 5 webrtc 6 hls 7 webrtc(srs)
                 //模式1 2 3已经停止更新，新版本可能存在不兼容情况，不推荐使用
                 playerMode: 0,
                 //是否使用集群管理分配服务器信息
@@ -183,7 +185,9 @@ defaultConfig = {
                 //截图图片类型 0 png, 1 jpeg, 2 webp
                 captureType: 0,
                 //截图图片质量 0-1 jpeg和webp时有效
-                captureQuality: null
+                captureQuality: null,
+                //流畅模式，开播会缓存够一定时间buff，保证播放流畅性，但延迟稍高 fmp4模式有效
+                smoothMode: false,
             };
 ```
    示例
@@ -738,6 +742,31 @@ CvNetVideo.IsPlaying(videoId);
 ```
 videoId:0为选中窗口，其它为窗口索引号从1开始
 return: true 播放中 false 未播放
+```
+
+#### 设置超时时间
+     接口
+```
+// 设置超时时间
+CvNetVideo.SetTimeoutMsec(timeoutCloseMsec, timeoutWarningMsec);
+
+```
+   参数说明
+```
+timeoutCloseMsec: 超时关闭时间
+timeoutWarningMsec: 超时前警告提醒时间
+```
+#### 设置优先级
+     接口
+```
+// 设置优先级
+CvNetVideo.SetPriority(priority, videoId = 0);
+
+```
+   参数说明
+```
+priority: 优先级0-255 越大优先级越高
+videoId:0为选中窗口，其它为窗口索引号从1开始
 ```
 
 ### 属性
