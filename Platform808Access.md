@@ -45,6 +45,8 @@ RTVS会按照以下规则通过Get请求发送0x9101、0x9201、0x9202、0x9205�
 | 其他  |String|0：车辆不在线<br> -1：失败<br>  1：成功（仅指将指令成功发送到网关） | 
 
 
+#### 实时/历史流程示意图
+![gw](vsd/img/9101.png)
 #### 网关接入处理逻辑
 ![gw](vsd/img/gw.png)
 
@@ -243,6 +245,7 @@ RTVS响应上级平台时，需要拿车牌和车牌颜色换取手机号，需�
 ```
 
 ### 录像列表应答
+
 RTVS向808平台发送查询录像列表指令后，808平台收到设备应答后，应当将应答结果按下面格式写入redis。
 
 |  类别   | 值  |
@@ -251,6 +254,7 @@ RTVS向808平台发送查询录像列表指令后，808平台收到设备应答�
 | Key  | OCX_ORDERINFO_[发起指令时HTTP接口返回的指令ID] |
 | 值  | [VideoOrderAck](#VideoOrderAck) 的JSON ,如果指令失败将VideoList置为null|
 | TTL  | 建议为5分钟，即300  |
+
 
 #### VideoOrderAck
 ```
@@ -439,6 +443,11 @@ public class JTVideoFileListItem {
 127.0.0.1:6379> GET OCX_ORDERINFO_637469123220860199
 "{\"Status\":1,\"VideoList\":{\"SerialNumber\":140,\"FileCount\":12,\"FileList\":[{\"Channel\":1,\"StartTime\":\"2021-01-22T00:00:00\",\"EndTime\":\"2021-01-22T00:05:00\",\"Alarm\":0,\"MediaType\":0,\"StreamType\":0,\"StorageType\":1,\"FileSize\":4938812},{\"Channel\":1,\"StartTime\":\"2021-01-22T00:05:00\",\"EndTime\":\"2021-01-22T00:10:00\",\"Alarm\":0,\"MediaType\":0,\"StreamType\":0,\"StorageType\":1,\"FileSize\":4938812},{\"Channel\":1,\"StartTime\":\"2021-01-22T00:10:00\",\"EndTime\":\"2021-01-22T00:15:00\",\"Alarm\":0,\"MediaType\":0,\"StreamType\":0,\"StorageType\":1,\"FileSize\":4938812},{\"Channel\":1,\"StartTime\":\"2021-01-22T00:15:00\",\"EndTime\":\"2021-01-22T00:20:00\",\"Alarm\":0,\"MediaType\":0,\"StreamType\":0,\"StorageType\":1,\"FileSize\":4938812},{\"Channel\":1,\"StartTime\":\"2021-01-22T00:20:00\",\"EndTime\":\"2021-01-22T00:25:00\",\"Alarm\":0,\"MediaType\":0,\"StreamType\":0,\"StorageType\":1,\"FileSize\":4938812},{\"Channel\":1,\"StartTime\":\"2021-01-22T00:25:00\",\"EndTime\":\"2021-01-22T00:30:00\",\"Alarm\":0,\"MediaType\":0,\"StreamType\":0,\"StorageType\":1,\"FileSize\":4938812},{\"Channel\":1,\"StartTime\":\"2021-01-22T00:30:00\",\"EndTime\":\"2021-01-22T00:35:00\",\"Alarm\":0,\"MediaType\":0,\"StreamType\":0,\"StorageType\":1,\"FileSize\":4938812},{\"Channel\":1,\"StartTime\":\"2021-01-22T00:35:00\",\"EndTime\":\"2021-01-22T00:40:00\",\"Alarm\":0,\"MediaType\":0,\"StreamType\":0,\"StorageType\":1,\"FileSize\":4938812},{\"Channel\":1,\"StartTime\":\"2021-01-22T00:40:00\",\"EndTime\":\"2021-01-22T00:45:00\",\"Alarm\":0,\"MediaType\":0,\"StreamType\":0,\"StorageType\":1,\"FileSize\":4938812},{\"Channel\":1,\"StartTime\":\"2021-01-22T00:45:00\",\"EndTime\":\"2021-01-22T00:50:00\",\"Alarm\":0,\"MediaType\":0,\"StreamType\":0,\"StorageType\":1,\"FileSize\":4938812},{\"Channel\":1,\"StartTime\":\"2021-01-22T00:50:00\",\"EndTime\":\"2021-01-22T00:55:00\",\"Alarm\":0,\"MediaType\":0,\"StreamType\":0,\"StorageType\":1,\"FileSize\":4938812},{\"Channel\":1,\"StartTime\":\"2021-01-22T00:55:00\",\"EndTime\":\"2021-01-22T01:00:00\",\"Alarm\":0,\"MediaType\":0,\"StreamType\":0,\"StorageType\":1,\"FileSize\":4938812}]},\"ErrMessage\":null}"
 ```
+
+
+#### 9205流程示意图
+![gw](vsd/img/9205.png)
+
 
 ### 磁盘空间配置
 此处按照1077功能要求配置磁盘空间使用规则，需要平台将配置写入redis，RTVS会按照配置的值进行磁盘空间管理。
