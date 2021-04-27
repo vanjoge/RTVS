@@ -1,5 +1,8 @@
 # 启动脚本
-以下在Centos7下测试通过，其他环境可能需要修改docker_network.sh脚本，主要需解决docker容器访问宿主机"No route to host"问题。
+
+[阿里云部署例子](https://blog.csdn.net/vanjoge/article/details/108319078)
+
+以下在Centos7和Ubuntu20.04下测试通过，其他环境可能需要修改docker_network.sh脚本，主要需解决docker容器访问宿主机"No route to host"问题。
 
 需支持lsof命令
 1. 添加docker自定义网络172.29.108.X网段(**仅首次需要**)
@@ -71,8 +74,8 @@ sudo -E ./run_rtvs.sh
 |  端口   | 类型  |说明|
 |  ----  | ----  | ----  |
 | 17000  | TCP  | 集群管理 |
-| 6001-6100  | TCP  | RTVS |
-| 14001-14200  | TCP+UDP  | Webrtc端口 |
+| 6001-6030  | TCP  | RTVS |
+| 14001-14200  | TCP+UDP  | Webrtc端口(不用webrtc可不映射) |
 | 9300  | TCP  |(可选)测试网关808协议接入端口 |
   
 
