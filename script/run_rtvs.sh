@@ -40,8 +40,10 @@ DOCKER_GATEWAY_HOST=${DOCKER_GATEWAY_HOST:-"172.29.108.1"}
 
 
 #证书
-CV_PXF_PATH=${CV_PXF_PATH:-""}
-CV_PXF_PWD=${CV_PXF_PWD:-""}
+CV_PFX_PATH=${CV_PFX_PATH:-$CV_PXF_PATH}
+CV_PFX_PWD=${CV_PFX_PWD:-$CV_PXF_PWD}
+CV_PFX_PATH=${CV_PFX_PATH:-""}
+CV_PFX_PWD=${CV_PFX_PWD:-""}
 CV_PEM_PATH=${CV_PEM_PATH:-""}
 CV_PEMKEY_PATH=${CV_PEMKEY_PATH:-""}
 
@@ -230,12 +232,12 @@ function init_system_files_path()
     fi
     
     # 复制证书
-    if [ -n "$CV_PXF_PATH" ]; then
-        if [[ -f "$CV_PXF_PATH" ]]; then
-            echo "拷贝证书文件： $CV_PXF_PATH $DOCKER_RTVSWEB_PATH/certificate.pfx"
-            cp -f $CV_PXF_PATH $DOCKER_RTVSWEB_PATH/certificate.pfx
+    if [ -n "$CV_PFX_PATH" ]; then
+        if [[ -f "$CV_PFX_PATH" ]]; then
+            echo "拷贝证书文件： $CV_PFX_PATH $DOCKER_RTVSWEB_PATH/certificate.pfx"
+            cp -f $CV_PFX_PATH $DOCKER_RTVSWEB_PATH/certificate.pfx
         else
-            echo "缺少$CV_PXF_PATH文件...已退出安装!"
+            echo "缺少$CV_PFX_PATH文件...已退出安装!"
             exit 1
         fi
     else
@@ -811,7 +813,7 @@ function update_config(){
     
     #证书
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml X509FileName "/MyData/certificate.pfx"
-    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml X509Password "$CV_PXF_PWD"
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml X509Password "$CV_PFX_PWD"
     
     #修改传入参数
     if  [ ! -n "$GovWebIp" ] ;then

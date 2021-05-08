@@ -18,11 +18,11 @@ sudo ./docker_network.sh
 #DOCKER_WEBSOCKET_PORT 设备连接端口 默认17000
 #export DOCKER_WEBSOCKET_PORT=17000
 
-#H5对讲必须HTTPS  集群管理需要pxf证书
-#CV_PXF_PATH pxf证书路径
-#export CV_PXF_PATH=/XXX/certificate.pfx
-#CV_PXF_PWD pxf证书密码
-#export CV_PXF_PWD=XXXX
+#H5对讲必须HTTPS  集群管理需要pfx证书
+#CV_PFX_PATH pfx证书路径
+#export CV_PFX_PATH=/XXX/certificate.pfx
+#CV_PFX_PWD pfx证书密码
+#export CV_PFX_PWD=XXXX
 
 sudo -E ./run_cluster.sh
 ```
@@ -41,12 +41,12 @@ sudo -E ./run_gw.sh
 
 4. 启动rtvs
 ``` bash
-#H5对讲必须HTTPS 需要pxf和pem证书
+#H5对讲必须HTTPS 需要pfx和pem证书
 
-#CV_PXF_PATH pxf证书路径 一般为*.pfx
-#export CV_PXF_PATH=/XXX/certificate.pfx
-#CV_PXF_PWD pxf证书密码
-#export CV_PXF_PWD=XXXX
+#CV_PFX_PATH pfx证书路径 一般为*.pfx
+#export CV_PFX_PATH=/XXX/certificate.pfx
+#CV_PFX_PWD pfx证书密码
+#export CV_PFX_PWD=XXXX
 
 #CV_PEM_PATH pem证书路径 一般为*.crt或*.pem
 #export CV_PEM_PATH=/XXX/certificate.crt
