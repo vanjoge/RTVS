@@ -81,6 +81,8 @@ async function run() {
     // Create Express app.
     await createExpressApp();
 
+    await runHttpAPIServer();
+	
     // Run HTTP server.
     await runHttpServer();
 
@@ -464,6 +466,88 @@ async function createExpressApp() {
         });
 }
 
+
+async function runHttpAPIServer() {
+    console.log('running an HTTP API server...', process.env.DEBUG);
+	
+	
+    var expressApi = express();
+	
+    expressApi.use(bodyParser.json());
+
+	/**
+	 * API GET resource that returns the mediasoup Router RTP capabilities of
+	 * the room.
+	 */
+    expressApi.get(
+        '/rtvs/createRoom',async (req, res) => {
+			let roomId=req.query.roomid;
+            logger.info("------------------------------");
+            logger.info("url:%s", req.url);
+            logger.info("baseurl:%s", req.baseUrl);
+            logger.info("roomId:%s", req.query.roomid);
+            logger.info("------------------------------");
+
+			let room = rooms.get(roomId);
+
+			if (room) {
+				res.status(200).json(room.getRtpInfo());
+			}
+			else {
+				logger.info('creating a new Room [roomId:%s]', roomId);
+
+				const mediasoupWorker = getMediasoupWorker();
+
+				room = await Room.create({ mediasoupWorker, roomId });
+
+				//创建上传
+				let roominfo = await room.createRtvsTransport();
+				
+				rooms.set(roomId, room);
+                room.on('close', function () {
+                    room.stopRtvsTransport();
+                    rooms.delete(roomId);
+					/*
+					let req = "/webrtc/videoplaystop?sim=" + sim +
+						"&channel=" + channel +
+						"&roomid=" + roomId;
+					httpGetData(rtvsIP, rtvsPort, req, () => { });
+					*/
+				});
+				res.status(200).json(roominfo);
+			}
+        });
+
+	
+    expressApi.get(
+        '/rtvs/closeRoom',async (req, res) => {
+			let roomId=req.query.roomid;
+            logger.info("------------------------------");
+            logger.info("url:%s", req.url);
+            logger.info("baseurl:%s", req.baseUrl);
+            logger.info("roomId:%s", req.query.roomid);
+            logger.info("------------------------------");
+
+			let room = rooms.get(roomId);
+
+			if (room) {
+				room.close();
+				res.status(200).json("ok");
+			}
+			else {
+				res.status(200).json("no room");
+			}
+        });
+
+	
+    var httpApi = http.createServer(expressApi);
+	
+    await new Promise((resolve) => {
+        httpApi.listen(
+            Number(config.httpApi.listenPort), config.httpApi.listenIp, resolve);
+    });
+}
+
 /**
  * Create a Node.js HTTP server. It listens in the IP and port given in the
  * configuration file and reuses the Express application as request listener.
@@ -537,8 +621,7 @@ function on_connectionrequest(info, accept, reject) {
     const sim = u.query['sim'];
     const channel = u.query['channel'];
     const peerId = u.query['peerId'];
-    const rtvsIP = u.query['rtvsIP'];
-    const rtvsPort = u.query['rtvsPort'];
+    const roomId = u.query['roomid'];
     const streamType = u.query['streamType'];
     const isReal = u.query['isReal'];
     let guid = "undefined";
@@ -559,7 +642,7 @@ function on_connectionrequest(info, accept, reject) {
         describe = 'realplay';
     }
 
-    if (!sim || !channel || !peerId || !rtvsIP || !rtvsPort) {
+    if (!sim || !channel || !peerId || !roomId) {
         reject(400, 'Connection request without sim and/or channel peerId rtvsIP rtvsPort');
 
         return;
@@ -573,7 +656,9 @@ function on_connectionrequest(info, accept, reject) {
     // the same time with the same roomId create two separate rooms with same
     // roomId.
     queue.push(async () => {
-        const room = await getOrCreateRoom({ sim, channel, describe, startTime, endTime, guid, rtvsIP, rtvsPort, streamType, socket: info.socket });
+		
+		let room = rooms.get(roomId);
+        //const room = await getOrCreateRoom({ sim, channel, describe, startTime, endTime, guid, rtvsIP, rtvsPort, streamType, socket: info.socket });
         if (room === undefined) {
             return;
         }
@@ -681,7 +766,7 @@ async function getOrCreateRoom({ sim, channel, describe, startTime, endTime, gui
         }).then(function (value) {
             rooms.set(roomId, room);
             room.on('close', function () {
-				room.stopRtvsTransport();
+                room.stopRtvsTransport();
                 rooms.delete(roomId);
                 let req = "/webrtc/videoplaystop?sim=" + sim +
                     "&channel=" + channel +

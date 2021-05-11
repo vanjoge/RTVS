@@ -784,6 +784,7 @@ function update_config(){
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml WssPort "$DOCKER_WSS_PORT"
     
     #Webrtc地址
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml WebRTCApi "http://$WEBRTC_DOCKER_IP:88"
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml WebRTCUrl "$WEBRTC_RTP_URL"
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml WebRTCIP "$BeianAddress"
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml WebRTCSslPort "$Webrtc_Port_Start"

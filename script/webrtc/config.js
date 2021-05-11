@@ -15,6 +15,11 @@ module.exports =
     // Listening hostname (just for `gulp live` task).
     domain: process.env.DOMAIN || 'localhost',
     // Signaling settings (protoo WebSocket server and HTTP API server).
+	httpApi:
+    {
+        listenIp: '0.0.0.0',
+        listenPort: process.env.PROTOO_LISTEN_PORT_HTTP_API || 88
+    },
     http:
     {
         listenIp: '0.0.0.0',
@@ -141,7 +146,7 @@ module.exports =
             listenIps:
                 [
                     {
-                        ip: process.env.MEDIASOUP_LISTEN_IP || '1.2.3.4',
+                        ip: process.env.MEDIASOUP_LISTEN_IP || '0.0.0.0',
                         announcedIp: process.env.MEDIASOUP_ANNOUNCED_IP || '1.2.3.4'
                     }
                 ],
@@ -158,7 +163,7 @@ module.exports =
         {
             listenIp:
             {
-                ip: process.env.MEDIASOUP_LISTEN_IP || '1.2.3.4',
+                ip: process.env.MEDIASOUP_LISTEN_IP || '0.0.0.0',
                 announcedIp: process.env.MEDIASOUP_ANNOUNCED_IP || '1.2.3.4'
             },
             maxSctpMessageSize: 262144

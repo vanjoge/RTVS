@@ -180,9 +180,9 @@ class Room extends EventEmitter
                 plainTransportOptions);
             // Store it.
             broadcaster.data.transports.set(audioTransport.id, audioTransport);
-            const audioRtpPort = audioTransport.tuple.localPort;
+            this.audioRtpPort = audioTransport.tuple.localPort;
             //const audioRtcpPort = audioTransport.rtcpTuple.localPort;
-			const audioRtcpPort = audioRtpPort;
+			this.audioRtcpPort = this.audioRtpPort;
 
             const audioProducer = await audioTransport.produce(
                 {
@@ -227,9 +227,9 @@ class Room extends EventEmitter
                 plainTransportOptions);
             // Store it.
             broadcaster.data.transports.set(videoTransport.id, videoTransport);
-            const videoRtpPort = videoTransport.tuple.localPort;
+            this.videoRtpPort = videoTransport.tuple.localPort;
             //const videoRtcpPort = videoTransport.rtcpTuple.localPort;
-			const videoRtcpPort = videoRtpPort;
+			this.videoRtcpPort = this.videoRtpPort;
 
             const videoProducer = await videoTransport.produce(
                 {
@@ -267,12 +267,7 @@ class Room extends EventEmitter
             this._audioLevelObserver.addProducer({ producerId: audioProducer.id })
                 .catch(() => { });
 
-            return {
-                videortpport: videoRtpPort,
-                videortcpport: videoRtcpPort,
-                audiortpport: audioRtpPort,
-                audiortcpport: audioRtcpPort
-            };
+            return this.getRtpInfo();
 
         }
         catch(error) {
@@ -280,13 +275,21 @@ class Room extends EventEmitter
         }
         
     }
+	getRtpInfo(){
+            return {
+                videortpport: this.videoRtpPort,
+                videortcpport: this.videoRtcpPort,
+                audiortpport: this.audioRtpPort,
+                audiortcpport: this.audioRtcpPort
+            };
+	}
 
     async stopRtvsTransport() {
         logger.info('running stopRoomForRtvs...');
 
-        if (this._broadcasters.has(this._roomId)) {
-            let broadcasterId = this._roomId;
-            this.deleteBroadcaster({ broadcasterId });
+		if (this._broadcasters.has(this._roomId)) {
+			let broadcasterId = this._roomId;
+			this.deleteBroadcaster({ broadcasterId });
         }
     }
 
