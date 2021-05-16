@@ -1,7 +1,7 @@
 #! /bin/bash
 
 
-DOCKER_MediaSoup_CONTAINER_NAME="vanjoge/mediasoup-demo"
+DOCKER_MediaSoup_CONTAINER_NAME=${DOCKER_MediaSoup_CONTAINER_NAME:-"vanjoge/mediasoup-demo:v3"}
 
 DOCKER_NETWORK=${DOCKER_NETWORK:-"cvnetwork"}
 
@@ -94,8 +94,8 @@ function docker_mediasoup_checkAndRun(){
         --privileged=true \
         --restart always \
         --name=$WEBRTC_DOCKER_CONTAINER_NAME \
-        -p ${Webrtc_Port_Start}-${Webrtc_Port_End}:${Webrtc_Port_Start}-${Webrtc_Port_End}/udp \
-        -p ${Webrtc_Port_Https}-${Webrtc_Port_End}:${Webrtc_Port_Https}-${Webrtc_Port_End}/tcp \
+        -p ${Webrtc_Port_Start}-${Webrtc_Port_Mapping_End}:${Webrtc_Port_Start}-${Webrtc_Port_Mapping_End}/udp \
+        -p ${Webrtc_Port_Https}-${Webrtc_Port_Http}:${Webrtc_Port_Https}-${Webrtc_Port_Http}/tcp \
         -v $WEBRTC_DOCKER_PATH/config.js:/server/config.js \
         -v $WEBRTC_DOCKER_PATH/source/server.js:/server/server.js \
         -v $WEBRTC_DOCKER_PATH/source/lib/Room.js:/server/lib/Room.js \
@@ -140,6 +140,10 @@ function init_base(){
         mkdir $WEBRTC_DOCKER_PATH/cert
     fi
     
+    #获取CPU个数
+    CPU_Count=`cat /proc/cpuinfo| grep "processor"| wc -l`
+    Webrtc_Port_Mapping_End=$((Webrtc_Port_Start+CPU_Count))
+
     
     # 复制证书
     if [ -n "$CV_PEM_PATH" ]; then
@@ -164,6 +168,8 @@ function init_base(){
 
     cp -f config.js config.js.tmp
     #设置配置
+    #numWorkers
+    config_replace config.js.tmp "Object.keys(os.cpus()).length" $CPU_Count
     #ip地址
     config_replace config.js.tmp 1.2.3.4 $IPADDRESS
     #http端口

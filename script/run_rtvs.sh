@@ -53,7 +53,7 @@ CV_PEMKEY_PATH=${CV_PEMKEY_PATH:-""}
 PORT_DEV_START=${PORT_DEV_START:-6001}
 PORT_DEV_END=${PORT_DEV_END:-65535}
 Webrtc_Port_Start=${Webrtc_Port_Start:-14001}
-Webrtc_Port_End=${Webrtc_Port_End:-14200}
+Webrtc_Port_End=${Webrtc_Port_End:-65535}
 PORT_DEV_BINDPORT_START=${PORT_DEV_BINDPORT_START:-0}
 
 ClusterServer=${ClusterServer:-"http://172.29.108.254/Api"}
