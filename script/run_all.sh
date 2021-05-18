@@ -4,12 +4,12 @@
 export DOCKER_HTTP_PORT=30888
 #DOCKER_WEBSOCKET_PORT 客户端连接端口 默认17000
 export DOCKER_WEBSOCKET_PORT=17000
-#设备连接端口范围(在这个范围找20个可用的端口)
+#服务端口范围(在这个范围找30个可用的端口)
 export PORT_DEV_START=6001
 export PORT_DEV_END=65535
-#webrtc连接端口范围(此范围全部开启)
+#webrtc连接端口范围(此范围找CPU核心数+2个端口)
 export Webrtc_Port_Start=14001
-export Webrtc_Port_End=14200
+export Webrtc_Port_End=65535
 #808测试网关连接端口
 export DOCKER_808_PORT=9300
 
