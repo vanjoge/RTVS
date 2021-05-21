@@ -74,6 +74,10 @@
 
 [可对讲HTTPS地址](https://lib.cvtsp.com/video/CVNetVideoJs/test/tstrtvs.html)
 
+小程序体验地址
+
+![体验小程序](wx/xcx.jpg)
+
 默认手机号为一个模拟设备，不一定随时打开着，建议自己挂一台真实设备上去，也方便看延迟。
 
 
