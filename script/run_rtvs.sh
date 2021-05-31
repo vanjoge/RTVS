@@ -302,6 +302,19 @@ function docker_set_DOCKER_RTVSWEB_CONTAINER_NAME(){
 
 function docker_base_install()
 {
+    #非x86_64启用第三方mysql镜像
+    if  [ ! -n "$MYSQL_DOCKER_IMAGE_NAME" ] ;then
+        get_arch=`arch`
+
+        if [[ $get_arch =~ "x86_64" ]];then
+            echo "$get_arch"
+        else
+            echo "$get_arch"
+            export MYSQL_DOCKER_IMAGE_NAME="biarms/mysql"
+            export GRAFANA_VERSION="5.4.4"
+        fi
+    fi
+
     init_system_files_path_base
     
     if  [  -n "$MYSQL_Server_IP" ] ;then
@@ -880,7 +893,7 @@ function docker_run(){
     --net $DOCKER_NETWORK \
     --ip $DOCKER_NETWORK_IPS.$DOCKER_RTMP_IP\
     --restart on-failure  \
-    jasonrivers/nginx-rtmp
+    vanjoge/nginx-rtmp
     
     docker pull $RTVSWEB_DOCKER_IMAGE_NAME:$DOCKER_RTVSWEB_VERSION
     #启动RTVS
