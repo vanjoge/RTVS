@@ -1,6 +1,9 @@
 #! /bin/bash
 echo "当前执行文件......$0"
 
+MYSQL_DOCKER_IMAGE_NAME=${MYSQL_DOCKER_IMAGE_NAME:-"mysql"}
+MYSQL_DOCKER_IMAGE_VERSION=${MYSQL_DOCKER_IMAGE_VERSION:-"5.7"}
+
 MYSQL_DOCKER_CONTAINER_NAME=${MYSQL_DOCKER_CONTAINER_NAME:-"mysql5.7"}
 MYSQL_DOCKER_PATH=${MYSQL_DOCKER_PATH:-"/etc/mysql"}
 
@@ -19,20 +22,20 @@ MYSQL_DOCKER_IP=${MYSQL_DOCKER_IP:-"172.29.108.241"}
 # ========================下载镜像======================================
 for i in [ `docker images ` ]; do
     
-    if [[ "$i" == "docker.io/mysql" ||  "$i" == "mysql" ]]; then
+    if [[ "$i" == "docker.io/$MYSQL_DOCKER_IMAGE_NAME" ||  "$i" == "$MYSQL_DOCKER_IMAGE_NAME" ]]; then
         echo "$i"
         IS_EXISTS_MYSQL_IMAGE_NAME="true"
     fi
-    if [[ "$i" == "5.7" ]]; then
+    if [[ "$i" == "$MYSQL_DOCKER_IMAGE_VERSION" ]]; then
         echo "$i"
         IS_EXISTS_MYSQL_IMAGE_TAG="true"
     fi
 done
 if [[ $IS_EXISTS_MYSQL_IMAGE_NAME == "true" && $IS_EXISTS_MYSQL_IMAGE_TAG == "true" ]]; then
-    echo "本地已存在mysql:5.7镜像，不再重新下载......."
+    echo "本地已存在$MYSQL_DOCKER_IMAGE_NAME:$MYSQL_DOCKER_IMAGE_VERSION镜像，不再重新下载......."
 else
-    echo "本地不存在mysql:5.7镜像，正在下载......."
-    docker pull mysql:5.7
+    echo "本地不存在$MYSQL_DOCKER_IMAGE_NAME:$MYSQL_DOCKER_IMAGE_VERSION镜像，正在下载......."
+    docker pull $MYSQL_DOCKER_IMAGE_NAME:$MYSQL_DOCKER_IMAGE_VERSION
 fi
 
 # ====================创建镜像===========================================
@@ -55,9 +58,9 @@ if [[ $IS_EXISTS_MYSQL_CONTAINER == "false" ]]; then
             # 运行容器实例 --privileged=true 获取管理员权限
             echo "创建$MYSQL_DOCKER_CONTAINER_NAME容器实例..."
             if  [ -n "$MYSQL_Server_PORT" ] ;then
-                docker run -d -p $MYSQL_Server_PORT:3306 --name $MYSQL_DOCKER_CONTAINER_NAME --net $DOCKER_NETWORK --ip $MYSQL_DOCKER_IP  --restart always --privileged=true -v $MYSQL_DOCKER_PATH/conf.d:/etc/mysql/conf.d -v $MYSQL_DOCKER_PATH/logs:/logs -v $MYSQL_DOCKER_PATH/data:/var/lib/mysql -v $MYSQL_DOCKER_PATH/scripts:/etc/mysql/scripts -e MYSQL_ROOT_PASSWORD=root  mysql:5.7
+                docker run -d -p $MYSQL_Server_PORT:3306 --name $MYSQL_DOCKER_CONTAINER_NAME --net $DOCKER_NETWORK --ip $MYSQL_DOCKER_IP  --restart always --privileged=true -v $MYSQL_DOCKER_PATH/conf.d:/etc/mysql/conf.d -v $MYSQL_DOCKER_PATH/logs:/logs -v $MYSQL_DOCKER_PATH/data:/var/lib/mysql -v $MYSQL_DOCKER_PATH/scripts:/etc/mysql/scripts -e MYSQL_ROOT_PASSWORD=root  $MYSQL_DOCKER_IMAGE_NAME:$MYSQL_DOCKER_IMAGE_VERSION
             else
-                docker run -d  --name $MYSQL_DOCKER_CONTAINER_NAME --net $DOCKER_NETWORK --ip $MYSQL_DOCKER_IP  --restart always --privileged=true -v $MYSQL_DOCKER_PATH/conf.d:/etc/mysql/conf.d -v $MYSQL_DOCKER_PATH/logs:/logs -v $MYSQL_DOCKER_PATH/data:/var/lib/mysql -v $MYSQL_DOCKER_PATH/scripts:/etc/mysql/scripts -e MYSQL_ROOT_PASSWORD=root  mysql:5.7
+                docker run -d  --name $MYSQL_DOCKER_CONTAINER_NAME --net $DOCKER_NETWORK --ip $MYSQL_DOCKER_IP  --restart always --privileged=true -v $MYSQL_DOCKER_PATH/conf.d:/etc/mysql/conf.d -v $MYSQL_DOCKER_PATH/logs:/logs -v $MYSQL_DOCKER_PATH/data:/var/lib/mysql -v $MYSQL_DOCKER_PATH/scripts:/etc/mysql/scripts -e MYSQL_ROOT_PASSWORD=root  $MYSQL_DOCKER_IMAGE_NAME:$MYSQL_DOCKER_IMAGE_VERSION
             fi
             # 映射copy文件路径到docker容器
             # echo "执行文件拷贝: cp $MYSQL_DOCKER_PATH/scripts/docker_mysql_db_init.sh $MYSQL_DOCKER_CONTAINER_NAME:/etc/mysql/scripts/docker_mysql_db_init.sh"
