@@ -12,7 +12,7 @@ DOCKER_REDIS_IMAGE_NAME=${DOCKER_REDIS_IMAGE_NAME:-"redis:4.0.10-alpine"}
 
 #端口  
 DOCKER_808_PORT=${DOCKER_808_PORT:-9300}
-DOCKER_HTTP_PORT=${DOCKER_HTTP_PORT:-9080}
+DOCKER_808_HTTP_PORT=${DOCKER_808_HTTP_PORT:-9080}
 
 DOCKER_NETWORK=${DOCKER_NETWORK:-"cvnetwork"}
 DOCKER_GW_IP=${DOCKER_GW_IP:-"172.29.108.249"}
@@ -27,7 +27,7 @@ function docker_run(){
 	
 	docker pull $DOCKER_GW_IMAGE_NAME
     #启动gw
-    docker run  --name $DOCKER_GW_NAME --net $DOCKER_NETWORK --ip $DOCKER_GW_IP --restart always  --privileged=true  -p $DOCKER_808_PORT:9300 -p $DOCKER_HTTP_PORT:80 -d $DOCKER_GW_IMAGE_NAME
+    docker run  --name $DOCKER_GW_NAME --net $DOCKER_NETWORK --ip $DOCKER_GW_IP --restart always  --privileged=true  -p $DOCKER_808_PORT:9300 -p $DOCKER_808_HTTP_PORT:80 -d $DOCKER_GW_IMAGE_NAME
 }
 function main(){
 	
