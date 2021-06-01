@@ -6,8 +6,8 @@ DOCKER_NETWORK="cvnetwork"
 DOCKER_NETWORK_IPA="172.29.108.0/24"
 DOCKER_NETWORK_IPGW="172.29.108.1/24"
 
-
-
+V2="20.10.0"
+V1=`docker version -f {{.Server.Version}}`
 
 function docker_create_network(){
     #判断NETWORK是否已经存在
@@ -29,12 +29,19 @@ function docker_network_exists(){
     done
     return 0;
 }
-
+function version_ge() { 
+    test "$(echo "$@" | tr " " "\n" | sort -rV | head -n 1)" == "$1";
+}
 
 docker_create_network
 
-DOCKER_ETH=` ip addr |grep $DOCKER_NETWORK_IPGW|awk '{print $NF}'`
 
+if version_ge $V1 $V2; then
+   echo "$V1 无需更改策略"
+   exit
+fi
+
+DOCKER_ETH=` ip addr |grep $DOCKER_NETWORK_IPGW|awk '{print $NF}'`
 
 nmcli connection modify $DOCKER_ETH connection.zone trusted
 
