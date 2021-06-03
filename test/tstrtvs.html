@@ -33,7 +33,10 @@
                             <option value="10">10=1+9</option>
                             <option value="13">13=1+12</option>
                             <option value="16">16=4x4</option>
+                            <option value="4X3">自定义4x3</option>
+                            <option value="3X4">自定义3x4</option>
                             <option value="3X2">自定义3x2</option>
+                            <option value="2X5">自定义2x5</option>
                             <option value="1+1">自定义1+1(左上)</option>
                         </select>
                     </td>
@@ -316,6 +319,16 @@
                 </tr>
             </table>
 
+            <table style="table-layout:fixed">
+                <tr>
+                    <td>
+                        <button onclick="GovPlay(0)" disabled>播放1078http</button>
+                    </td>
+                    <td>Gov URL:</td>
+                    <td><input id="txtgov" value="http://et.test.cvtsp.com:15007/沪QQ7777.1.1.0.aaa" style="width: 800px;" /></td>
+                </tr>
+            </table>
+
 
         </div>
         <div id="btns">
@@ -409,14 +422,16 @@
             //console.log(base64png);
         } //分屏回调
         function Split3X2(width, height) {
+            uc1.SplitXY(width, height, 3, 2)
+            return;
 
-            CvNetVideo.Container.style.width = width - parseInt((width - CvNetVideo.m_border * 4) % 3) + "px";
-            CvNetVideo.Container.style.height = height - parseInt((height - CvNetVideo.m_border * 3) % 2) + "px";
+            uc1.Container.style.width = width - parseInt((width - uc1.m_border * 4) % 3) + "px";
+            uc1.Container.style.height = height - parseInt((height - uc1.m_border * 3) % 2) + "px";
 
-            width = parseInt((width - CvNetVideo.m_border * 4) / 3);
-            height = parseInt((height - CvNetVideo.m_border * 3) / 2);
-            for (var i = 1; i <= 16; i++) {
-                var video_div = CvNetVideo.Videos[i].GetVideoDiv();
+            width = parseInt((width - uc1.m_border * 4) / 3);
+            height = parseInt((height - uc1.m_border * 3) / 2);
+            uc1.VideosforEach(function (video, i) {
+                var video_div = video.GetVideoDiv();
                 if (i > 6) {
                     //超过分屏数量隐藏掉
                     video_div.style.display = "none";
@@ -431,20 +446,21 @@
 
                     video_div.style.width = width + "px";
                     video_div.style.height = height + "px";
-                    CvNetVideo.Videos[i].Resize();
+                    video.Resize();
                 }
-            }
+            });
         }
         function Split2(width, height) {
-            CvNetVideo.SelectChangeZIndex = false;
+            uc1.SelectChangeZIndex = false;
 
-            CvNetVideo.Container.style.width = width + "px";
-            CvNetVideo.Container.style.height = height + "px";
+            uc1.Container.style.width = width + "px";
+            uc1.Container.style.height = height + "px";
 
-            width = width - CvNetVideo.m_border * 2;
-            height = height - CvNetVideo.m_border * 2;
-            for (var i = 1; i <= 16; i++) {
-                var video_div = CvNetVideo.videos[i].GetVideoDiv();
+            width = width - uc1.m_border * 2;
+            height = height - uc1.m_border * 2;
+
+            uc1.VideosforEach(function (video, i) {
+                var video_div = video.GetVideoDiv();
                 if (i > 2) {
                     video_div.style.display = "none";
                 } else if (i == 1) {
@@ -455,7 +471,7 @@
                     video_div.style.width = width + "px";
                     video_div.style.height = height + "px";
                     video_div.style.zIndex = i;
-                    CvNetVideo.Videos[i].Resize();
+                    video.Resize();
                 } else if (i == 2) {
                     video_div.style.display = "block";
 
@@ -467,12 +483,13 @@
                     video_div.style.width = w + "px";
                     video_div.style.height = h + "px";
                     video_div.style.zIndex = i;
-                    CvNetVideo.Videos[i].Resize();
+                    video.Resize();
                 }
-            }
+            });
         }
+        var uc1;
         function init() {
-            CvNetVideo.Init(document.querySelector("#player"), document.querySelector("#cmbScreenNumbers").value,
+            uc1 = CvNetVideo.Init(document.querySelector("#player"), document.querySelector("#cmbScreenNumbers").value,
                 {
                     callback: function () {
                         [].forEach.call(document.querySelectorAll("button"), function (btn) {
@@ -482,7 +499,6 @@
                     selectedEvent: function (e) {
                         var selected = e;
                     },
-                    enableDbcZoom: true,
                     //事件通知
                     events: {
                         //截图事件
@@ -509,6 +525,15 @@
             //参数2为分屏计算回调
             CvNetVideo.CustomScreens("3X2", Split3X2);
             CvNetVideo.CustomScreens("1+1", Split2);
+            CvNetVideo.CustomScreens("4X3", function (width, height) {
+                uc1.SplitXY(width, height, 4, 3)
+            });
+            CvNetVideo.CustomScreens("3X4", function (width, height) {
+                uc1.SplitXY(width, height, 3, 4)
+            });
+            CvNetVideo.CustomScreens("2X5", function (width, height) {
+                uc1.SplitXY(width, height, 2, 5)
+            });
 
             //CvNetVideo.SetRealOrBack(false);
             //CvNetVideo.SetBackDateTime(
@@ -529,6 +554,24 @@
 
         function changeControls(controls) {
             document.querySelectorAll("video").forEach((p) => { p.controls = true; });
+        }
+        function GovPlay(id) {
+
+            CvNetVideo.GovPlay(
+                document.querySelector('#txtgov').value,
+                id, null,
+                //gov实时流请求回调，status < 0 请求失败，reason 原因
+                function (status, reason) {
+                    if (status < 0) {
+                        console.log("失败:" + reason);
+                        if (status == -1) {
+                            alert("URL请求发生错误，请检查URL是否能访问，或是否通过HTTPS页面访问了HTTP地址。");
+                        } else {
+                            alert(reason);
+                        }
+                    }
+                },
+            );
         }
         //实时流
         function Connect(id) {
