@@ -53,7 +53,7 @@ JS视频播放插件
 ### 初始化和分屏
 #### 初始化控件
 ----
-   接口
+   接口 返回UCMain对象，与静态方法具有同名接口。用以支持一个页面初始化多个视频控件。
 ```
 CvNetVideo.Init(dom, VideoNums = 4, config = {});
 
@@ -67,6 +67,8 @@ defaultConfig = {
                 //以下只可初始化传入 后期不可改
                 //与dom参数一致 
                 media: null,
+                //初始化分屏数量 此处可调整分屏最大数量 建议够用就行 设过大可能影响页面性能
+                MaxUcNum: 16,
                 //视频显示宽度
                 videoWidth: 352,
                 //视频显示高度
@@ -201,8 +203,9 @@ window.onload = function () {
             init();
 
         };
+        var uc1;
         function init() {
-            CvNetVideo.Init(document.querySelector("#player"), 4,
+            uc1 = CvNetVideo.Init(document.querySelector("#player"), 4,
                 {
                     remoteHost: "127.0.0.1",
                     playerMode: 4,
@@ -229,11 +232,11 @@ callback:分屏计算回调
 ```
      示例
 ```
-   CvNetVideo.CustomScreens("3X2", functi.on(width, height) {
+   uc1.CustomScreens("3X2", function(width, height) {
             width = parseInt((width - 4) / 3);
             height = parseInt((height - 4) / 2);
-            for (var i = 1; i <= 16; i++) {
-                var video_div = CvNetVideo.Videos[i].GetVideoDiv();
+            uc1.VideosforEach(function (video, i) {
+                var video_div = video.GetVideoDiv();
                 if (i > 6) {
                     //超过分屏数量隐藏掉
                     video_div.style.display = "none";
@@ -247,11 +250,11 @@ callback:分屏计算回调
                     video_div.style.top = top + "px";
                     video_div.style.width = (width - 4) + "px";
                     video_div.style.height = (height - 4) + "px";
-                    CvNetVideo.Videos[i].Resize();
+                    video.Resize();
                 }
-            }
+            });
         });
-   CvNetVideo.LayoutByScreens("3X2");
+   uc1.LayoutByScreens("3X2");
 ```
 
 #### 设置分屏数量
