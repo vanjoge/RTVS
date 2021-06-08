@@ -22,7 +22,11 @@ export GatewayBaseAPI=http://172.29.108.249/api/
 #设置redis连接字符串
 export RedisExchangeHosts=172.29.108.245:6379,connectTimeout=20000,syncTimeout=20000,responseTimeout=20000
 
+if [[ ! -f "./run_cluster.sh" ]]; then
+    cd RTVS/script
+fi
 
+./clear.sh
 
 ./run_cluster.sh
 
