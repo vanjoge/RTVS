@@ -22,6 +22,7 @@
             * [发送云台雨刷控制指令](#发送云台雨刷控制指令)
             * [发送云台红外补光控制指令](#发送云台红外补光控制指令)
             * [发送云台变倍控制指令](#发送云台变倍控制指令)
+            * [Gov播放](#Gov播放)
          * [其他](#其他)
             * [视频旋转](#视频旋转)
             * [视频镜面反转](#视频镜面反转)
@@ -192,6 +193,11 @@ defaultConfig = {
                 captureQuality: null,
                 //流畅模式，开播会缓存够一定时间buff，保证播放流畅性，但延迟稍高 fmp4模式有效
                 smoothMode: false,
+                //gov授权码，未授权版本仅允许播放一路视频，且30秒自动断开。
+                govmd5: "",
+                govnum: 100,
+                //协议版本 0 808-2013 1 808-2019
+                protocol: 0
             };
 ```
    示例
@@ -633,6 +639,43 @@ TimesControl(Sim, Channel, Flag, videoId = 0, config = {});
    参数说明
 ```
 Flag:0:调大 1调小
+```
+
+#### Gov播放
+     接口
+```
+GovPlay(url, videoId = 0, config = {}, Callback = null);
+
+```
+   参数说明
+```
+url: JT/T 1078-2016 6.2中规定的URL
+videoId:哪一个分屏，0代表当前选中分屏 
+config:配置项 可更改init中传入config值
+Callback:错误回调 function (status, reason) 
+	-1, "URL请求发生错误"
+	-2, "URL请求失败"
+	-101, "超过允许最大连接数，断开连接"
+	-102, "超过允许播放时长，断开连接。"
+```
+
+示例
+```js
+CvNetVideo.GovPlay(
+                "http://et.test.cvtsp.com:15007/沪QQ7771.1.1.0.aaa",
+                id, null,
+                //gov实时流请求回调，status < 0 请求失败，reason 原因
+                function (status, reason) {
+                    if (status < 0) {
+                        console.log("失败:" + reason);
+                        if (status == -1) {
+                            alert("URL请求发生错误，请检查URL是否能访问，或是否通过HTTPS页面访问了HTTP地址。");
+                        } else {
+                            alert(reason);
+                        }
+                    }
+                },
+            );
 ```
 
 ### 其他
