@@ -55,6 +55,13 @@
                     <td>
                         <input id="txtport" value="15001" />
                     </td>
+                    <td>协议:</td>
+                    <td>
+                        <select id="protocol">
+                            <option value="0" selected="selected">2013</option>
+                            <option value="1">2019</option>
+                        </select>
+                    </td>
                 </tr>
             </table>
             <h3>指令参数</h3>
@@ -76,6 +83,9 @@
                             <option value="6">通道6</option>
                             <option value="7">通道7</option>
                             <option value="8">通道8</option>
+                            <option value="33">通道33</option>
+                            <option value="36">通道36</option>
+                            <option value="99">通道99</option>
                         </select>
                     </td>
                     <td>码流类型:</td>
@@ -231,9 +241,10 @@
                     <td>执行条件:</td>
                     <td>
                         <select id="taskCondition">
-                            <option value="0" selected="selected">WIFI</option>
-                            <option value="1">LAN</option>
-                            <option value="2">3G/4G</option>
+                            <option value="7" selected="selected">WIFI+LAN+3G/4G</option>
+                            <option value="1">WIFI</option>
+                            <option value="2">LAN</option>
+                            <option value="4">3G/4G</option>
                         </select>
                     </td>
                 </tr>
@@ -304,6 +315,14 @@
                             <option value="4">fmp4</option>
                             <option value="5">webrtc</option>
                             <option value="6">hls</option>
+                        </select>
+                    </td>
+                    <td>实时视频追帧:</td>
+                    <td>
+                        <select id="seekMode">
+                            <option value="-1" selected="selected">不追帧</option>
+                            <option value="0">跳到最新</option>
+                            <option value="1">倍速追帧</option>
                         </select>
                     </td>
                 </tr>
@@ -591,8 +610,9 @@
                 id,
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
-                    clusterPort: document.querySelector("#txtport").value
-
+                    clusterPort: document.querySelector("#txtport").value,
+                    seekMode: document.querySelector("#seekMode").value,
+                    protocol: document.querySelector("#protocol").value
                 },
                 null,
                 parseInt(document.querySelector('#cmbPlayermode').value)
@@ -612,7 +632,8 @@
                 parseInt(document.querySelector('#cmbStorageType').value),
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
-                    clusterPort: document.querySelector("#txtport").value
+                    clusterPort: document.querySelector("#txtport").value,
+                    protocol: document.querySelector("#protocol").value
                 },
                 parseInt(document.querySelector('#cmbDataSource').value)
             );
@@ -627,7 +648,8 @@
                 id,
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
-                    clusterPort: document.querySelector("#txtport").value
+                    clusterPort: document.querySelector("#txtport").value,
+                    protocol: document.querySelector("#protocol").value
 
                 }
             );
@@ -647,7 +669,8 @@
                 id,
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
-                    clusterPort: document.querySelector("#txtport").value
+                    clusterPort: document.querySelector("#txtport").value,
+                    protocol: document.querySelector("#protocol").value
                 },
                 null,
                 parseInt(document.querySelector('#cmbPlayermode').value),
@@ -664,7 +687,8 @@
                 id,
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
-                    clusterPort: document.querySelector("#txtport").value
+                    clusterPort: document.querySelector("#txtport").value,
+                    protocol: document.querySelector("#protocol").value
 
                 }
             );
@@ -683,7 +707,8 @@
                 id,
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
-                    clusterPort: document.querySelector("#txtport").value
+                    clusterPort: document.querySelector("#txtport").value,
+                    protocol: document.querySelector("#protocol").value
                 },
                 parseInt(document.querySelector('#cmbDataSource').value)
             );
@@ -767,7 +792,7 @@
                         + "parseInt(document.querySelector('#cmbPlaybackMode').value),parseInt(document.querySelector('#cmbMultiple').value),"
                         + "Time1078ToTime('" + item.StartTime + "'),"
                         + "Time1078ToTime('" + item.EndTime + "'),0,"
-                        + "{clusterHost: document.querySelector('#txtserveradd').value,clusterPort: document.querySelector('#txtport').value},null,parseInt(document.querySelector('#cmbPlayermode').value),parseInt(document.querySelector('#cmbDataSource').value))";
+                        + "{clusterHost: document.querySelector('#txtserveradd').value,clusterPort: document.querySelector('#txtport').value,protocol: document.querySelector('#protocol').value},null,parseInt(document.querySelector('#cmbPlayermode').value),parseInt(document.querySelector('#cmbDataSource').value))";
                     aaa.innerText = "播放";
                     td9.appendChild(aaa);
                     tr.appendChild(td1);
@@ -817,7 +842,8 @@
                 id,
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
-                    clusterPort: document.querySelector("#txtport").value
+                    clusterPort: document.querySelector("#txtport").value,
+                    protocol: document.querySelector("#protocol").value
                 }
             );
         }
@@ -842,7 +868,8 @@
                 id,
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
-                    clusterPort: document.querySelector("#txtport").value
+                    clusterPort: document.querySelector("#txtport").value,
+                    protocol: document.querySelector("#protocol").value
 
                 }
             );
@@ -890,15 +917,19 @@
         }
 
         function SpeekAudio() {
-            CvNetVideo.StartSpeek(
+            let ret = CvNetVideo.StartSpeek(
                 document.querySelector('#txtsim').value,
                 parseInt(document.querySelector('#cmbChannel').value),
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
-                    clusterPort: document.querySelector("#txtport").value
+                    clusterPort: document.querySelector("#txtport").value,
+                    protocol: document.querySelector("#protocol").value
 
                 }
             );
+            if (!ret) {
+                alert("未能获取到麦克风，请确认当前页面是https且未设置阻止。");
+            }
         }
 
         function StopAudio() {

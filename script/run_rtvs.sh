@@ -57,6 +57,7 @@ Webrtc_Port_End=${Webrtc_Port_End:-65535}
 PORT_DEV_BINDPORT_START=${PORT_DEV_BINDPORT_START:-0}
 
 ClusterServer=${ClusterServer:-"http://172.29.108.254/Api"}
+MatchSim12And20=${MatchSim12And20:-"true"}
 
 if  [ ! -n "$GatewayBaseAPI" ] ;then
     echo "GatewayBaseAPI 未设置，无需更改VideoControlUrl"
@@ -72,7 +73,7 @@ DOCKER_RTVSWEB_CONTAINER_NAME=$RTVSWEB_DOCKER_CONTAINER_NAME_TEMPLATE"1"
 DOCKER_RTVSWEB_PATH=$RTVSWEB_DOCKER_PATH_TEMPLATE"1"
 DOCKER_NGINX_PATH=$NGINX_DOCKER_PATH_TEMPLATE"1"
 DOCKER_NGINX_CONTAINER_NAME=$NGINX_DOCKER_CONTAINER_NAME_TEMPLATE"1";
-DOCKER_RTVSWEB_VERSION="1.3.0"
+DOCKER_RTVSWEB_VERSION="1.3.1"
 
 DOCKER_RTVS_IP=11
 DOCKER_RTMP_IP=12
@@ -786,6 +787,7 @@ function update_config(){
     
     
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml IsTestMode false
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml MatchSim12And20 $MatchSim12And20
     
     #Rtmp地址修改
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml RtmpUrl "rtmp://$DOCKER_NETWORK_IPS.$DOCKER_RTMP_IP/mytv/"

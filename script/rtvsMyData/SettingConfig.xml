@@ -113,7 +113,7 @@
   <BeianAddress>1.1.1.1</BeianAddress>
   <GovWebIp>+</GovWebIp>
   <GovPort>9604</GovPort>
-  <Ver>1.3.0</Ver>
+  <Ver>1.3.1</Ver>
   <WebRTCApi>http://172.29.108.240:4088</WebRTCApi>
   <WebRTCUrl>rtp://172.29.108.240</WebRTCUrl>
   <WebRTCIP>1.1.1.1</WebRTCIP>
@@ -144,4 +144,5 @@
   <MaxTestSec>600</MaxTestSec>
   <X509FileName></X509FileName>
   <X509Password></X509Password>
+  <MatchSim12And20>true</MatchSim12And20>
 </ConfigModel>
