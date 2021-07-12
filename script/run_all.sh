@@ -19,7 +19,7 @@ export DOCKER_808_PORT=9300
 export IPADDRESS=(Your IP or domain)
 #设置网关接口地址
 export GatewayBaseAPI=http://172.29.108.249/api/
-#设置redis连接字符串
+#设置redis连接字符串(默认的测试网关未支持RedisExchangeHosts参数，如果使用默认网关请不要更改此参数)
 export RedisExchangeHosts=172.29.108.245:6379,connectTimeout=20000,syncTimeout=20000,responseTimeout=20000
 
 if [[ ! -f "./run_cluster.sh" ]]; then
@@ -29,7 +29,7 @@ fi
 ./clear.sh
 
 ./run_cluster.sh
-
+#启动默认测试网关+redis服务
 ./run_gw.sh
 
 ./run_rtvs.sh
