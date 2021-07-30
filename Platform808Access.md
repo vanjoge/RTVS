@@ -585,12 +585,12 @@ AUTHORIZE_CODE_2 为 跨域地区政府平台使用的时效口令
         /// <remarks></remarks>
         public byte STREAM_TYPE { get; set; }
         /// <summary>
-        /// 回放起始时间   UTC时间
+        /// 回放起始时间   UTC时间(秒)
         /// </summary>
         /// <remarks></remarks>
         public UInt64 PLAYBACK_STARTTIME { get; set; }
         /// <summary>
-        /// 回放结束时间   UTC时间
+        /// 回放结束时间   UTC时间(秒)
         /// </summary>
         /// <remarks></remarks>
         public UInt64 PLAYBACK_ENDTIME { get; set; }
@@ -915,7 +915,7 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
 | VehicleColor  | 车牌颜色  | 2 |
 | ControlType  | 回放类型<br> 0x00:正常回放,0x01:暂停回放,0x02:结束回放,0x03:快进回放,0x04:关键帧快退回放,0x05:拖动回放,0x06:关键帧播放  | 5 |
 | FastTime  | 快进或快退倍数 回放类型为0x3或0x4时有效<br> 0x00:无效,0x01:1倍,0x02:2倍,0x03:4倍,0x04:8倍,0x05:16倍  | 0 |
-| DateTime  | 拖动位置，用UTC时间表示，回放控制为0x05时，此字段内容有效    | 1606905169 |
+| DateTime  | 拖动位置，用UTC时间(秒)表示，回放控制为0x05时，此字段内容有效    | 1606905169 |
 
 
 
