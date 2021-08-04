@@ -145,6 +145,9 @@ defaultConfig = {
                 },
                 //初始化完成通知
                 callback: null,
+                //gov授权码，未授权版本仅允许播放一路视频，且30秒自动断开。
+                govmd5: "",
+                govnum: 100,
 
 
                 //以下参数可调用方法时修改
@@ -193,9 +196,6 @@ defaultConfig = {
                 captureQuality: null,
                 //流畅模式，开播会缓存够一定时间buff，保证播放流畅性，但延迟稍高 fmp4模式有效
                 smoothMode: false,
-                //gov授权码，未授权版本仅允许播放一路视频，且30秒自动断开。
-                govmd5: "",
-                govnum: 100,
                 //协议版本 0 808-2013 1 808-2019
                 protocol: 0
             };
