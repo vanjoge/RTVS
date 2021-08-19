@@ -894,7 +894,7 @@ function docker_run(){
     --name $DOCKER_NGINX_CONTAINER_NAME \
     --net $DOCKER_NETWORK \
     --ip $DOCKER_NETWORK_IPS.$DOCKER_RTMP_IP\
-    --restart on-failure  \
+    --restart always  \
     vanjoge/nginx-rtmp
     
     docker pull $RTVSWEB_DOCKER_IMAGE_NAME:$DOCKER_RTVSWEB_VERSION
@@ -903,7 +903,7 @@ function docker_run(){
     --name $DOCKER_RTVSWEB_CONTAINER_NAME \
     --net $DOCKER_NETWORK \
     --ip $DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP\
-    --restart on-failure  \
+    --restart always  \
     --privileged=true  \
     -v $DOCKER_RTVSWEB_PATH:/MyData \
     -v /etc/service/rtvsvideocache:/VideoCache \
