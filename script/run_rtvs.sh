@@ -539,17 +539,20 @@ function update_nginx()
     val3=`echo "$4"| sed 's:\/:\\\/:g'`
     val4=`echo "$5"| sed 's:\/:\\\/:g'`
     val5=`echo "$6"| sed 's:\/:\\\/:g'`
+    val6=`echo "$7"| sed 's:\/:\\\/:g'`
     echo "正在修改nginx配置文件:$1,on_play:$2,on_play_done:$3"
     sed -i "s/on_play .*/on_play $val1/g" $1
     sed -i "s/on_play_done .*/on_play_done $val2/g" $1
     sed -i "s/listen 4443 ssl;/listen $val3 ssl;/g" $1
     sed -i "s/server wss1002;/server $val4;/g" $1
     sed -i "s/server wss1003;/server $val5;/g" $1
+    sed -i "s/server wss1005;/server $val6;/g" $1
     unset val1
     unset val2
     unset val3
     unset val4
     unset val5
+    unset val6
 }
 function update_cluster_conf()
 {
@@ -818,7 +821,7 @@ function update_config(){
 
 
     #修改nginx-rtmp配置
-    update_nginx $DOCKER_NGINX_PATH/nginx.conf "http://$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP/WebService/NginxOnPlay;" "http://$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP/WebService/NginxOnPlayDown;" "$DOCKER_WSS_PORT" "$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP:$DOCKER_WS_PORT"  "$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP:$DOCKER_FMP4_PORT" 
+    update_nginx $DOCKER_NGINX_PATH/nginx.conf "http://$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP/WebService/NginxOnPlay;" "http://$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP/WebService/NginxOnPlayDown;" "$DOCKER_WSS_PORT" "$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP:$DOCKER_WS_PORT"  "$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP:$DOCKER_FMP4_PORT"  "$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP:$DOCKER_GOV_PORT" 
     
     
     #修改InfluxdbBaseUrl配置
