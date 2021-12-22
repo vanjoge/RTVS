@@ -59,6 +59,7 @@ PORT_DEV_BINDPORT_START=${PORT_DEV_BINDPORT_START:-0}
 
 ClusterServer=${ClusterServer:-"http://172.29.108.254/Api"}
 MatchSim12And20=${MatchSim12And20:-"true"}
+QueryVideoListTimeOutSec=${QueryVideoListTimeOutSec:-"60"}
 
 if  [ ! -n "$GatewayBaseAPI" ] ;then
     echo "GatewayBaseAPI 未设置，无需更改VideoControlUrl"
@@ -792,6 +793,7 @@ function update_config(){
     
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml IsTestMode false
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml MatchSim12And20 $MatchSim12And20
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml QueryVideoListTimeOutSec $QueryVideoListTimeOutSec
     
     #Rtmp地址修改
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml RtmpUrl "rtmp://$DOCKER_NETWORK_IPS.$DOCKER_RTMP_IP/mytv/"
