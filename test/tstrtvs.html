@@ -16,7 +16,8 @@
 <body>
     <div>
         <h1>播放测试</h1>
-        <h2>设备接入地址(808协议) 116.228.114.206:15000 </h2>
+        <h3>如需测试本地部署的RTVS，请修改服务器、端口(默认17000)、SIM卡号等信息，设备接入地址(808协议) 服务器:9300</h3>
+        <h3>本示例默认服务et.test.cvtsp.com:15001中，设备接入地址(808协议)是116.228.114.206:15000 </h3>
         <div>
             <h3>控件参数</h3>
             <table style="table-layout:fixed">
@@ -271,7 +272,7 @@
                         <button onclick="SetOsdText(0)" disabled>设置Osd文本</button>
                     </td>
                     <td>Osd文本:</td>
-                    <td><input id="osdtext" value="通道名称" type="text" /></td>
+                    <td><input id="osdtext" value="OSD示例" type="text" /></td>
                     <td>
                         <button onclick="SetOsdVisible(true)" disabled>显示Osd文本</button>
                     </td>
@@ -293,7 +294,7 @@
                     </td>
                     <td>旋转角度:</td>
                     <td>
-                        <select id="cmbRotateAngle" onchange="Screens(this.value)">
+                        <select id="cmbRotateAngle">
                             <option value="0" selected="selected">0</option>
                             <option value="90">90</option>
                             <option value="180">180</option>
@@ -312,6 +313,7 @@
                     <td>
                         <select id="cmbPlayermode">
                             <option value="0" selected="selected">default</option>
+                            <option value="3">软解(支持265)</option>
                             <option value="4">fmp4</option>
                             <option value="5">webrtc</option>
                             <option value="6">hls</option>
@@ -334,6 +336,22 @@
                     <td>
                         <button onclick="SpeekAudio()" disabled>开始对讲</button>
                         <button onclick="StopAudio()" disabled>关闭对讲</button>
+                    </td>
+                    <td>对讲音量:</td>
+                    <td>
+                        <select id="speakVolume" onchange="SpeakVolumeChange()">
+                            <option value="0.0">0.0</option>
+                            <option value="0.1">0.1</option>
+                            <option value="0.2">0.2</option>
+                            <option value="0.3">0.3</option>
+                            <option value="0.4">0.4</option>
+                            <option value="0.5">0.5</option>
+                            <option value="0.6">0.6</option>
+                            <option value="0.7">0.7</option>
+                            <option value="0.8">0.8</option>
+                            <option value="0.9">0.9</option>
+                            <option value="1.0" selected="selected">1.0</option>
+                        </select>
                     </td>
                 </tr>
             </table>
@@ -373,13 +391,24 @@
             console.log(CvNetVideo.version);
             init();
 
-            var myDate = new Date();
-            document.getElementById("txtStarttime").value = myDate.toLocaleDateString().split('/').join('-') + " 00:00:00";
+            var now = new Date();
+            document.getElementById("txtPlayBackDatetime").value = now.toLocaleDateString().split('/').join('-');
 
-            var time = myDate.getTime() + 24 * 60 * 60 * 1000;
-            var nextday = new Date(time);
-            document.getElementById("txtEndtime").value = nextday.toLocaleDateString().split('/').join('-') + " 00:00:00";
+
+            document.getElementById("txtStarttime").value = GetDateStr(now, -60 * 60);
+
+            document.getElementById("txtDragPlaybackPosition").value = GetDateStr(now, -55 * 60);
+
+            document.getElementById("txtEndtime").value = GetDateStr(now, -50 * 60);
+
+
         };
+        function GetDateStr(date, addsec) {
+            var sd = new Date(date.getTime() + 1000 * addsec);
+            return sd.toLocaleDateString().split('/').join('-') + " " + sd.getHours() + ":" + sd.getMinutes() + ":00";
+
+        }
+
 
         function WindowResize() {
             let isFullscreen = document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen;
@@ -436,10 +465,13 @@
             console.log(id + "分屏截图 sim:" + ucVideo.Sim + " Channel:" + ucVideo.Channel);
             //console.log(base64png);
         }
-        function onHlsPlay(id, ucVideo, hlshttp, hlshttps, rtmpurl, cid) {
-            console.log(hlshttp, hlshttps, rtmpurl, cid);
-            //console.log(base64png);
-        } //分屏回调
+        function onHlsPlay(id, ucVideo, hlshttp, hlshttps, rtmpurl, cid, flvhttp, flvhttps) {
+            console.log(id, hlshttp, hlshttps, rtmpurl, cid, flvhttp, flvhttps);
+        }
+        function onChangeH265Player(playermode) {
+            console.log("当前模式" + playermode + "不支持H265，自动切换软解模式");
+        }
+        //分屏回调
         function Split3X2(width, height) {
             uc1.SplitXY(width, height, 3, 2)
             return;
@@ -535,7 +567,9 @@
                         //被服务端结束播放通知
                         onEndByServer: onEndByServer,
                         //HLS模式播放前通知 可获取RTMP HLS 等URL
-                        onHlsPlay: onHlsPlay
+                        onHlsPlay: onHlsPlay,
+                        //当前模式不支持265通知
+                        onChangeH265Player: onChangeH265Player
                     }
                 });
 
@@ -578,7 +612,11 @@
 
             CvNetVideo.GovPlay(
                 document.querySelector('#txtgov').value,
-                id, null,
+                id,
+                {
+                    protocol: document.querySelector("#protocol").value,
+                    seekMode: -1,
+                },
                 //gov实时流请求回调，status < 0 请求失败，reason 原因
                 function (status, reason) {
                     if (status < 0) {
@@ -936,6 +974,9 @@
             CvNetVideo.StopSpeak();
         }
 
+        function SpeakVolumeChange() {
+            CvNetVideo.SetSpeekVolume(document.querySelector('#speakVolume').value);
+        }
     </script>
 
 </body>
