@@ -24,11 +24,11 @@ RTVS自带的测试808网关已开源，可参考对应实现，地址：
 ### 808指令
 RTVS会按照以下规则通过Get请求发送0x9101、0x9201、0x9202、0x9205等1078规定走808通道指令，需要网关实现以下HTTP接口。
 
-    [配置的网关HTTP接口地址]VideoControl?Content=808协议16进制字符串&IsSuperiorPlatformSend=是否是上级平台发送
+    [配置的网关HTTP接口地址]VideoControl?Content=808协议16进制字符串&IsSuperiorPlatformSend=是否是上级平台发送&CTags=可由前端传入的自定义内容
 
     例1:http://127.0.0.1:8888/VideoControl?Content=9101001401377788321025C20C31302E31302E31302E3233304CF40000010001&IsSuperiorPlatformSend=true
 
-    例2:http://127.0.0.1:8888/VideoControl?Content=920200090112464004260003030500200820172042
+    例2:http://127.0.0.1:8888/VideoControl?Content=920200090112464004260003030500200820172042&CTags=ccc11aa
 
 接口参数：
 
@@ -808,6 +808,11 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
         public static bool m_is_device_connection_single_channel = true;
 
         /// <summary>
+        /// b帧处理模式 0自动 1有B帧 2无B帧
+        /// </summary>
+        public int m_b_frame_type;
+
+        /// <summary>
         /// 设置默认配置信息
         /// </summary>
         /// <param name="config"></param>
@@ -832,6 +837,9 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
             config.m_is_absolute_timestamp = false;
             
             config.m_is_audio_have_haisi_header = true;
+
+            config.m_b_frame_type = 0;
+
         }
 
     }

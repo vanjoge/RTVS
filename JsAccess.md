@@ -197,7 +197,9 @@ defaultConfig = {
                 //流畅模式，开播会缓存够一定时间buff，保证播放流畅性，但延迟稍高 fmp4模式有效
                 smoothMode: false,
                 //协议版本 0 808-2013 1 808-2019
-                protocol: 0
+                protocol: 0,
+                //默认ctags
+                defaultCtags: null
             };
 ```
    示例
