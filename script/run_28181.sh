@@ -22,7 +22,7 @@ GB28181_RTP_TYPE=${GB28181_RTP_TYPE:-"1"}
 
 #808
 Server_808_ADDR=${Server_808_ADDR:-"172.29.108.249"}
-Server_808_PORT=${Server_808_PORT:-"9300"}
+DOCKER_808_PORT=${DOCKER_808_PORT:-"9300"}
  
  
 function updateXml()
@@ -80,10 +80,10 @@ function init_system_files_path()
 function docker_run(){
     updateXml $DOCKER_GB2JT_PATH/Setting.xml RtpType "$GB28181_RTP_TYPE"
     updateXml $DOCKER_GB2JT_PATH/Setting.xml ServerIP "$IPADDRESS"
-    updateXml $DOCKER_GB2JT_PATH/Setting.xml SipPort "$SipPort"
-    updateXml $DOCKER_GB2JT_PATH/Setting.xml RtpPort "$RtpPort"
+    updateXml $DOCKER_GB2JT_PATH/Setting.xml SipPort "$DOCKER_SIP_PORT"
+    updateXml $DOCKER_GB2JT_PATH/Setting.xml RtpPort "$DOCKER_RTP_PORT"
     updateXml $DOCKER_GB2JT_PATH/Setting.xml Server808 "$Server_808_ADDR"
-    updateXml $DOCKER_GB2JT_PATH/Setting.xml Prot808 "$Server_808_PORT"
+    updateXml $DOCKER_GB2JT_PATH/Setting.xml Prot808 "$DOCKER_808_PORT"
 	
 	
 	docker pull $DOCKER_GB2JT_IMAGE_NAME

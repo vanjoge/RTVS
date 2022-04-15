@@ -10,8 +10,6 @@ export PORT_DEV_END=65535
 #webrtc连接端口范围(此范围找CPU核心数+2个端口)
 export Webrtc_Port_Start=14001
 export Webrtc_Port_End=65535
-#808测试网关连接端口
-export DOCKER_808_PORT=9300
 
 
 #设置服务器IP地址或域名(内网测试无需映射端口 外网请映射端口)
@@ -25,9 +23,8 @@ export RedisExchangeHosts=172.29.108.245:6379,connectTimeout=20000,syncTimeout=2
 
 #此配置是GB28181转808后连808网关地址
 export Server_808_ADDR="172.29.108.249"
-#此配置是连808网关端口
-export Server_808_PORT="9300"
-
+#808网关连接端口(如果启用28181 此参数必填)
+export DOCKER_808_PORT=9300
 
 
 if [[ ! -f "./run_cluster.sh" ]]; then
