@@ -40,6 +40,9 @@ DOCKER_CLUSTER_NAME=${DOCKER_CLUSTER_NAME:-"cvcluster-1"}
 DOCKER_CLUSTER_PATH=${DOCKER_CLUSTER_PATH:-"/etc/service/$DOCKER_CLUSTER_NAME"}
 
 
+DOCKER_GB2JT_NAME=${DOCKER_GB2JT_NAME:-"gb2jt-1"}
+DOCKER_GB2JT_PATH=${DOCKER_GB2JT_PATH:-"/etc/service/$DOCKER_GB2JT_NAME"}
+
 
 
 function main(){
@@ -65,6 +68,8 @@ function main(){
 	docker rm -f $DOCKER_CLUSTER_NAME
 	rm -rf $DOCKER_CLUSTER_PATH
 	
+	echo "清理28181"
+	docker rm -f $DOCKER_GB2JT_NAME
 	
 	if [[ $RM_ALL == 1 ]]; then
 		echo "清理redis"
