@@ -22,6 +22,14 @@ export GatewayBaseAPI=http://172.29.108.249/api/
 #设置redis连接字符串(默认的测试网关未支持RedisExchangeHosts参数，如果使用默认网关请不要更改此参数)
 export RedisExchangeHosts=172.29.108.245:6379,connectTimeout=20000,syncTimeout=20000,responseTimeout=20000
 
+
+#此配置是GB28181转808后连808网关地址
+export Server_808_ADDR="172.29.108.249"
+#此配置是连808网关端口
+export Server_808_PORT="9300"
+
+
+
 if [[ ! -f "./run_cluster.sh" ]]; then
     cd RTVS/script
 fi
@@ -33,3 +41,5 @@ fi
 ./run_gw.sh
 
 ./run_rtvs.sh
+
+./run_28181.sh
