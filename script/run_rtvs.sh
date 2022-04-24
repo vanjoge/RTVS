@@ -529,8 +529,10 @@ function updateXml()
 }
 function updateXmlMultiline()
 {
+    val=`echo "$3"| sed 's:\/:\\\/:g'`
     echo "正在修改XML文件:$1,节点:$2,新值:$3"
-    cat $1  | sed ":label;N;s/\n/\t\t\tnewlinenewlinenewline\t\t\t/;b label" | sed "s/<$2>.*<\/$2>/<$2>$3<\/$2>/g" | sed "s/\t\t\tnewlinenewlinenewline\t\t\t/\n/g" > $1
+    cat $1  | sed ":label;N;s/\n/\t\t\tnewlinenewlinenewline\t\t\t/;b label" | sed "s/<$2>.*<\/$2>/<$2>$val<\/$2>/g" | sed "s/\t\t\tnewlinenewlinenewline\t\t\t/\n/g" > $1
+    unset val
 }
 
 function update_nginx()
