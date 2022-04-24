@@ -840,8 +840,6 @@ function update_config(){
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml X509FileName "/MyData/certificate.pfx"
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml X509Password "$CV_PFX_PWD"
     
-    #TagConfs
-    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml TagConfs "$TagConfs"
 
     #修改传入参数
     if  [ ! -n "$GovWebIp" ] ;then
@@ -889,6 +887,8 @@ function update_config(){
         updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml WebUsrPwd $WebUsrPwd
     fi
     
+    #TagConfs
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml TagConfs "$TagConfs"
 }
 function docker_run(){
     #启动nginx-rtmp
