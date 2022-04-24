@@ -61,11 +61,6 @@ ClusterServer=${ClusterServer:-"http://172.29.108.254/Api"}
 MatchSim12And20=${MatchSim12And20:-"true"}
 QueryVideoListTimeOutSec=${QueryVideoListTimeOutSec:-"60"}
 
-if  [ ! -n "$GatewayBaseAPI" ] ;then
-    echo "GatewayBaseAPI 未设置，无需更改VideoControlUrl"
-else
-    VideoControlUrl=${GatewayBaseAPI}"VideoControl?Content="
-fi
 
 
 
@@ -532,6 +527,11 @@ function updateXml()
     fi
     unset val
 }
+function updateXmlMultiline()
+{
+    echo "正在修改XML文件:$1,节点:$2,新值:$3"
+    cat $1  | sed ":label;N;s/\n/\t\t\tnewlinenewlinenewline\t\t\t/;b label" | sed "s/<$2>.*<\/$2>/<$2>$3<\/$2>/g" | sed "s/\t\t\tnewlinenewlinenewline\t\t\t/\n/g" > $1
+}
 
 function update_nginx()
 {
@@ -837,6 +837,9 @@ function update_config(){
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml X509FileName "/MyData/certificate.pfx"
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml X509Password "$CV_PFX_PWD"
     
+    #TagConfs
+    updateXmlMultiline $DOCKER_RTVSWEB_PATH/SettingConfig.xml TagConfs "$TagConfs"
+
     #修改传入参数
     if  [ ! -n "$GovWebIp" ] ;then
         updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml GovWebIp $BeianAddress
@@ -847,11 +850,6 @@ function update_config(){
         updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml FDWebIP http://$DOCKER_GATEWAY_HOST
     else
         updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml FDWebIP http://$FDWebIP
-    fi
-    if  [ ! -n "$VideoControlUrl" ] ;then
-        echo "VideoControlUrl无需修改"
-    else
-        updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml VideoControlUrl $VideoControlUrl
     fi
     if  [ ! -n "$GatewayBaseAPI" ] ;then
         echo "GatewayBaseAPI无需修改"

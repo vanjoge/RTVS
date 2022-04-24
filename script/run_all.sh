@@ -15,8 +15,10 @@ export Webrtc_Port_End=65535
 #设置服务器IP地址或域名(内网测试无需映射端口 外网请映射端口)
 #此配置是RTVS下发给设备的连接地址和客户端连接服务器的地址，请注意公网时的端口映射
 export IPADDRESS=(Your IP or domain)
-#设置网关接口地址
+#设置默认网关接口地址
 export GatewayBaseAPI=http://172.29.108.249/api/
+#设置TagConfs 此参数支持按前端传入的CTags区分网关接口地址
+#export TagConfs="<Item><Tag>test</Tag><GatewayBaseAPI>http://172.29.108.249/api/</GatewayBaseAPI></Item> <Item><Tag>publish</Tag><GatewayBaseAPI>http://172.29.108.249/api/</GatewayBaseAPI></Item>"
 #设置redis连接字符串(默认的测试网关未支持RedisExchangeHosts参数，如果使用默认网关请不要更改此参数)
 export RedisExchangeHosts=172.29.108.245:6379,connectTimeout=20000,syncTimeout=20000,responseTimeout=20000
 

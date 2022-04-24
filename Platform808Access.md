@@ -554,6 +554,10 @@ AUTHORIZE_CODE_2 为 跨域地区政府平台使用的时效口令
         /// 手机号 如有不再调用http请求换取SIM接口
         /// </summary>
         public string Sim { get; set; }
+        /// <summary>
+        /// CTags 可用于区分调用不通网关API地址
+        /// </summary>
+        public string CTags { get; set; }
     }
 ```
 
@@ -604,6 +608,10 @@ AUTHORIZE_CODE_2 为 跨域地区政府平台使用的时效口令
         /// 0x00:音视频；0x01:音频；0x02:视频；0x03:视频或音视频
         /// </summary>
         public byte AVITEM_TYPE { get; set; }
+        /// <summary>
+        /// CTags 可用于区分调用不通网关API地址
+        /// </summary>
+        public string CTags { get; set; }
     }
 ```
 

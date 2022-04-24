@@ -127,7 +127,7 @@
   <HeartTimeoutSec>300</HeartTimeoutSec>
   <SckTimeoutSecNoAuthorityID>300</SckTimeoutSecNoAuthorityID>
   <FDSckTimeoutSecNoAuthorityID>300</FDSckTimeoutSecNoAuthorityID>
-  <VideoControlUrl>http://172.29.108.1:8888/WebService/VideoControl?Content=</VideoControlUrl>
+  <TagConfs></TagConfs>
   <GatewayBaseAPI>http://172.29.108.1:8888/WebService/</GatewayBaseAPI>
   <RedisExchangeHosts>172.29.108.1:7000,172.29.108.1:7001,172.29.108.1:7002,172.29.108.1:7003,172.29.108.1:7004,172.29.108.1:7005,connectTimeout=20000,syncTimeout=20000,responseTimeout=20000</RedisExchangeHosts>
   <MysqlConnectionString>Database=filecache;Data Source=172.29.108.241;port=3306;User Id=rtvsweb;Password=rtvs2018;charset=utf8;pooling=true</MysqlConnectionString>
