@@ -531,7 +531,8 @@ function updateXmlMultiline()
 {
     val=`echo "$3"| sed 's:\/:\\\/:g'`
     echo "正在修改XML文件:$1,节点:$2,新值:$3"
-    cat $1  | sed ":label;N;s/\n/\t\t\tnewlinenewlinenewline\t\t\t/;b label" | sed "s/<$2>.*<\/$2>/<$2>$val<\/$2>/g" | sed "s/\t\t\tnewlinenewlinenewline\t\t\t/\n/g" > $1
+    cat $1  | sed ":label;N;s/\n/\t\t\tnewlinenewlinenewline\t\t\t/;b label" | sed "s/<$2>.*<\/$2>/<$2>$val<\/$2>/g" | sed "s/\t\t\tnewlinenewlinenewline\t\t\t/\n/g" > tmp.xml
+    mv tmp.xml $1
     unset val
 }
 
@@ -840,7 +841,7 @@ function update_config(){
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml X509Password "$CV_PFX_PWD"
     
     #TagConfs
-    updateXmlMultiline $DOCKER_RTVSWEB_PATH/SettingConfig.xml TagConfs "$TagConfs"
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml TagConfs "$TagConfs"
 
     #修改传入参数
     if  [ ! -n "$GovWebIp" ] ;then
