@@ -895,7 +895,7 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
     例:http://10.10.10.228:6035/111111111112_1_1651745996_0?MediaType=0&StreamType=1&PlaybackMode=0&Multiple=1&DataSource=1&CTags=test
 
 
-    MediaType、StreamType、PlaybackMode和Multiple数值定义见1078协议9101，DataSource为来源 0自动 1设备 2服务端缓存
+    MediaType、StreamType、PlaybackMode和Multiple数值定义见1078协议9201，DataSource为来源 0自动 1设备 2服务端缓存
 
 
 ### 网关响应上级平台关闭实时音视频接口0x9802
