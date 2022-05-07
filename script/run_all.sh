@@ -17,8 +17,10 @@ export Webrtc_Port_End=65535
 export IPADDRESS=(Your IP or domain)
 #设置默认网关接口地址
 export GatewayBaseAPI=http://172.29.108.249/api/
+#设置默认GB网关接口地址
+export GB28181API=http://172.29.108.247/api/
 #设置TagConfs 此参数支持按前端传入的CTags区分网关接口地址
-#export TagConfs="<Item><Tag>test</Tag><GatewayBaseAPI>http://172.29.108.249/api/</GatewayBaseAPI></Item> <Item><Tag>publish</Tag><GatewayBaseAPI>http://172.29.108.249/api/</GatewayBaseAPI></Item>"
+#export TagConfs="<Item><Tag>test</Tag><GatewayBaseAPI>http://172.29.108.249/api/</GatewayBaseAPI><GB28181API>http://172.29.108.247/api/</GB28181API></Item> <Item><Tag>publish</Tag><GatewayBaseAPI>http://172.29.108.249/api/</GatewayBaseAPI><GB28181API>http://172.29.108.247/api/</GB28181API></Item>"
 #设置redis连接字符串(默认的测试网关未支持RedisExchangeHosts参数，如果使用默认网关请不要更改此参数)
 export RedisExchangeHosts=172.29.108.245:6379,connectTimeout=20000,syncTimeout=20000,responseTimeout=20000
 

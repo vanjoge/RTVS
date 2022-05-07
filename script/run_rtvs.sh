@@ -857,6 +857,9 @@ function update_config(){
     else
         updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml GatewayBaseAPI $GatewayBaseAPI
     fi
+
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml GB28181API $GB28181API
+
     if  [ ! -n "$RedisExchangeHosts" ] ;then
         echo "RedisExchangeHosts无需修改"
     else
