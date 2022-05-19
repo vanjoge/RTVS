@@ -12,6 +12,7 @@ DOCKER_GBSIP_IMAGE_NAME=${DOCKER_GBSIP_IMAGE_NAME:-"vanjoge/gbsip:latest"}
 #端口  
 
 DOCKER_GBSIP_PORT=${DOCKER_GBSIP_PORT:-5060}
+DOCKER_GBSIP_HTTP_PORT=${DOCKER_GBSIP_HTTP_PORT:-9081}
 
 DOCKER_NETWORK=${DOCKER_NETWORK:-"cvnetwork"}
 DOCKER_GBSIP_IP=${DOCKER_GBSIP_IP:-"172.29.108.247"}
@@ -91,7 +92,7 @@ function docker_run(){
 	
 	docker pull $DOCKER_GBSIP_IMAGE_NAME
     #启动RTVS
-    docker run  --name $DOCKER_GBSIP_NAME --net $DOCKER_NETWORK --ip $DOCKER_GBSIP_IP --restart always  --privileged=true  -v $DOCKER_GBSIP_PATH:/MyData  -e MyDataPath=/MyData -p $DOCKER_GBSIP_PORT:$DOCKER_GBSIP_PORT/tcp -p $DOCKER_GBSIP_PORT:$DOCKER_GBSIP_PORT/udp -d $DOCKER_GBSIP_IMAGE_NAME
+    docker run  --name $DOCKER_GBSIP_NAME --net $DOCKER_NETWORK --ip $DOCKER_GBSIP_IP --restart always  --privileged=true  -v $DOCKER_GBSIP_PATH:/MyData  -e MyDataPath=/MyData -p $DOCKER_GBSIP_HTTP_PORT:80 -p $DOCKER_GBSIP_PORT:$DOCKER_GBSIP_PORT/tcp -p $DOCKER_GBSIP_PORT:$DOCKER_GBSIP_PORT/udp -d $DOCKER_GBSIP_IMAGE_NAME
 }
 function main(){
     echo "依耐文件检查...."
