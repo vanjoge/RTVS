@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Setting xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Server808>172.29.108.249</Server808>
-  <Prot808>9300</Prot808>
-  <Ver808>2</Ver808>
-  <AudioCodecType>G711A</AudioCodecType>
-  <GpsSec>60</GpsSec>
-  <HeartSec>60</HeartSec>
-  <RegAndAuthoritySec>30</RegAndAuthoritySec>
-  <ConnSec>10</ConnSec>
-  <SendGps>false</SendGps>
-  <ServerIP>1.1.1.1</ServerIP>
-  <SipPort>5060</SipPort>
-  <RtpPort>30000</RtpPort>
-  <RtpType>1</RtpType>
   <EnableSipLog>true</EnableSipLog>
+  <ServerIP>127.0.0.1</ServerIP>
+  <SipPort>5060</SipPort>
+  <RedisExchangeHosts>172.29.108.245:6379,connectTimeout=20000,syncTimeout=20000,responseTimeout=20000,defaultDatabase=0,password=</RedisExchangeHosts>
+  <KeepAliveTimeoutSec>180</KeepAliveTimeoutSec>
+  <RTVSAPI>http://172.29.108.11/</RTVSAPI>
+  <RTVSVideoServer>172.29.108.1</RTVSVideoServer>
+  <RTVSVideoPort>17000</RTVSVideoPort>
 </Setting>

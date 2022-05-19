@@ -2,27 +2,26 @@
 echo "当前执行文件......$0"
 
 ##################################变量定义##################################
-DOCKER_GB2JT_NAME=${DOCKER_GB2JT_NAME:-"gb2jt-1"}
-DOCKER_GB2JT_PATH=${DOCKER_GB2JT_PATH:-"/etc/service/$DOCKER_GB2JT_NAME"}
-DOCKER_GB2JT_IMAGE_NAME=${DOCKER_GB2JT_IMAGE_NAME:-"vanjoge/gb2jt:1.3.4"}
+DOCKER_GBSIP_NAME=${DOCKER_GBSIP_NAME:-"gbsip-1"}
+DOCKER_GBSIP_PATH=${DOCKER_GBSIP_PATH:-"/etc/service/$DOCKER_GBSIP_NAME"}
+DOCKER_GBSIP_IMAGE_NAME=${DOCKER_GBSIP_IMAGE_NAME:-"vanjoge/gbsip:latest"}
 
 
 #外网IP
 
 #端口  
 
-DOCKER_SIP_PORT=${DOCKER_SIP_PORT:-5060}
-DOCKER_RTP_PORT=${DOCKER_RTP_PORT:-30000}
+DOCKER_GBSIP_PORT=${DOCKER_GBSIP_PORT:-5060}
 
 DOCKER_NETWORK=${DOCKER_NETWORK:-"cvnetwork"}
-DOCKER_GB2JT_IP=${DOCKER_GB2JT_IP:-"172.29.108.248"}
+DOCKER_GBSIP_IP=${DOCKER_GBSIP_IP:-"172.29.108.247"}
 
-#0 UDP 1 TCP
-GB28181_RTP_TYPE=${GB28181_RTP_TYPE:-"1"}
 
-#808
-Server_808_ADDR=${Server_808_ADDR:-"172.29.108.249"}
-DOCKER_808_PORT=${DOCKER_808_PORT:-"9300"}
+DOCKER_GBSIP_ENABLESIPLOG=${DOCKER_GBSIP_ENABLESIPLOG:-"true"}
+DOCKER_GBSIP_ALIVETIMEOUTSEC=${DOCKER_GBSIP_ALIVETIMEOUTSEC:-180}
+DOCKER_GBSIP_RTVSAPI=${DOCKER_GBSIP_RTVSAPI:-"http://172.29.108.11/"}
+BeianAddress=${BeianAddress:-IPADDRESS}
+DOCKER_WEBSOCKET_PORT=${DOCKER_WEBSOCKET_PORT:-17000}
  
  
 function updateXml()
@@ -45,22 +44,22 @@ function init_system_files_path()
     if [[ ! -d "/etc/service" ]]; then
         mkdir /etc/service
     fi
-    if [[ ! -d $DOCKER_GB2JT_PATH ]]; then
-        mkdir $DOCKER_GB2JT_PATH
+    if [[ ! -d $DOCKER_GBSIP_PATH ]]; then
+        mkdir $DOCKER_GBSIP_PATH
     fi
     cd gb28181
     # 复制Setting.xml
     if [[ -f "./Setting.xml" ]]; then
-        echo "拷贝文件： ./Setting.xml $DOCKER_GB2JT_PATH/Setting.xml"
-        cp -f Setting.xml $DOCKER_GB2JT_PATH/Setting.xml
+        echo "拷贝文件： ./Setting.xml $DOCKER_GBSIP_PATH/Setting.xml"
+        cp -f Setting.xml $DOCKER_GBSIP_PATH/Setting.xml
     else
         echo "缺少./Setting.xml文件...已退出安装!"
         exit
     fi
     # 复制siplog4.config
     if [[ -f "./siplog4.config" ]]; then
-        echo "拷贝文件： ./siplog4.config $DOCKER_GB2JT_PATH/siplog4.config"
-        cp -f siplog4.config $DOCKER_GB2JT_PATH/siplog4.config
+        echo "拷贝文件： ./siplog4.config $DOCKER_GBSIP_PATH/siplog4.config"
+        cp -f siplog4.config $DOCKER_GBSIP_PATH/siplog4.config
     else
         echo "缺少./siplog4.config文件...已退出安装!"
         exit
@@ -68,8 +67,8 @@ function init_system_files_path()
     
     # 复制log4.config
     if [[ -f "./log4.config" ]]; then
-        echo "拷贝一份日志配置文件： ./log4.config $DOCKER_GB2JT_PATH/log4.config"
-        cp  -f ./log4.config $DOCKER_GB2JT_PATH/log4.config
+        echo "拷贝一份日志配置文件： ./log4.config $DOCKER_GBSIP_PATH/log4.config"
+        cp  -f ./log4.config $DOCKER_GBSIP_PATH/log4.config
     else
         echo "缺少./log4.config文件...已退出安装!"
         exit
@@ -78,17 +77,19 @@ function init_system_files_path()
 }
  
 function docker_run(){
-    updateXml $DOCKER_GB2JT_PATH/Setting.xml RtpType "$GB28181_RTP_TYPE"
-    updateXml $DOCKER_GB2JT_PATH/Setting.xml ServerIP "$IPADDRESS"
-    updateXml $DOCKER_GB2JT_PATH/Setting.xml SipPort "$DOCKER_SIP_PORT"
-    updateXml $DOCKER_GB2JT_PATH/Setting.xml RtpPort "$DOCKER_RTP_PORT"
-    updateXml $DOCKER_GB2JT_PATH/Setting.xml Server808 "$Server_808_ADDR"
-    updateXml $DOCKER_GB2JT_PATH/Setting.xml Prot808 "$DOCKER_808_PORT"
+    updateXml $DOCKER_GBSIP_PATH/Setting.xml EnableSipLog "$EnableSipLog"
+    updateXml $DOCKER_GBSIP_PATH/Setting.xml ServerIP "$IPADDRESS"
+    updateXml $DOCKER_GBSIP_PATH/Setting.xml SipPort "$DOCKER_GBSIP_PORT"
+    updateXml $DOCKER_GBSIP_PATH/Setting.xml RedisExchangeHosts "$RedisExchangeHosts"
+    updateXml $DOCKER_GBSIP_PATH/Setting.xml KeepAliveTimeoutSec "$DOCKER_GBSIP_ALIVETIMEOUTSEC"
+    updateXml $DOCKER_GBSIP_PATH/Setting.xml RTVSAPI "$DOCKER_GBSIP_RTVSAPI"
+    updateXml $DOCKER_GBSIP_PATH/Setting.xml RTVSVideoServer "$BeianAddress"
+    updateXml $DOCKER_GBSIP_PATH/Setting.xml RTVSVideoPort "$DOCKER_WEBSOCKET_PORT"
 	
 	
-	docker pull $DOCKER_GB2JT_IMAGE_NAME
+	docker pull $DOCKER_GBSIP_IMAGE_NAME
     #启动RTVS
-    docker run  --name $DOCKER_GB2JT_NAME --net $DOCKER_NETWORK --ip $DOCKER_GB2JT_IP --restart always  --privileged=true  -v $DOCKER_GB2JT_PATH:/MyData  -e MyDataPath=/MyData -p $DOCKER_SIP_PORT:$DOCKER_SIP_PORT/tcp -p $DOCKER_SIP_PORT:$DOCKER_SIP_PORT/udp -p $DOCKER_RTP_PORT:$DOCKER_RTP_PORT/tcp -p $DOCKER_RTP_PORT:$DOCKER_RTP_PORT/udp  -d $DOCKER_GB2JT_IMAGE_NAME
+    docker run  --name $DOCKER_GBSIP_NAME --net $DOCKER_NETWORK --ip $DOCKER_GBSIP_IP --restart always  --privileged=true  -v $DOCKER_GBSIP_PATH:/MyData  -e MyDataPath=/MyData -p $DOCKER_SIP_PORT:$DOCKER_SIP_PORT/tcp -p $DOCKER_SIP_PORT:$DOCKER_SIP_PORT/udp -d $DOCKER_GBSIP_IMAGE_NAME
 }
 function main(){
     echo "依耐文件检查...."
