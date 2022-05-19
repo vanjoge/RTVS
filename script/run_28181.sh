@@ -20,9 +20,11 @@ DOCKER_GBSIP_IP=${DOCKER_GBSIP_IP:-"172.29.108.247"}
 DOCKER_GBSIP_ENABLESIPLOG=${DOCKER_GBSIP_ENABLESIPLOG:-"true"}
 DOCKER_GBSIP_ALIVETIMEOUTSEC=${DOCKER_GBSIP_ALIVETIMEOUTSEC:-180}
 DOCKER_GBSIP_RTVSAPI=${DOCKER_GBSIP_RTVSAPI:-"http://172.29.108.11/"}
-BeianAddress=${BeianAddress:-IPADDRESS}
 DOCKER_WEBSOCKET_PORT=${DOCKER_WEBSOCKET_PORT:-17000}
  
+if [ ! -n "$BeianAddress" ] ; then
+    BeianAddress=$IPADDRESS
+fi
  
 function updateXml()
 {
@@ -77,7 +79,7 @@ function init_system_files_path()
 }
  
 function docker_run(){
-    updateXml $DOCKER_GBSIP_PATH/Setting.xml EnableSipLog "$EnableSipLog"
+    updateXml $DOCKER_GBSIP_PATH/Setting.xml EnableSipLog "$DOCKER_GBSIP_ENABLESIPLOG"
     updateXml $DOCKER_GBSIP_PATH/Setting.xml ServerIP "$IPADDRESS"
     updateXml $DOCKER_GBSIP_PATH/Setting.xml SipPort "$DOCKER_GBSIP_PORT"
     updateXml $DOCKER_GBSIP_PATH/Setting.xml RedisExchangeHosts "$RedisExchangeHosts"
@@ -89,7 +91,7 @@ function docker_run(){
 	
 	docker pull $DOCKER_GBSIP_IMAGE_NAME
     #启动RTVS
-    docker run  --name $DOCKER_GBSIP_NAME --net $DOCKER_NETWORK --ip $DOCKER_GBSIP_IP --restart always  --privileged=true  -v $DOCKER_GBSIP_PATH:/MyData  -e MyDataPath=/MyData -p $DOCKER_SIP_PORT:$DOCKER_SIP_PORT/tcp -p $DOCKER_SIP_PORT:$DOCKER_SIP_PORT/udp -d $DOCKER_GBSIP_IMAGE_NAME
+    docker run  --name $DOCKER_GBSIP_NAME --net $DOCKER_NETWORK --ip $DOCKER_GBSIP_IP --restart always  --privileged=true  -v $DOCKER_GBSIP_PATH:/MyData  -e MyDataPath=/MyData -p $DOCKER_GBSIP_PORT:$DOCKER_GBSIP_PORT/tcp -p $DOCKER_GBSIP_PORT:$DOCKER_GBSIP_PORT/udp -d $DOCKER_GBSIP_IMAGE_NAME
 }
 function main(){
     echo "依耐文件检查...."

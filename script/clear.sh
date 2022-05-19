@@ -43,6 +43,8 @@ DOCKER_CLUSTER_PATH=${DOCKER_CLUSTER_PATH:-"/etc/service/$DOCKER_CLUSTER_NAME"}
 DOCKER_GB2JT_NAME=${DOCKER_GB2JT_NAME:-"gb2jt-1"}
 DOCKER_GB2JT_PATH=${DOCKER_GB2JT_PATH:-"/etc/service/$DOCKER_GB2JT_NAME"}
 
+DOCKER_GBSIP_NAME=${DOCKER_GBSIP_NAME:-"gbsip-1"}
+DOCKER_GBSIP_PATH=${DOCKER_GBSIP_PATH:-"/etc/service/$DOCKER_GBSIP_NAME"}
 
 
 function main(){
@@ -70,6 +72,7 @@ function main(){
 	
 	echo "清理28181"
 	docker rm -f $DOCKER_GB2JT_NAME
+	docker rm -f $DOCKER_GBSIP_NAME
 	
 	if [[ $RM_ALL == 1 ]]; then
 		echo "清理redis"
