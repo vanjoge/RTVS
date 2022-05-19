@@ -16,8 +16,9 @@
 <body>
     <div>
         <h1>播放测试</h1>
-        <h3>如需测试本地部署的RTVS，请修改服务器、端口(默认17000)、SIM卡号等信息，设备接入地址(808协议) 服务器:9300</h3>
-        <h3>本示例默认服务et.test.cvtsp.com:15001中，设备接入地址(808协议)是116.228.114.206:15000 </h3>
+        <h3>如需测试本地部署的RTVS，请修改服务器、端口(默认17000)、SIM卡号等信息，设备接入地址(808协议) 服务器:9300，国标接入地址(28181)服务器:5060 </h3>
+        <h3>本示例默认服务et.test.cvtsp.com:15001中，设备接入地址(808协议)是116.228.114.206:15000，国标接入地址(28181)是116.228.114.206:5060</h3>
+        <h3>播放国标设备时，协议需选择GB28181，SIM卡号 填写 国标设备编号(SIP用户名)，通道 填写 IPC编号(视频通道编码ID)即可，本地部署时，也可通过 http://服务器:9081 播放</h3>
         <div>
             <h3>控件参数</h3>
             <table style="table-layout:fixed">
@@ -58,9 +59,10 @@
                     </td>
                     <td>协议:</td>
                     <td>
-                        <select id="protocol">
-                            <option value="0" selected="selected">2013</option>
-                            <option value="1">2019</option>
+                        <select id="protocol" onchange="ProtocolChange()">
+                            <option value="0" selected="selected">JT/T 808-2013</option>
+                            <option value="1">JT/T 808-2019</option>
+                            <option value="2">GB/T 28181-2016</option>
                         </select>
                     </td>
                 </tr>
@@ -88,6 +90,7 @@
                             <option value="36">通道36</option>
                             <option value="99">通道99</option>
                         </select>
+                        <input id="txtChannel" value="34020000001310000001" hidden />
                     </td>
                     <td>码流类型:</td>
                     <td>
@@ -199,6 +202,9 @@
                             <option value="4">8倍</option>
                             <option value="5">16倍</option>
                         </select>
+                    </td>
+                    <td>
+                        <button onclick="StartDownload()" disabled>开始下载</button>
                     </td>
                 </tr>
                 <tr>
@@ -359,7 +365,7 @@
             <table style="table-layout:fixed">
                 <tr>
                     <td>
-                        <button onclick="GovPlay(0)" disabled>播放1078http</button>
+                        <button onclick="GovPlay(0)" disabled>播放1078http(政府平台用)</button>
                     </td>
                     <td>Gov URL:</td>
                     <td><input id="txtgov" value="http://et.test.cvtsp.com:15007/沪QQ7777.1.1.0.aaa" style="width: 800px;" /></td>
@@ -432,6 +438,23 @@
                 document.querySelector("#playbackbyday").style.display = "";
             }
         }
+        function ProtocolChange() {
+            if (document.querySelector('#protocol').value == 2) {
+                document.querySelector('#cmbChannel').hidden = true;
+                document.querySelector('#txtChannel').hidden = false;
+            } else {
+                document.querySelector('#cmbChannel').hidden = false;
+                document.querySelector('#txtChannel').hidden = true;
+            }
+        }
+        function GetChannel() {
+
+            if (document.querySelector('#protocol').value == 2)
+                return document.querySelector('#txtChannel').value;
+            else
+                return parseInt(document.querySelector('#cmbChannel').value);
+        }
+
 
         function CvNetVideoSelectedEventCallback(id) {
             var selected = id;
@@ -591,7 +614,7 @@
             //CvNetVideo.SetRealOrBack(false);
             //CvNetVideo.SetBackDateTime(
             //    document.querySelector('#txtsim').value,
-            //    parseInt(document.querySelector('#cmbChannel').value),
+            //    GetChannel(),
             //    "2019-03-06",
             //    1,
             //    document.querySelector('#numAlarm').value,
@@ -642,7 +665,7 @@
             }
             CvNetVideo.StartRealTimeVideo(
                 document.querySelector('#txtsim').value,
-                parseInt(document.querySelector('#cmbChannel').value),
+                GetChannel(),
                 parseInt(document.querySelector('#cmbStreamType').value),
                 mideaType,
                 id,
@@ -661,7 +684,7 @@
 
             CvNetVideo.SetBackDateTime(
                 document.querySelector('#txtsim').value,
-                parseInt(document.querySelector('#cmbChannel').value),
+                GetChannel(),
                 document.querySelector('#txtPlayBackDatetime').value,
                 id,
                 document.querySelector('#numAlarm').value,
@@ -679,7 +702,7 @@
         function AVTransferControl(id) {
             CvNetVideo.AVTransferControl(
                 document.querySelector('#txtsim').value,
-                parseInt(document.querySelector('#cmbChannel').value),
+                GetChannel(),
                 parseInt(document.querySelector('#cmbControlCommand').value),
                 parseInt(document.querySelector('#cmbStreamType').value),
                 parseInt(document.querySelector('#cmbTurnOffMediaType').value),
@@ -692,11 +715,31 @@
                 }
             );
         }
+        function StartDownload() {
+
+            CvNetVideo.DownLoadFmp4(
+                document.querySelector('#txtsim').value,
+                GetChannel(),
+                parseInt(document.querySelector('#cmbMideaType').value),
+                parseInt(document.querySelector('#cmbStreamType_back').value),
+                parseInt(document.querySelector('#cmbStorageType').value),
+                parseInt(document.querySelector('#cmbPlaybackMode').value),
+                parseInt(document.querySelector('#cmbMultiple').value),
+                document.querySelector('#txtStarttime').value,
+                document.querySelector('#txtEndtime').value,
+                {
+                    clusterHost: document.querySelector("#txtserveradd").value,
+                    clusterPort: document.querySelector("#txtport").value,
+                    protocol: document.querySelector("#protocol").value
+                },
+                parseInt(document.querySelector('#cmbDataSource').value)
+            )
+        }
         function PlaybackVideo(id) {
 
             CvNetVideo.PlaybackVideo(
                 document.querySelector('#txtsim').value,
-                parseInt(document.querySelector('#cmbChannel').value),
+                GetChannel(),
                 parseInt(document.querySelector('#cmbMideaType').value),
                 parseInt(document.querySelector('#cmbStreamType_back').value),
                 parseInt(document.querySelector('#cmbStorageType').value),
@@ -718,7 +761,7 @@
         function PlaybackVideoControl(id) {
             CvNetVideo.PlaybackVideoControl(
                 document.querySelector('#txtsim').value,
-                parseInt(document.querySelector('#cmbChannel').value),
+                GetChannel(),
                 parseInt(document.querySelector('#cmbPlaybackControl').value),
                 parseInt(document.querySelector('#cmbMultiple').value),
                 document.querySelector('#txtDragPlaybackPosition').value,
@@ -734,7 +777,7 @@
         function QueryVideoFileList(id) {
             CvNetVideo.QueryVideoFileList(
                 document.querySelector('#txtsim').value,
-                parseInt(document.querySelector('#cmbChannel').value),
+                GetChannel(),
                 DateToUnixLong(document.querySelector('#txtStarttime').value),
                 DateToUnixLong(document.querySelector('#txtEndtime').value),
                 document.querySelector('#numAlarm').value,
@@ -863,7 +906,7 @@
         function FtpVideoFileUpload(id) {
             CvNetVideo.FtpVideoFileUpload(
                 document.querySelector('#txtsim').value,
-                parseInt(document.querySelector('#cmbChannel').value),
+                GetChannel(),
                 document.querySelector('#ftpAddress').value,
                 parseInt(document.querySelector('#ftpPort').value),
                 document.querySelector('#ftpUsr').value,
@@ -957,7 +1000,7 @@
         function SpeekAudio() {
             let ret = CvNetVideo.StartSpeek(
                 document.querySelector('#txtsim').value,
-                parseInt(document.querySelector('#cmbChannel').value),
+                GetChannel(),
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
                     clusterPort: document.querySelector("#txtport").value,
