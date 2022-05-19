@@ -25,12 +25,6 @@ export GB28181API=http://172.29.108.247/api/RTVS/
 export RedisExchangeHosts=172.29.108.245:6379,connectTimeout=20000,syncTimeout=20000,responseTimeout=20000,defaultDatabase=0,password=
 
 
-#此配置是GB28181转808后连808网关地址
-export Server_808_ADDR="172.29.108.249"
-#808网关连接端口(如果启用28181 此参数必填)
-export DOCKER_808_PORT=9300
-
-
 if [[ ! -f "./run_cluster.sh" ]]; then
     cd RTVS/script
 fi
