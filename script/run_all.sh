@@ -32,9 +32,10 @@ fi
 ./clear.sh
 
 ./run_cluster.sh
+
+./run_28181.sh
+
 #启动默认测试网关+redis服务
 ./run_gw.sh
 
 ./run_rtvs.sh
-
-./run_28181.sh
