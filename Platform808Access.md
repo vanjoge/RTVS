@@ -786,7 +786,7 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
         /// <summary>
         /// 同一设备对讲监听能不能同时进行
         /// </summary>
-        public bool m_is_taklback_listen_meanwhile;
+        public bool m_is_talkback_listen_meanwhile;
         /// <summary>
         /// 同一通道实时历史能不能同时传
         /// </summary>
@@ -806,19 +806,78 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
         public long m_start_absolute_timestamp;
 
         /// <summary>
-        /// 是否有海思头
+        /// 1.2016版jt1078   2.2014版jt1078
         /// </summary>
-        public bool m_is_audio_have_haisi_header;
-
+        public int m_protocol_type;
         /// <summary>
         /// 是否设备cheji，一个连接就只发一个通道的数据
         /// </summary>
         public static bool m_is_device_connection_single_channel = true;
-
         /// <summary>
         /// b帧处理模式 0自动 1有B帧 2无B帧
         /// </summary>
         public int m_b_frame_type;
+        /// <summary>
+        /// 强制编码方式(主码流视频)
+        /// </summary>
+        public JTRTAVCodeType m_force_pt_video_main;
+        /// <summary>
+        /// 强制编码方式(子码流视频)
+        /// </summary>
+        public JTRTAVCodeType m_force_pt_video_sub;
+        /// <summary>
+        /// 强制编码方式(主码流音频)
+        /// </summary>
+        public JTRTAVCodeType m_force_pt_audio_main;
+        /// <summary>
+        /// 强制编码方式(子码流音频)
+        /// </summary>
+        public JTRTAVCodeType m_force_pt_audio_sub;
+        /// <summary>
+        /// 上次编码(主码流视频)
+        /// </summary>
+        public JTRTAVCodeType m_last_pt_video_main;
+        /// <summary>
+        /// 上次编码(主码流音频)
+        /// </summary>
+        public JTRTAVCodeType m_last_pt_audio_main;
+        /// <summary>
+        /// 音频帧长(主码流)
+        /// </summary>
+        public ushort m_audio_frame_length_main;
+        /// <summary>
+        /// 是否有海思头(主码流)
+        /// </summary>
+        public bool? m_is_audio_have_haisi_header_main;
+        /// <summary>
+        /// 上次编码(子码流视频)
+        /// </summary>
+        public JTRTAVCodeType m_last_pt_video_sub;
+        /// <summary>
+        /// 上次编码(子码流音频)
+        /// </summary>
+        public JTRTAVCodeType m_last_pt_audio_sub;
+        /// <summary>
+        /// 音频帧长(子码流)
+        /// </summary>
+        public ushort m_audio_frame_length_sub;
+        /// <summary>
+        /// 是否有海思头(子码流)
+        /// </summary>
+        public bool? m_is_audio_have_haisi_header_sub;
+        /// <summary>
+        /// 上次编码(对讲)
+        /// </summary>
+        public JTRTAVCodeType m_last_talk_pt;
+        /// <summary>
+        /// 对讲音频帧长
+        /// </summary>
+        public ushort m_talk_frame_length;
+        /// <summary>
+        /// 对讲是否有海思头
+        /// </summary>
+        public bool? m_is_talk_have_haisi_header;
+
 
         /// <summary>
         /// 设置默认配置信息
@@ -838,13 +897,13 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
             config.m_channel_max_connection_talk = 3;
             config.m_channel_max_connection_listen = 3;
 
-            config.m_is_taklback_listen_meanwhile = false;
+            config.m_is_talkback_listen_meanwhile = false;
             config.m_is_channel_real_back_meanwhile = true;
             config.m_is_channel_real_streamtype_meanwhile = true;
 
             config.m_is_absolute_timestamp = false;
-            
-            config.m_is_audio_have_haisi_header = true;
+
+            config.m_protocol_type = 1;
 
             config.m_b_frame_type = 0;
 
