@@ -723,7 +723,7 @@ Speed:下载倍速，仅28181有效
      接口
 ```
 // 截图
-Capture(filename, captureType, captureQuality, videoId = 0) ;//id>=0
+Capture(filename, captureType, captureQuality, videoId = 0);
 
 ```
    参数说明
