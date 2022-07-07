@@ -56,7 +56,7 @@ JS视频播放插件
 ----
    接口 返回UCMain对象，与静态方法具有同名接口。用以支持一个页面初始化多个视频控件。
 ```
-CvNetVideo.Init(dom, VideoNums = 4, config = {});
+Init(dom, VideoNums = 4, config = {});
 
 ```
    参数说明
@@ -494,6 +494,21 @@ StopSpeak()
  CvNetVideo.StopSpeak();
 ```
 
+#### 对讲音量设置
+     接口
+```
+SetSpeekVolume(value)
+
+```
+   参数说明
+```
+value:音量大小 0-1
+```
+     示例
+```
+ CvNetVideo.SetSpeekVolume(1);
+```
+
 #### 发送FTP视频上传指令
 
      接口
@@ -571,10 +586,10 @@ UploadControl：上传控制（0：暂停，1：继续，2：取消）
      接口
 ```
 // 根据索引关闭窗口 0代表当前选中窗口
-CvNetVideo.Stop(id);//id>=0
+Stop(id);//id>=0
 
 // 关闭所有窗口
-CvNetVideo.Stop(-1);
+Stop(-1);
 ```
 
 
@@ -680,12 +695,51 @@ CvNetVideo.GovPlay(
             );
 ```
 
+#### 下载FMP4文件
+     接口
+```
+DownLoadFmp4(Sim, Channel, MediaType, StreamType = 0, StorageType = 0, PlaybackMode = 0, Multiple = 0, StartTime, EndTime, config = {}, DataSource = 0, Speed = 4) ;
+
+```
+   参数说明
+```
+Sim:sim卡号
+Channel:通道号不支持0
+MediaType：音视频资源类型（0：音视频，1：音频，2：视频，3：视频或音视频）
+StreamType：码流类型（0：主码流或子码流，1：主码流，2：子码流）
+StorageType：存储器类型（0：主存储器或灾备存储器，1：主存储器，2：灾备存储器）
+PlaybackMode:回放模式（0：正常回放，1：快进回放，2：关键帧快退回放，3：关键帧播放，4：单帧上传）
+Multiple:倍速（0：无效，1：1倍，2：2倍，3：4倍，4：8倍，5：16倍）
+StartTime:开始时间
+EndTime:结束时间
+config:配置项 与Init一致
+DataSource:0自动 1设备 2服务端缓存
+Speed:下载倍速，仅28181有效
+```
+
+
 ### 其他
+#### 截图
+     接口
+```
+// 截图
+Capture(filename, captureType, captureQuality, videoId = 0) ;//id>=0
+
+```
+   参数说明
+```
+filename:为null时不下载生成文件
+captureType:截图图片类型 0 png, 1 jpeg, 2 webp; 为null时取config.captureType
+captureQuality:截图图片质量 0-1 jpeg和webp时有效; 为null时取config.captureQuality
+videoId:-1为所有窗口，0为选中窗口，其它为窗口索引号从1开始
+return:截图图片base64编码
+```
+
 #### 视频旋转
      接口
 ```
 // 根据索引关闭窗口 0代表当前选中窗口
-CvNetVideo.SetRotate(id, angle);//id>=0
+SetRotate(id, angle);//id>=0
 
 ```
    参数说明
@@ -699,7 +753,7 @@ return:true为调用成功，false为调用失败
      接口
 ```
 // 初始化为正常状态，之后调用一次反转一次
-CvNetVideo.SetMirrorInver(id);//id>=0
+SetMirrorInver(id);//id>=0
 
 ```
    参数说明
@@ -712,15 +766,36 @@ return:true为调用成功，false为调用失败
      接口
 ```
 // 保持分屏整体全屏 
-CvNetVideo.FullScreen()
+FullScreen()
 
 ```
+
+#### 放大单个分屏
+     接口
+```
+// 将单个分屏铺满整个控件 同双击分屏事件
+ZoomUC(videoId)
+
+```
+   参数说明
+```
+videoId:-1为所有窗口，0为选中窗口，其它为窗口索引号从1开始
+```
+
+#### 恢复分屏
+     接口
+```
+// 恢复显示所有分屏 
+UnZoomUC()
+
+```
+
 
 #### 重新设置大小
      接口
 ```
 // 重新设置播放控件整体所占用大小
-CvNetVideo.Resize(width, height)
+Resize(width, height)
 
 ```
    参数说明
@@ -734,7 +809,7 @@ height:高度
      接口
 ```
 // 初始化为正常状态，之后调用一次反转一次
-CvNetVideo.SetMirrorInver(id);//id>=0
+SetMirrorInver(id);//id>=0
 
 ```
    参数说明
@@ -747,7 +822,7 @@ return:true为调用成功，false为调用失败
      接口
 ```
 // 设置所有分屏osd是否显示
-CvNetVideo.SetOsdVisible(visible, videoId);
+SetOsdVisible(visible, videoId);
 
 ```
    参数说明
@@ -760,7 +835,7 @@ videoId:-1为所有窗口，0为选中窗口，其它为窗口索引号从1开�
      接口
 ```
 // 设置所有分屏osd文本颜色
-CvNetVideo.SetOsdColor(color, videoId);
+SetOsdColor(color, videoId);
 
 ```
    参数说明
@@ -772,7 +847,7 @@ videoId:-1为所有窗口，0为选中窗口，其它为窗口索引号从1开�
      接口
 ```
 // 设置所有分屏osd文本颜色
-CvNetVideo.SetOsdText(videoId, text);
+SetOsdText(videoId, text);
 
 ```
    参数说明
@@ -785,7 +860,7 @@ text: 文本内如
      接口
 ```
 // 分屏是否正在播放(只要开启不管有无画面均认为在播放，手动暂停此状态还是true)
-CvNetVideo.IsPlaying(videoId);
+IsPlaying(videoId);
 
 ```
    参数说明
@@ -798,7 +873,7 @@ return: true 播放中 false 未播放
      接口
 ```
 // 设置超时时间
-CvNetVideo.SetTimeoutMsec(timeoutCloseMsec, timeoutWarningMsec);
+SetTimeoutMsec(timeoutCloseMsec, timeoutWarningMsec);
 
 ```
    参数说明
@@ -810,7 +885,7 @@ timeoutWarningMsec: 超时前警告提醒时间
      接口
 ```
 // 设置优先级
-CvNetVideo.SetPriority(priority, videoId = 0);
+SetPriority(priority, videoId = 0);
 
 ```
    参数说明
@@ -823,7 +898,7 @@ videoId:0为选中窗口，其它为窗口索引号从1开始
 #### Videos
 ```
 // 获取内部分屏对象 即内部UCVideo对象，一个分屏就是一个UCVideo
-CvNetVideo.Videos[id]
+Videos[id]
 
 ```
    参数说明
