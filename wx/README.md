@@ -7,7 +7,7 @@
 
 示例代码片段，请在微信开发工具中导入：
 
-> https://developers.weixin.qq.com/s/RXQCK0mW7lBY
+> https://developers.weixin.qq.com/s/1oRqF0ml7MBS
 > 
 
 体验地址，对应服务器为 et.test.cvtsp.com:15001
