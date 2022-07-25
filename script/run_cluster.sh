@@ -84,7 +84,7 @@ function init_system_files_path()
             exit 1
         fi
     else
-        rm $DOCKER_CLUSTER_PATH/certificate.pfx
+        rm $DOCKER_CLUSTER_PATH/certificate.pfx 2>/dev/null
     fi
     
     # 复制log4.config

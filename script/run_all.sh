@@ -29,7 +29,7 @@ if [[ ! -f "./run_cluster.sh" ]]; then
     cd RTVS/script
 fi
 
-./clear.sh
+./clear.sh 2>/dev/null
 
 ./run_cluster.sh
 

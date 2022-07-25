@@ -184,8 +184,8 @@ function init_system_files_path()
             exit 1
         fi
     else
-        rm $DOCKER_NGINX_PATH/cert/certificate.crt
-        rm $DOCKER_NGINX_PATH/cert/privkey.pem
+        rm $DOCKER_NGINX_PATH/cert/certificate.crt 2>/dev/null
+        rm $DOCKER_NGINX_PATH/cert/privkey.pem 2>/dev/null
         # 复制未加密nginx.conf文件
         if [[ -f "./nginx/nginx_nowss.conf" ]]; then
             echo "拷贝一份nginx_nowss.conf：cp ./nginx/nginx_nowss.conf $DOCKER_NGINX_PATH/nginx.conf"
@@ -203,7 +203,7 @@ function init_system_files_path()
     fi
     # 复制程序指定的版本VersionConfig.xml
     if [[ -f "./rtvsMyData/VersionConfig.xml" ]]; then
-        rm -f $DOCKER_RTVSWEB_PATH/VersionConfig.xml
+        rm -f $DOCKER_RTVSWEB_PATH/VersionConfig.xml 2>/dev/null
         echo "拷贝一份XML配置文件：cp ./rtvsMyData/VersionConfig.xml $DOCKER_RTVSWEB_PATH/VersionConfig.xml"
         cp ./rtvsMyData/VersionConfig.xml $DOCKER_RTVSWEB_PATH/VersionConfig.xml
     else
@@ -212,7 +212,7 @@ function init_system_files_path()
     fi
     # 需要的时候复制服务配置文件
     if [[ -f "./rtvsMyData/SettingConfig.xml" ]]; then
-        rm -f $DOCKER_RTVSWEB_PATH/SettingConfig.xml
+        rm -f $DOCKER_RTVSWEB_PATH/SettingConfig.xml 2>/dev/null
         echo "拷贝一份XML配置文件：cp ./rtvsMyData/SettingConfig.xml $DOCKER_RTVSWEB_PATH/SettingConfig.xml"
         cp ./rtvsMyData/SettingConfig.xml $DOCKER_RTVSWEB_PATH/SettingConfig.xml
         
@@ -239,7 +239,7 @@ function init_system_files_path()
             exit 1
         fi
     else
-        rm $DOCKER_RTVSWEB_PATH/certificate.pfx
+        rm $DOCKER_RTVSWEB_PATH/certificate.pfx 2>/dev/null
     fi
     
     # 复制集群管理文件
@@ -247,7 +247,7 @@ function init_system_files_path()
         mkdir $DOCKER_RTVSWEB_PATH/Config
     fi
     if [[ -f "./rtvsMyData/Config/ClusterServer.json" ]]; then
-        rm -f $DOCKER_RTVSWEB_PATH/Config/ClusterServer.json
+        rm -f $DOCKER_RTVSWEB_PATH/Config/ClusterServer.json 2>/dev/null
         echo "拷贝ClusterServer.json：./rtvsMyData/Config/ClusterServer.json $DOCKER_RTVSWEB_PATH/Config/ClusterServer.json"
         cp ./rtvsMyData/Config/ClusterServer.json $DOCKER_RTVSWEB_PATH/Config/ClusterServer.json
     else
@@ -959,7 +959,7 @@ function main(){
     fi
     echo "找到可执行DOCKER_RUN_ID:$DOCKER_RUN_ID"
     DOCKER_NGINX_CONTAINER_NAME=$NGINX_DOCKER_CONTAINER_NAME_TEMPLATE$DOCKER_RUN_ID;
-    docker rm -f $DOCKER_NGINX_CONTAINER_NAME
+    docker rm -f $DOCKER_NGINX_CONTAINER_NAME 2>/dev/null
 
 
     echo "依耐文件检查...."

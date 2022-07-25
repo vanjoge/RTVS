@@ -162,8 +162,8 @@ function init_base(){
             exit 1
         fi
     else
-        rm $WEBRTC_DOCKER_PATH/cert/certificate.crt
-        rm $WEBRTC_DOCKER_PATH/cert/privkey.pem
+        rm $WEBRTC_DOCKER_PATH/cert/certificate.crt 2>/dev/null
+        rm $WEBRTC_DOCKER_PATH/cert/privkey.pem 2>/dev/null
     fi
 
     cp -f config.js config.js.tmp
@@ -223,7 +223,7 @@ function init_base(){
     fi
     if [[ $update -eq 1 ]]; then
         echo "MediaSoup需要更新"
-        docker_stop_ps
+        docker_stop_ps 2>/dev/null
     fi
     unset update
 }
