@@ -16,13 +16,13 @@ echo "Docker Mysql控制台创建数据库...."
 echo "Docker Mysql控制台为root用户设置密码....$mysql_root_user_pwd"
 sql_alter_user="ALTER USER '$mysql_root_user_name'@'$mysql_host' IDENTIFIED BY '$mysql_root_user_pwd'"
 # 防止新版本-e 密码设置不成功
-mysql -u$mysql_root_user_name -e"$sql_alter_user"
+mysql -u$mysql_root_user_name -e"$sql_alter_user" 2>/dev/null
 mysql -u$mysql_root_user_name -p$mysql_root_user_pwd -P$mysql_port -e"$sql_alter_user"
 
 #删除可能重复的远程用户
 echo "Docker Mysql控制台删除可能重复的远程用户....$mysql_remote_user_name"
 sql_create_user="DROP USER '$mysql_remote_user_name'@'%' "
-mysql -u$mysql_root_user_name -p$mysql_root_user_pwd -P$mysql_port -e"$sql_create_user"
+mysql -u$mysql_root_user_name -p$mysql_root_user_pwd -P$mysql_port -e"$sql_create_user" 2>/dev/null
 
 # 刷新数据库权限
 echo "Docker Mysql刷新用户权限...."

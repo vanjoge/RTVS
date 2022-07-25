@@ -25,7 +25,7 @@ function config_replace(){
 #判断容器状态 参数值 容器名
 #返回值 0 未启动 1 启动 2 没有此容器   （有些容器没有.State这个属性）
 function docker_stat(){
-    for i in [ `docker inspect --format='{{.State.Running}}' $1` ]; do
+    for i in [ `docker inspect --format='{{.State.Running}}' $1 2>/dev/null` ]; do
         if [[ "$i" == "true" ]]; then
             return 1
         elif [[ "$i" == "false" ]]; then
