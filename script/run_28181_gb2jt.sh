@@ -84,9 +84,9 @@ function docker_run(){
     updateXml $DOCKER_GB2JT_PATH/Setting.xml RtpPort "$DOCKER_RTP_PORT"
     updateXml $DOCKER_GB2JT_PATH/Setting.xml Server808 "$Server_808_ADDR"
     updateXml $DOCKER_GB2JT_PATH/Setting.xml Prot808 "$DOCKER_808_PORT"
-	
-	
-	docker pull $DOCKER_GB2JT_IMAGE_NAME
+    
+    
+    docker pull $DOCKER_GB2JT_IMAGE_NAME
     #启动RTVS
     docker run  --name $DOCKER_GB2JT_NAME --net $DOCKER_NETWORK --ip $DOCKER_GB2JT_IP --restart always  --privileged=true  -v $DOCKER_GB2JT_PATH:/MyData  -e MyDataPath=/MyData -p $DOCKER_SIP_PORT:$DOCKER_SIP_PORT/tcp -p $DOCKER_SIP_PORT:$DOCKER_SIP_PORT/udp -p $DOCKER_RTP_PORT:$DOCKER_RTP_PORT/tcp -p $DOCKER_RTP_PORT:$DOCKER_RTP_PORT/udp  -d $DOCKER_GB2JT_IMAGE_NAME
 }

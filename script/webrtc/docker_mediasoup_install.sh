@@ -88,7 +88,7 @@ function docker_mediasoup_checkAndRun(){
     fi
     
 
-	docker pull $DOCKER_MediaSoup_CONTAINER_NAME
+    docker pull $DOCKER_MediaSoup_CONTAINER_NAME
     echo "即将运行"$WEBRTC_DOCKER_CONTAINER_NAME
     docker run \
         --privileged=true \

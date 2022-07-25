@@ -280,7 +280,7 @@ function docker_set_DOCKER_RTVSWEB_CONTAINER_NAME(){
         ret=$?
         if [[ ret -eq 0 ]]; then
             echo "$DOCKER_RTVSWEB_CONTAINER_NAME应用服务容器已停止，即将删除容器"
-            docker rm $DOCKER_RTVSWEB_CONTAINER_NAME
+            docker rm $DOCKER_RTVSWEB_CONTAINER_NAME 2>/dev/null
             echo "$DOCKER_RTVSWEB_CONTAINER_NAME可用"
             return $DOCKER_RUN_ID;
         elif  [[ ret -eq 2 ]]; then

@@ -88,9 +88,9 @@ function docker_run(){
     updateXml $DOCKER_GBSIP_PATH/Setting.xml RTVSAPI "$DOCKER_GBSIP_RTVSAPI"
     updateXml $DOCKER_GBSIP_PATH/Setting.xml RTVSVideoServer "$BeianAddress"
     updateXml $DOCKER_GBSIP_PATH/Setting.xml RTVSVideoPort "$DOCKER_WEBSOCKET_PORT"
-	
-	
-	docker pull $DOCKER_GBSIP_IMAGE_NAME
+    
+    
+    docker pull $DOCKER_GBSIP_IMAGE_NAME
     #启动RTVS
     docker run  --name $DOCKER_GBSIP_NAME --net $DOCKER_NETWORK --ip $DOCKER_GBSIP_IP --restart always  --privileged=true  -v $DOCKER_GBSIP_PATH:/MyData  -e MyDataPath=/MyData -p $DOCKER_GBSIP_HTTP_PORT:80 -p $DOCKER_GBSIP_PORT:$DOCKER_GBSIP_PORT/tcp -p $DOCKER_GBSIP_PORT:$DOCKER_GBSIP_PORT/udp -d $DOCKER_GBSIP_IMAGE_NAME
 }

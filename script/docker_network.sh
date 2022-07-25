@@ -14,9 +14,9 @@ function docker_create_network(){
     docker_network_exists $DOCKER_NETWORK $DOCKER_NETWORK_IPA
     if [[ $? -eq 0 ]]; then
         echo "创建docker自定义网络 $DOCKER_NETWORK $DOCKER_NETWORK_IPA"
-		docker network rm $DOCKER_NETWORK
-		
-		docker network create --subnet=$DOCKER_NETWORK_IPA $DOCKER_NETWORK
+        docker network rm $DOCKER_NETWORK
+        
+        docker network create --subnet=$DOCKER_NETWORK_IPA $DOCKER_NETWORK
         
         return 0
     fi

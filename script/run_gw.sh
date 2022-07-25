@@ -35,8 +35,8 @@ function docker_run(){
     fi
     
     docker rm -f $DOCKER_GW_NAME 2>/dev/null
-	
-	docker pull $DOCKER_GW_IMAGE_NAME
+    
+    docker pull $DOCKER_GW_IMAGE_NAME
     #启动gw
     docker run  --name $DOCKER_GW_NAME --net $DOCKER_NETWORK --ip $DOCKER_GW_IP --restart always  --privileged=true  -p $DOCKER_808_PORT:9300 -p $DOCKER_808_HTTP_PORT:80 -d $DOCKER_GW_IMAGE_NAME
 }
@@ -53,12 +53,12 @@ function docker_stat(){
     return 2
 }
 function main(){
-	
+    
     #启动镜像
     docker_run
     
-	echo "网关启动完成"
-	echo ""
+    echo "网关启动完成"
+    echo ""
 }
 ###################################脚本入口#######################################
 
