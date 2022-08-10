@@ -38,4 +38,7 @@ fi
 #启动默认测试网关+redis服务
 ./run_gw.sh
 
+#启动主动安全附件服务
+./run_attachment.sh
+
 ./run_rtvs.sh
