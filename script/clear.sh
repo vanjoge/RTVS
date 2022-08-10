@@ -34,6 +34,9 @@ DOCKER_GATEWAY_HOST=${DOCKER_GATEWAY_HOST:-"172.29.108.1"}
 DOCKER_GW_NAME=${DOCKER_GW_NAME:-"tstgw808-1"}
 DOCKER_GW_PATH=${DOCKER_GW_PATH:-"/etc/service/$DOCKER_GW_NAME"}
 
+DOCKER_ATTACHMENT_NAME=${DOCKER_ATTACHMENT_NAME:-"attachment-1"}
+DOCKER_ATTACHMENT_PATH=${DOCKER_ATTACHMENT_PATH:-"/etc/service/$DOCKER_ATTACHMENT_NAME"}
+
 DOCKER_REDIS_NAME=${DOCKER_REDIS_NAME:-"tstgw_redis"}
 
 DOCKER_CLUSTER_NAME=${DOCKER_CLUSTER_NAME:-"cvcluster-1"}
@@ -65,6 +68,9 @@ function main(){
     echo "清理网关"
     docker rm -f $DOCKER_GW_NAME
     rm -rf $DOCKER_GW_PATH
+
+    echo "清理主动安全附件服务"
+    docker rm -f $DOCKER_ATTACHMENT_NAME
     
     echo "清理集群管理"
     docker rm -f $DOCKER_CLUSTER_NAME
@@ -88,6 +94,9 @@ function main(){
         echo "清理mysql"
         docker rm -f $MYSQL_DOCKER_CONTAINER_NAME
         rm -rf $MYSQL_DOCKER_PATH
+
+        echo "清理主动安全附件文件"
+        rm -rf $DOCKER_ATTACHMENT_PATH
     fi
     
 }

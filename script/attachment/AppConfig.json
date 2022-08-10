@@ -1,0 +1,10 @@
+﻿{
+  "Config": {
+    "ListenPort": 3397,
+    "FilePath": "/app/media",
+    "LocWebFileUrl": "http://localhost/alarmfiles",
+    "KafkaServer": "",
+    "KafkaTopic": "media-complete"
+  }
+
+}
