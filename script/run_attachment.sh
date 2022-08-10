@@ -56,6 +56,11 @@ function docker_run(){
     updateJson $DOCKER_ATTACHMENT_PATH/AppConfig.json LocWebFileUrl "$LocWebFileUrl"
     updateJson $DOCKER_ATTACHMENT_PATH/AppConfig.json KafkaServer "$KafkaServer"
     updateJson $DOCKER_ATTACHMENT_PATH/AppConfig.json KafkaTopic "$DOCKER_ATTACHMENT_KafkaTopic"
+    updateJson $DOCKER_ATTACHMENT_PATH/AppConfig.json AliOssEndpoint "$DOCKER_ATTACHMENT_AliOssEndpoint"
+    updateJson $DOCKER_ATTACHMENT_PATH/AppConfig.json AliOssAccessKeyId "$DOCKER_ATTACHMENT_AliOssAccessKeyId"
+    updateJson $DOCKER_ATTACHMENT_PATH/AppConfig.json AliOssAccessKeySecret "$DOCKER_ATTACHMENT_AliOssAccessKeySecret"
+    updateJson $DOCKER_ATTACHMENT_PATH/AppConfig.json AliOssBucketName "$DOCKER_ATTACHMENT_AliOssBucket"
+    updateJson $DOCKER_ATTACHMENT_PATH/AppConfig.json AliOssCallbackUrl "$DOCKER_ATTACHMENT_AliOssCallbackUrl"
     
     
     docker pull $DOCKER_ATTACHMENT_IMAGE_NAME

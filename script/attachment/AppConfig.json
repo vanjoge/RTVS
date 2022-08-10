@@ -4,7 +4,14 @@
     "FilePath": "/app/media",
     "LocWebFileUrl": "http://localhost/alarmfiles",
     "KafkaServer": "",
-    "KafkaTopic": "media-complete"
+    "KafkaTopic": "media-complete",
+    "AliOssEndpoint": "",
+    "AliOssAccessKeyId": "",
+    "AliOssAccessKeySecret": "",
+    "AliOssBucketName": "",
+    //需返回JSON
+    "AliOssCallbackUrl": "",
+    "AliOssCallbackBody": "bucket=${bucket}&object=${object}&etag=${etag}&size=${size}&mimeType=${mimeType}"
   }
 
 }
