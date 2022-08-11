@@ -3,6 +3,10 @@
     "ListenPort": 3397,
     "FilePath": "/app/media",
     "LocWebFileUrl": "http://localhost/alarmfiles",
+    "FileServerUrl": "",
+    "UserToken": "",
+    "ConnectionString": "",
+    "RedisConnectionString": "",
     "KafkaServer": "",
     "KafkaTopic": "media-complete",
     "AliOssEndpoint": "",
@@ -11,7 +15,7 @@
     "AliOssBucketName": "",
     //需返回JSON
     "AliOssCallbackUrl": "",
-    "AliOssCallbackBody": "bucket=${bucket}&object=${object}&etag=${etag}&size=${size}&mimeType=${mimeType}"
+    "AliOssCallbackBody": "bucket=${bucket}&object=${object}&etag=${etag}&size=${size}&mimeType=${mimeType}&AlarmID=${x:AlarmID}"
   }
 
 }

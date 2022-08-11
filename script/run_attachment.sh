@@ -62,6 +62,11 @@ function docker_run(){
     updateJson $DOCKER_ATTACHMENT_PATH/AppConfig.json AliOssBucketName "$DOCKER_ATTACHMENT_AliOssBucket"
     updateJson $DOCKER_ATTACHMENT_PATH/AppConfig.json AliOssCallbackUrl "$DOCKER_ATTACHMENT_AliOssCallbackUrl"
     
+    updateJson $DOCKER_ATTACHMENT_PATH/AppConfig.json FileServerUrl "$DOCKER_ATTACHMENT_FileServerUrl"
+    updateJson $DOCKER_ATTACHMENT_PATH/AppConfig.json UserToken "$DOCKER_ATTACHMENT_UserToken"
+    updateJson $DOCKER_ATTACHMENT_PATH/AppConfig.json ConnectionString "$DOCKER_ATTACHMENT_ConnectionString"
+    updateJson $DOCKER_ATTACHMENT_PATH/AppConfig.json RedisConnectionString "$DOCKER_ATTACHMENT_RedisConnectionString"
+    
     
     docker pull $DOCKER_ATTACHMENT_IMAGE_NAME
     #启动
