@@ -38,9 +38,9 @@ RTVS已集成主动安全附件服务，支持团标，同时支持苏、粤、�
 | DOCKER_ATTACHMENT_KafkaTopic  | media-complete |  
 
 例如: run_all.sh 脚本中加入以下脚本配置kafka连接信息
-
+kafka各设置名称可参考此处 https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md
 ``` bash
-export KafkaServer="192.168.1.11:9092"
+export KafkaServer="bootstrap.servers=192.168.1.11:9092"
 ```
 #### 通知格式
 配置kafka连接信息后，附件服务会在收全一个文件后会通过kafka生成一个通知，通知格式如下：
