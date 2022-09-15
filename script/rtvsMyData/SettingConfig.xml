@@ -94,6 +94,11 @@
   <HlsUrlPullHttps>https://127.0.0.1/mytv/</HlsUrlPullHttps>
   <LocIP>127.0.0.1</LocIP>
   <LocPort>80</LocPort>
+  <CdnType>0</CdnType>
+  <CdnAddress></CdnAddress>
+  <CdnPort>0</CdnPort>
+  <CdnID></CdnID>
+  <AKey></AKey>
   <VideoCachePath>/VideoCache/</VideoCachePath>
   <IsSendOnlyIFrameDuring8Fasterplay>false</IsSendOnlyIFrameDuring8Fasterplay>
   <IsWriteCache>false</IsWriteCache>
@@ -110,10 +115,11 @@
   <FDWebIP>http://172.29.108.1</FDWebIP>
   <FDWebPort>9600</FDWebPort>
   <IPAddress>1.1.1.1</IPAddress>
+  <DomainToIP>true</DomainToIP>
   <BeianAddress>1.1.1.1</BeianAddress>
   <GovWebIp>+</GovWebIp>
   <GovPort>9604</GovPort>
-  <Ver>1.3.6</Ver>
+  <Ver>1.3.7</Ver>
   <WebRTCApi>http://172.29.108.240:4088</WebRTCApi>
   <WebRTCUrl>rtp://172.29.108.240</WebRTCUrl>
   <WebRTCIP>1.1.1.1</WebRTCIP>

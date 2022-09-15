@@ -4,7 +4,7 @@ echo "当前执行文件......$0"
 ##################################变量定义##################################
 DOCKER_CLUSTER_NAME=${DOCKER_CLUSTER_NAME:-"cvcluster-1"}
 DOCKER_CLUSTER_PATH=${DOCKER_CLUSTER_PATH:-"/etc/service/$DOCKER_CLUSTER_NAME"}
-DOCKER_CLUSTER_IMAGE_NAME=${DOCKER_CLUSTER_IMAGE_NAME:-"vanjoge/cvcluster:1.3.3"}
+DOCKER_CLUSTER_IMAGE_NAME=${DOCKER_CLUSTER_IMAGE_NAME:-"vanjoge/cvcluster:1.3.7"}
 
 #证书
 #兼容之前变量写法
@@ -23,6 +23,11 @@ DOCKER_WEBSOCKET_PORT=${DOCKER_WEBSOCKET_PORT:-17000}
 
 DOCKER_NETWORK=${DOCKER_NETWORK:-"cvnetwork"}
 DOCKER_CVCLUSTER_IP=${DOCKER_CVCLUSTER_IP:-"172.29.108.254"}
+
+#CDN
+RTVS_CDN_URL=${RTVS_CDN_URL:-"http://cdn.cvnavi.com:38220/api/RequestCdnNode"}
+RTVS_CDN_ID=${RTVS_CDN_ID:-""}
+RTVS_CDN_AKEY=${RTVS_CDN_AKEY:-""}
 
  
  
@@ -101,6 +106,10 @@ function init_system_files_path()
 function docker_run(){
     updateXml $DOCKER_CLUSTER_PATH/ApiServer.xml X509FileName "/MyData/certificate.pfx"
     updateXml $DOCKER_CLUSTER_PATH/ApiServer.xml X509Password "$CV_PFX_PWD"
+
+    updateXml $DOCKER_CLUSTER_PATH/ApiServer.xml CdnUrl "$RTVS_CDN_URL"
+    updateXml $DOCKER_CLUSTER_PATH/ApiServer.xml CdnID "$RTVS_CDN_ID"
+    updateXml $DOCKER_CLUSTER_PATH/ApiServer.xml AKey "$RTVS_CDN_AKEY"
     
     
     docker pull $DOCKER_CLUSTER_IMAGE_NAME

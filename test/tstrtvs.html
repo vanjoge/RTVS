@@ -65,6 +65,13 @@
                             <option value="2">GB/T 28181-2016</option>
                         </select>
                     </td>
+                    <td>是否使用cdn:</td>
+                    <td>
+                        <select id="isUseCdn">
+                            <option value="true">是</option>
+                            <option value="false" selected="selected">否</option>
+                        </select>
+                    </td>
                 </tr>
             </table>
             <h3>指令参数</h3>
@@ -673,7 +680,8 @@
                     clusterHost: document.querySelector("#txtserveradd").value,
                     clusterPort: document.querySelector("#txtport").value,
                     seekMode: document.querySelector("#seekMode").value,
-                    protocol: document.querySelector("#protocol").value
+                    protocol: document.querySelector("#protocol").value,
+                    isUseCdn: document.querySelector("#isUseCdn").value === 'true'
                 },
                 null,
                 parseInt(document.querySelector('#cmbPlayermode').value)
@@ -694,7 +702,8 @@
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
                     clusterPort: document.querySelector("#txtport").value,
-                    protocol: document.querySelector("#protocol").value
+                    protocol: document.querySelector("#protocol").value,
+                    isUseCdn: document.querySelector("#isUseCdn").value === 'true'
                 },
                 parseInt(document.querySelector('#cmbDataSource').value)
             );
@@ -730,7 +739,8 @@
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
                     clusterPort: document.querySelector("#txtport").value,
-                    protocol: document.querySelector("#protocol").value
+                    protocol: document.querySelector("#protocol").value,
+                    isUseCdn: document.querySelector("#isUseCdn").value === 'true'
                 },
                 parseInt(document.querySelector('#cmbDataSource').value)
             )
@@ -751,7 +761,8 @@
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
                     clusterPort: document.querySelector("#txtport").value,
-                    protocol: document.querySelector("#protocol").value
+                    protocol: document.querySelector("#protocol").value,
+                    isUseCdn: document.querySelector("#isUseCdn").value === 'true'
                 },
                 null,
                 parseInt(document.querySelector('#cmbPlayermode').value),
@@ -873,7 +884,7 @@
                         + "parseInt(document.querySelector('#cmbPlaybackMode').value),parseInt(document.querySelector('#cmbMultiple').value),"
                         + "Time1078ToTime('" + item.StartTime + "'),"
                         + "Time1078ToTime('" + item.EndTime + "'),0,"
-                        + "{clusterHost: document.querySelector('#txtserveradd').value,clusterPort: document.querySelector('#txtport').value,protocol: document.querySelector('#protocol').value},null,parseInt(document.querySelector('#cmbPlayermode').value),parseInt(document.querySelector('#cmbDataSource').value))";
+                        + "{clusterHost: document.querySelector('#txtserveradd').value,clusterPort: document.querySelector('#txtport').value,protocol: document.querySelector('#protocol').value,isUseCdn: document.querySelector('#isUseCdn').value === 'true'},null,parseInt(document.querySelector('#cmbPlayermode').value),parseInt(document.querySelector('#cmbDataSource').value))";
                     aaa.innerText = "播放";
                     td9.appendChild(aaa);
                     tr.appendChild(td1);
@@ -1004,8 +1015,8 @@
                 {
                     clusterHost: document.querySelector("#txtserveradd").value,
                     clusterPort: document.querySelector("#txtport").value,
-                    protocol: document.querySelector("#protocol").value
-
+                    protocol: document.querySelector("#protocol").value,
+                    isUseCdn: document.querySelector("#isUseCdn").value === 'true'
                 }
             );
             if (!ret) {

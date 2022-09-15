@@ -60,8 +60,15 @@ PORT_DEV_BINDPORT_START=${PORT_DEV_BINDPORT_START:-0}
 ClusterServer=${ClusterServer:-"http://172.29.108.254/Api"}
 MatchSim12And20=${MatchSim12And20:-"true"}
 QueryVideoListTimeOutSec=${QueryVideoListTimeOutSec:-"60"}
+DomainToIP=${DomainToIP:-"true"}
 
 
+#CDN
+RTVS_CDN_HOST=${RTVS_CDN_HOST:-"cdn.cvnavi.com"}
+RTVS_CDN_PORT=${RTVS_CDN_PORT:-"38225"}
+RTVS_CDN_ID=${RTVS_CDN_ID:-""}
+RTVS_CDN_AKEY=${RTVS_CDN_AKEY:-""}
+RTVS_CDN_TYPE=${RTVS_CDN_TYPE:-"0"}
 
 
 ##################################临时变量定义##################################
@@ -70,7 +77,7 @@ DOCKER_RTVSWEB_CONTAINER_NAME=$RTVSWEB_DOCKER_CONTAINER_NAME_TEMPLATE"1"
 DOCKER_RTVSWEB_PATH=$RTVSWEB_DOCKER_PATH_TEMPLATE"1"
 DOCKER_NGINX_PATH=$NGINX_DOCKER_PATH_TEMPLATE"1"
 DOCKER_NGINX_CONTAINER_NAME=$NGINX_DOCKER_CONTAINER_NAME_TEMPLATE"1";
-DOCKER_RTVSWEB_VERSION="1.3.6"
+DOCKER_RTVSWEB_VERSION="1.3.7"
 
 DOCKER_RTVS_IP=11
 DOCKER_RTMP_IP=12
@@ -797,7 +804,24 @@ function update_config(){
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml IsTestMode false
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml MatchSim12And20 $MatchSim12And20
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml QueryVideoListTimeOutSec $QueryVideoListTimeOutSec
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml DomainToIP $DomainToIP
     
+    #CDN
+    if [ -n "$RTVS_CDN_ID" -a  -n "$RTVS_CDN_AKEY" ] ; then
+        if [[ "$RTVS_CDN_TYPE" == "0" ]]; then
+            RTVS_CDN_TYPE=1
+        fi
+        
+        updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml CdnAddress $RTVS_CDN_HOST
+        updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml CdnPort $RTVS_CDN_PORT
+        updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml CdnID $RTVS_CDN_ID
+        updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml AKey $RTVS_CDN_AKEY
+        echo "RTVS_CDN_TYPE $RTVS_CDN_TYPE"
+        updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml CdnType $RTVS_CDN_TYPE
+    fi
+
+    
+
     #Rtmp地址修改
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml RtmpUrl "rtmp://$DOCKER_NETWORK_IPS.$DOCKER_RTMP_IP/mytv/"
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml RtmpUrlPull "rtmp://$BeianAddress:$DOCKER_RTMP_PORT/mytv/"
@@ -872,6 +896,8 @@ function update_config(){
     fi
     if  [ ! -n "$ClusterServer" ] ;then
         update_cluster_conf $DOCKER_RTVSWEB_PATH/Config/ClusterServer.json "http://$DOCKER_GATEWAY_HOST:30888/Api"
+    elif  [[ "$ClusterServer" == "null" ]]; then
+        echo "ClusterServer无需修改"
     else
         update_cluster_conf $DOCKER_RTVSWEB_PATH/Config/ClusterServer.json $ClusterServer
     fi
