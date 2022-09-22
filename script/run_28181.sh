@@ -7,6 +7,8 @@ DOCKER_GBSIP_PATH=${DOCKER_GBSIP_PATH:-"/etc/service/$DOCKER_GBSIP_NAME"}
 DOCKER_GBSIP_IMAGE_NAME=${DOCKER_GBSIP_IMAGE_NAME:-"vanjoge/gbsip:latest"}
 
 
+MYSQL_DOCKER_IP=${MYSQL_DOCKER_IP:-"172.29.108.241"}
+
 #外网IP
 
 #端口  
@@ -88,6 +90,7 @@ function docker_run(){
     updateXml $DOCKER_GBSIP_PATH/Setting.xml RTVSAPI "$DOCKER_GBSIP_RTVSAPI"
     updateXml $DOCKER_GBSIP_PATH/Setting.xml RTVSVideoServer "$BeianAddress"
     updateXml $DOCKER_GBSIP_PATH/Setting.xml RTVSVideoPort "$DOCKER_WEBSOCKET_PORT"
+    updateXml $DOCKER_GBSIP_PATH/Setting.xml MysqlConnectionString "$MysqlConnectionString"
     
     
     docker pull $DOCKER_GBSIP_IMAGE_NAME
@@ -98,6 +101,11 @@ function main(){
     echo "依耐文件检查...."
     init_system_files_path
     
+    if  [  -n "$MYSQL_Server_IP" ] ;then
+        MysqlConnectionString="Database=gbs;Data Source=$MYSQL_Server_IP;port=$MYSQL_Server_PORT;User Id=rtvsweb;Password=rtvs2018;charset=utf8;pooling=true"
+    else
+        MysqlConnectionString="Database=gbs;Data Source=$MYSQL_DOCKER_IP;port=3306;User Id=rtvsweb;Password=rtvs2018;charset=utf8;pooling=true"
+    fi
     #启动镜像
     docker_run
     
