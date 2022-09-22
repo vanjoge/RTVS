@@ -1,0 +1,23 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    
+      - name: Mirror the Github organization repos to Gitee.
+        uses: Yikun/hub-mirror-action@master
+        with:
+          src: 'github/vanjoge'
+          dst: 'gitee/vanjoge'
+          dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
+          static_list: 'RTVS'
+          force_update: true
+          debug: true
