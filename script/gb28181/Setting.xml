@@ -8,4 +8,5 @@
   <RTVSAPI>http://172.29.108.11/</RTVSAPI>
   <RTVSVideoServer>172.29.108.1</RTVSVideoServer>
   <RTVSVideoPort>17000</RTVSVideoPort>
+  <MysqlConnectionString>Database=gbs;Data Source=172.29.108.241;port=3306;User Id=rtvsweb;Password=rtvs2018;charset=utf8;pooling=true</MysqlConnectionString>
 </Setting>
