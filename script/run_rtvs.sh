@@ -561,7 +561,7 @@ function update_nginx()
     sed -i "s/server wss1002;/server $val4;/g" $1
     sed -i "s/server wss1003;/server $val5;/g" $1
     sed -i "s/server wss1005;/server $val6;/g" $1
-    sed -i "s/172.29.108.247/server $val7;/g" $1
+    sed -i "s/172.29.108.247/$val7/g" $1
     unset val1
     unset val2
     unset val3
