@@ -71,6 +71,8 @@ RTVS_CDN_AKEY=${RTVS_CDN_AKEY:-""}
 RTVS_CDN_TYPE=${RTVS_CDN_TYPE:-"0"}
 
 
+DOCKER_GBSIP_IP=${DOCKER_GBSIP_IP:-"172.29.108.247"}
+
 ##################################临时变量定义##################################
 DOCKER_RUN_ID=0
 DOCKER_RTVSWEB_CONTAINER_NAME=$RTVSWEB_DOCKER_CONTAINER_NAME_TEMPLATE"1"
@@ -551,6 +553,7 @@ function update_nginx()
     val4=`echo "$5"| sed 's:\/:\\\/:g'`
     val5=`echo "$6"| sed 's:\/:\\\/:g'`
     val6=`echo "$7"| sed 's:\/:\\\/:g'`
+    val7=`echo "$8"| sed 's:\/:\\\/:g'`
     echo "正在修改nginx配置文件:$1,on_play:$2,on_play_done:$3"
     sed -i "s/on_play .*/on_play $val1/g" $1
     sed -i "s/on_play_done .*/on_play_done $val2/g" $1
@@ -558,12 +561,14 @@ function update_nginx()
     sed -i "s/server wss1002;/server $val4;/g" $1
     sed -i "s/server wss1003;/server $val5;/g" $1
     sed -i "s/server wss1005;/server $val6;/g" $1
+    sed -i "s/172.29.108.247/server $val7;/g" $1
     unset val1
     unset val2
     unset val3
     unset val4
     unset val5
     unset val6
+    unset val7
 }
 function update_cluster_conf()
 {
@@ -850,7 +855,7 @@ function update_config(){
 
 
     #修改nginx-rtmp配置
-    update_nginx $DOCKER_NGINX_PATH/nginx.conf "http://$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP/WebService/NginxOnPlay;" "http://$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP/WebService/NginxOnPlayDown;" "$DOCKER_WSS_PORT" "$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP:$DOCKER_WS_PORT"  "$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP:$DOCKER_FMP4_PORT"  "$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP:$DOCKER_GOV_PORT" 
+    update_nginx $DOCKER_NGINX_PATH/nginx.conf "http://$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP/WebService/NginxOnPlay;" "http://$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP/WebService/NginxOnPlayDown;" "$DOCKER_WSS_PORT" "$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP:$DOCKER_WS_PORT"  "$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP:$DOCKER_FMP4_PORT"  "$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP:$DOCKER_GOV_PORT" "$DOCKER_GBSIP_IP"
     
     
     #修改InfluxdbBaseUrl配置
