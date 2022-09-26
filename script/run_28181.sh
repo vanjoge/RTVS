@@ -92,6 +92,17 @@ function docker_run(){
     updateXml $DOCKER_GBSIP_PATH/Setting.xml RTVSVideoPort "$DOCKER_WEBSOCKET_PORT"
     updateXml $DOCKER_GBSIP_PATH/Setting.xml MysqlConnectionString "$MysqlConnectionString"
     
+    if  [ ! -n "$GBWebUsrName" ] ;then
+        echo "WebUsrName无需修改"
+    else
+        updateXml $DOCKER_GBSIP_PATH/Setting.xml WebUsrName $GBWebUsrName
+    fi
+    
+    if  [ ! -n "$GBWebUsrPwd" ] ;then
+        echo "WebUsrPwd无需修改"
+    else
+        updateXml $DOCKER_GBSIP_PATH/Setting.xml WebUsrPwd $GBWebUsrPwd
+    fi
     
     docker pull $DOCKER_GBSIP_IMAGE_NAME
     #启动RTVS
