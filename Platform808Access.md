@@ -24,6 +24,9 @@ RTVS自带的测试808网关已开源，可参考对应实现，地址：
 ### 808指令
 RTVS会按照以下规则通过Get请求发送0x9101、0x9201、0x9202、0x9205等1078规定走808通道指令，需要网关实现以下HTTP接口。
 
+`此接口支持验证，如果配置了APIAuthorization参数，会自动在http头中加入"authorization"，值为APIAuthorization配置的值。`
+
+
     [配置的网关HTTP接口地址]VideoControl?Content=808协议16进制字符串&IsSuperiorPlatformSend=是否是上级平台发送&CTags=可由前端传入的自定义内容
 
     例1:http://127.0.0.1:8888/VideoControl?Content=9101001401377788321025C20C31302E31302E31302E3233304CF40000010001&IsSuperiorPlatformSend=true
