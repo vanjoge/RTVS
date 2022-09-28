@@ -4,7 +4,7 @@ echo "当前执行文件......$0"
 ##################################变量定义##################################
 DOCKER_ATTACHMENT_NAME=${DOCKER_ATTACHMENT_NAME:-"attachment-1"}
 DOCKER_ATTACHMENT_PATH=${DOCKER_ATTACHMENT_PATH:-"/etc/service/$DOCKER_ATTACHMENT_NAME"}
-DOCKER_ATTACHMENT_IMAGE_NAME=${DOCKER_ATTACHMENT_IMAGE_NAME:-"vanjoge/attachment:1.3.6"}
+DOCKER_ATTACHMENT_IMAGE_NAME=${DOCKER_ATTACHMENT_IMAGE_NAME:-"vanjoge/attachment:1.3.7"}
 DOCKER_ATTACHMENT_KafkaTopic=${DOCKER_ATTACHMENT_KafkaTopic:-"media-complete"}
 
 
