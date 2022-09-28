@@ -61,6 +61,7 @@ ClusterServer=${ClusterServer:-"http://172.29.108.254/Api"}
 MatchSim12And20=${MatchSim12And20:-"true"}
 QueryVideoListTimeOutSec=${QueryVideoListTimeOutSec:-"60"}
 DomainToIP=${DomainToIP:-"true"}
+APIAuthorization=${APIAuthorization:-"12345678"}
 
 
 #CDN
@@ -72,6 +73,7 @@ RTVS_CDN_TYPE=${RTVS_CDN_TYPE:-"0"}
 
 
 DOCKER_GBSIP_IP=${DOCKER_GBSIP_IP:-"172.29.108.247"}
+
 
 ##################################临时变量定义##################################
 DOCKER_RUN_ID=0
@@ -810,6 +812,7 @@ function update_config(){
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml MatchSim12And20 $MatchSim12And20
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml QueryVideoListTimeOutSec $QueryVideoListTimeOutSec
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml DomainToIP $DomainToIP
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml APIAuthorization "$APIAuthorization"
     
     #CDN
     if [ -n "$RTVS_CDN_ID" -a  -n "$RTVS_CDN_AKEY" ] ; then
@@ -821,10 +824,9 @@ function update_config(){
         updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml CdnPort $RTVS_CDN_PORT
         updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml CdnID $RTVS_CDN_ID
         updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml AKey $RTVS_CDN_AKEY
-        echo "RTVS_CDN_TYPE $RTVS_CDN_TYPE"
         updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml CdnType $RTVS_CDN_TYPE
     fi
-
+    
     
 
     #Rtmp地址修改

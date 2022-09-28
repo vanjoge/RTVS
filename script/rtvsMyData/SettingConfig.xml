@@ -153,4 +153,5 @@
   <X509Password></X509Password>
   <MatchSim12And20>true</MatchSim12And20>
   <QueryVideoListTimeOutSec>60</QueryVideoListTimeOutSec>
+  <APIAuthorization>12345678</APIAuthorization>
 </ConfigModel>

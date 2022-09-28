@@ -11,4 +11,5 @@
   <MysqlConnectionString>Database=gbs;Data Source=172.29.108.241;port=3306;User Id=rtvsweb;Password=rtvs2018;charset=utf8;pooling=true</MysqlConnectionString>
   <WebUsrName>gbsip</WebUsrName>
   <WebUsrPwd>admin</WebUsrPwd>
+  <APIAuthorization>12345678</APIAuthorization>
 </Setting>

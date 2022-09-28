@@ -24,6 +24,9 @@ DOCKER_GBSIP_ENABLESIPLOG=${DOCKER_GBSIP_ENABLESIPLOG:-"true"}
 DOCKER_GBSIP_ALIVETIMEOUTSEC=${DOCKER_GBSIP_ALIVETIMEOUTSEC:-180}
 DOCKER_GBSIP_RTVSAPI=${DOCKER_GBSIP_RTVSAPI:-"http://172.29.108.11/"}
 DOCKER_WEBSOCKET_PORT=${DOCKER_WEBSOCKET_PORT:-17000}
+
+
+APIAuthorization=${APIAuthorization:-"12345678"}
  
 if [ ! -n "$BeianAddress" ] ; then
     BeianAddress=$IPADDRESS
@@ -91,6 +94,7 @@ function docker_run(){
     updateXml $DOCKER_GBSIP_PATH/Setting.xml RTVSVideoServer "$BeianAddress"
     updateXml $DOCKER_GBSIP_PATH/Setting.xml RTVSVideoPort "$DOCKER_WEBSOCKET_PORT"
     updateXml $DOCKER_GBSIP_PATH/Setting.xml MysqlConnectionString "$MysqlConnectionString"
+    updateXml $DOCKER_GBSIP_PATH/Setting.xml APIAuthorization "$APIAuthorization"
     
     if  [ ! -n "$GBWebUsrName" ] ;then
         echo "WebUsrName无需修改"
