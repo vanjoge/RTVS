@@ -1,6 +1,7 @@
 # 启动脚本
 
-[阿里云部署例子](https://blog.csdn.net/vanjoge/article/details/108319078)
+## 可参考下面的阿里云部署教程
+[https://blog.csdn.net/vanjoge/article/details/108319078](https://blog.csdn.net/vanjoge/article/details/108319078)
 
 以下在Centos7和Ubuntu20.04下测试通过，其他环境可能需要修改docker_network.sh脚本，主要需解决docker容器访问宿主机"No route to host"问题。
 
@@ -74,9 +75,11 @@ sudo -E ./run_rtvs.sh
 |  端口   | 类型  |说明|
 |  ----  | ----  | ----  |
 | 17000  | TCP  | 集群管理 |
-| 6001-6030  | TCP  | RTVS |
+| 6001-6029  | TCP  | RTVS |
 | 14001-14034  | TCP+UDP  | Webrtc端口(不用webrtc可不映射,具体端口数数量为CPU核心数+2) |
+| 6030  | TCP+UDP  | (可选)主动安全附件服务端口 |
 | 9300  | TCP  |(可选)测试网关808协议接入端口 |
+| 5060  | TCP+UDP  |(可选)28181 sip接入端口 |
   
 
 ## 清理方法
