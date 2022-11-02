@@ -24,13 +24,13 @@ function docker_run(){
     docker_stat $DOCKER_REDIS_NAME
     ret=$?
     if [[ ret -eq 2 ]]; then
-        echo "REDIS未安装，即将安装REDIS"
+        echo "Redis未安装，即将安装Redis"
         docker run  --name $DOCKER_REDIS_NAME --net $DOCKER_NETWORK --ip $DOCKER_REDIS_IP --restart always  --privileged=true   -d $DOCKER_REDIS_IMAGE_NAME
         cd ..
     elif  [[ ret -eq 1 ]]; then
-        echo "REDIS已启动"
+        echo "Redis已启动"
     else
-        echo "REDIS未启动，即将启动REDIS"
+        echo "Redis未启动，即将启动Redis"
         docker start $DOCKER_REDIS_NAME
     fi
     
