@@ -141,13 +141,18 @@ defaultConfig = {
                     onHlsPlay: null,
                     //对讲开始 与设备链路建立完成，且可开始对讲时触发
                     //参数 无
-                    onStartSpeek: null
+                    onStartSpeek: null,
+                    //客户端获取麦克风错误，一般多见于无麦克风强行开启对讲的场景
+                    //参数 Error
+                    onMicError: null,
                 },
                 //初始化完成通知
                 callback: null,
                 //gov授权码，未授权版本仅允许播放一路视频，且30秒自动断开。
                 govmd5: "",
                 govnum: 100,
+                //开始传输以后，gov多少毫秒未收到数据关闭URL
+                govTimeoutMsec: 5000,
 
 
                 //以下参数可调用方法时修改
@@ -196,10 +201,23 @@ defaultConfig = {
                 captureQuality: null,
                 //流畅模式，开播会缓存够一定时间buff，保证播放流畅性，但延迟稍高 fmp4模式有效
                 smoothMode: false,
-                //协议版本 0 808-2013 1 808-2019
+                //协议版本 0 808-2013 1 808-2019 2 GB28181
                 protocol: 0,
                 //默认ctags
-                defaultCtags: null
+                defaultCtags: null,
+                //添加菜单
+                /*addMenu:[
+                    { title: "567", onClicked: function (index) { console.log("clicked 567-" + index) } },
+                    { title: "123", onClicked: function (index) { console.log("clicked 123-" + index) } },
+                ],*/
+
+                //添加按钮 需在class中指定按钮图标和位置
+                /*addButtons:[
+                    { title: "add1", class: "addbuton-1", onClicked: function (index) { console.log("addbuton-1-" + index) } },
+                    { title: "add1", class: "addbuton-2", onClicked: function (index) { console.log("addbuton-2-" + index) } },
+                ],*/
+                //是否使用cdn
+                isUseCdn: false,
             };
 ```
    示例
@@ -894,7 +912,7 @@ priority: 优先级0-100 越大优先级越高
 videoId:0为选中窗口，其它为窗口索引号从1开始
 ```
 
-### 属性
+### UCMain包含属性
 #### Videos
 ```
 // 获取内部分屏对象 即内部UCVideo对象，一个分屏就是一个UCVideo
@@ -905,6 +923,19 @@ Videos[id]
 ```
 id:索引号从1开始
 return:UCVideo对象
+```
+
+#### NowSelectVideo
+```
+// 当前选中分屏id
+
+```
+
+
+#### NowPlayVideosCount
+```
+// 当前播放中的分屏数量
+
 ```
 
 
