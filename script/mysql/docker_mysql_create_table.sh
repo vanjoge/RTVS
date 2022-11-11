@@ -76,12 +76,23 @@ fi
 ####GBS
 mysql_gbs_dbname="gbs"
 
+
+###########移除旧版gbs############2022.11.11
+sql_table_is_exits="USE $mysql_gbs_dbname; 
+select 1  FROM information_schema.TABLES WHERE table_name ='T_SuperiorChannel';"
+host=$(mysql -u$mysql_root_user_name -p$mysql_root_user_pwd  -P$mysql_port -e"$sql_table_is_exits")
+if [ ! -n "$host" ] ;then
+	echo "移除旧版gbs...."
+	mysql -u$mysql_root_user_name -p$mysql_root_user_pwd  -P$mysql_port -e"DROP DATABASE $mysql_gbs_dbname;"
+fi
+##########################################
+
 #创建GBS数据库
 sql_create_database="CREATE DATABASE IF NOT EXISTS $mysql_gbs_dbname"
 mysql -u$mysql_root_user_name -p$mysql_root_user_pwd -P$mysql_port -e"$sql_create_database"
 
 #创建表
-sql_create_table="USE $mysql_gbs_dbname;
+sql_create_table="set character_set_results=utf8; set character_set_client=utf8; set collation_connection= utf8_general_ci; USE $mysql_gbs_dbname;
 CREATE TABLE IF NOT EXISTS T_Catalog (
   ChannelID varchar(50) NOT NULL COMMENT 'CatalogID',
   DeviceID varchar(50) NOT NULL COMMENT '设备ID',
@@ -109,7 +120,7 @@ CREATE TABLE IF NOT EXISTS T_Catalog (
   Longitude double NOT NULL COMMENT '经度',
   Latitude double NOT NULL COMMENT '纬度',
   RemoteEP varchar(50) NOT NULL DEFAULT '' COMMENT '远程设备终结点',
-  Online bit(1) NOT NULL DEFAULT b'1' COMMENT '在线状态',
+  Online bit(1) NOT NULL COMMENT '在线状态',
   OnlineTime timestamp NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '上次上线时间',
   OfflineTime timestamp NULL DEFAULT NULL COMMENT '离线时间',
   PRIMARY KEY (ChannelID,DeviceID)
@@ -154,11 +165,21 @@ CREATE TABLE IF NOT EXISTS T_Event (
   PRIMARY KEY (RowID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS T_SuperiorInfo (
+CREATE TABLE IF NOT EXISTS T_SuperiorChannel (
+  SuperiorID varchar(50) NOT NULL COMMENT '上级ID',
+  CustomChannelID varchar(50) NOT NULL COMMENT '自定义通道ID',
+  DeviceID varchar(50) NOT NULL COMMENT '设备ID',
+  ChannelID varchar(50) NOT NULL COMMENT 'CatalogID',
   Enable bit(1) NOT NULL COMMENT '启用',
+  PRIMARY KEY (SuperiorID,CustomChannelID)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS T_SuperiorInfo (
   ID varchar(50) NOT NULL COMMENT '唯一ID',
+  Enable bit(1) NOT NULL COMMENT '启用',
   Name varchar(50) NOT NULL COMMENT '名称',
   ServerID varchar(50) NOT NULL COMMENT '上级国标编码',
+  ServerRealm varchar(50) NOT NULL COMMENT '服务域',
   Server varchar(50) NOT NULL COMMENT '上级IP/域名',
   ServerPort int(11) NOT NULL COMMENT '上级端口',
   ClientID varchar(50) NOT NULL COMMENT '本地SIP国标编码',
@@ -169,7 +190,8 @@ CREATE TABLE IF NOT EXISTS T_SuperiorInfo (
   RegSec int(11) NOT NULL COMMENT '注册间隔',
   HeartSec int(11) NOT NULL COMMENT '心跳周期',
   HeartTimeoutTimes int(11) NOT NULL COMMENT '最大心跳超时次数',
-  UseTcp bit(1) NOT NULL COMMENT 'TCP/UDP'
+  UseTcp bit(1) NOT NULL COMMENT 'TCP/UDP',
+  PRIMARY KEY (ID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS T_UserInfo (
