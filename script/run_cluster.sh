@@ -12,6 +12,8 @@ CV_PFX_PATH=${CV_PFX_PATH:-$CV_PXF_PATH}
 CV_PFX_PWD=${CV_PFX_PWD:-$CV_PXF_PWD}
 CV_PFX_PATH=${CV_PFX_PATH:-""}
 CV_PFX_PWD=${CV_PFX_PWD:-""}
+CV_PEM_PATH=${CV_PEM_PATH:-""}
+CV_PEMKEY_PATH=${CV_PEMKEY_PATH:-""}
 
 #外网IP
 
@@ -91,6 +93,30 @@ function init_system_files_path()
     else
         rm $DOCKER_CLUSTER_PATH/certificate.pfx 2>/dev/null
     fi
+
+    if [ -n "$CV_PEM_PATH" ]; then
+        if [[ -f "$CV_PEM_PATH" ]]; then
+            echo "拷贝pem证书： $CV_PEM_PATH $DOCKER_CLUSTER_PATH/certificate.crt"
+            cp -f $CV_PEM_PATH $DOCKER_CLUSTER_PATH/certificate.crt
+        else
+            echo "缺少$CV_PEM_PATH文件...已退出安装!"
+            exit 1
+        fi
+    else
+        rm $DOCKER_CLUSTER_PATH/certificate.crt 2>/dev/null
+    fi
+
+    if [ -n "$CV_PEMKEY_PATH" ]; then
+        if [[ -f "$CV_PEMKEY_PATH" ]]; then
+            echo "拷贝私钥： $CV_PEMKEY_PATH $DOCKER_CLUSTER_PATH/privkey.pem"
+            cp -f $CV_PEMKEY_PATH $DOCKER_CLUSTER_PATH/privkey.pem
+        else
+            echo "缺少$CV_PEMKEY_PATH文件...已退出安装!"
+            exit 1
+        fi
+    else
+        rm $DOCKER_CLUSTER_PATH/privkey.pem 2>/dev/null
+    fi
     
     # 复制log4.config
     if [[ -f "./log4.config" ]]; then
@@ -106,6 +132,8 @@ function init_system_files_path()
 function docker_run(){
     updateXml $DOCKER_CLUSTER_PATH/ApiServer.xml X509FileName "/MyData/certificate.pfx"
     updateXml $DOCKER_CLUSTER_PATH/ApiServer.xml X509Password "$CV_PFX_PWD"
+    updateXml $DOCKER_CLUSTER_PATH/ApiServer.xml PemFileName "/MyData/certificate.crt"
+    updateXml $DOCKER_CLUSTER_PATH/ApiServer.xml PemKeyFileName "/MyData/privkey.pem"
 
     updateXml $DOCKER_CLUSTER_PATH/ApiServer.xml CdnUrl "$RTVS_CDN_URL"
     updateXml $DOCKER_CLUSTER_PATH/ApiServer.xml CdnID "$RTVS_CDN_ID"
