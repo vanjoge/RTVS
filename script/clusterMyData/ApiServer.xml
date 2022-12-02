@@ -3,6 +3,8 @@
 	<WsPort>17000</WsPort>
 	<X509FileName>/MyData/certificate.pfx</X509FileName>
 	<X509Password></X509Password>
+	<PemFileName>/MyData/certificate.crt</PemFileName>
+	<PemKeyFileName>/MyData/privkey.pem</PemKeyFileName>
 	<CdnUrl></CdnUrl>
 	<CdnID></CdnID>
 	<AKey></AKey>
