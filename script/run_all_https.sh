@@ -6,11 +6,11 @@
 #设置服务器域名，用于HTTPS和防止某些IDC对未备案IP拦截，如果不设置则取IPADDRESS值。
 export BeianAddress=(Your domain)
 
-#CV_PFX_PATH pfx证书路径 (建议为绝对路径 如 /pem/xxx.com.pfx)
-export CV_PFX_PATH=(Your pfx file path)
+#CV_PFX_PATH pfx证书路径 (建议为绝对路径 如 /pem/xxx.com.pfx) 1.3.8之后可不配置，只用pem证书即可
+#export CV_PFX_PATH=(Your pfx file path)
 
-#CV_PFX_PWD pfx证书密码
-export CV_PFX_PWD=(Your pfx password)
+#CV_PFX_PWD pfx证书密码 1.3.8之后可不配置，只用pem证书即可
+#export CV_PFX_PWD=(Your pfx password)
 
 #CV_PEM_PATH pem证书路径 一般为*.crt或*.pem (建议为绝对路径 如 /pem/xxx.com.pem)
 export CV_PEM_PATH=(Your pem file path)
