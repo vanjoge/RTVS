@@ -876,8 +876,8 @@ function update_config(){
     #证书
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml X509FileName "/MyData/certificate.pfx"
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml X509Password "$CV_PFX_PWD"
-    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml X509FileName "/MyData/certificate.crt"
-    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml X509FileName "/MyData/privkey.pem"
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml PemFileName "/MyData/certificate.crt"
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml PemKeyFileName "/MyData/privkey.pem"
     
 
     #修改传入参数
