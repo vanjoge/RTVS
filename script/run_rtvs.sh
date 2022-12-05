@@ -174,6 +174,8 @@ function init_system_files_path()
         if [[ -f "$CV_PEM_PATH" ]]; then
             echo "拷贝证书文件： $CV_PEM_PATH $DOCKER_NGINX_PATH/cert/certificate.crt"
             cp -f $CV_PEM_PATH $DOCKER_NGINX_PATH/cert/certificate.crt
+            echo "拷贝证书文件： $CV_PEM_PATH $DOCKER_RTVSWEB_PATH/certificate.crt"
+            cp -f $CV_PEM_PATH $DOCKER_RTVSWEB_PATH/certificate.crt
         else
             echo "缺少$CV_PEM_PATH文件...已退出安装!"
             exit 1
@@ -182,6 +184,8 @@ function init_system_files_path()
         if [[ -f "$CV_PEMKEY_PATH" ]]; then
             echo "拷贝证书私钥： $CV_PEMKEY_PATH $DOCKER_NGINX_PATH/cert/privkey.pem"
             cp -f $CV_PEMKEY_PATH $DOCKER_NGINX_PATH/cert/privkey.pem
+            echo "拷贝证书私钥： $CV_PEMKEY_PATH $DOCKER_RTVSWEB_PATH/privkey.pem"
+            cp -f $CV_PEMKEY_PATH $DOCKER_RTVSWEB_PATH/privkey.pem
         else
             echo "缺少$CV_PEMKEY_PATH文件...已退出安装!"
             exit 1
@@ -197,6 +201,8 @@ function init_system_files_path()
     else
         rm $DOCKER_NGINX_PATH/cert/certificate.crt 2>/dev/null
         rm $DOCKER_NGINX_PATH/cert/privkey.pem 2>/dev/null
+        rm $DOCKER_RTVSWEB_PATH/certificate.crt 2>/dev/null
+        rm $DOCKER_RTVSWEB_PATH/privkey.pem 2>/dev/null
         # 复制未加密nginx.conf文件
         if [[ -f "./nginx/nginx_nowss.conf" ]]; then
             echo "拷贝一份nginx_nowss.conf：cp ./nginx/nginx_nowss.conf $DOCKER_NGINX_PATH/nginx.conf"
@@ -870,6 +876,8 @@ function update_config(){
     #证书
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml X509FileName "/MyData/certificate.pfx"
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml X509Password "$CV_PFX_PWD"
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml X509FileName "/MyData/certificate.crt"
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml X509FileName "/MyData/privkey.pem"
     
 
     #修改传入参数
