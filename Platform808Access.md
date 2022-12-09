@@ -24,7 +24,9 @@ RTVS自带的测试808网关已开源，可参考对应实现，地址：
 ### 808指令
 RTVS会按照以下规则通过Get请求发送0x9101、0x9201、0x9202、0x9205等1078规定走808通道指令，需要网关实现以下HTTP接口。
 
-`此接口支持验证，如果配置了APIAuthorization参数，会自动在http头中加入"authorization"，值为APIAuthorization配置的值。`
+`此接口支持验证，如果配置了APIAuthorization参数，会自动在http头中加入"authorization"，值为APIAuthorization配置的值。
+
+`
 
 
     [配置的网关HTTP接口地址]VideoControl?Content=808协议16进制字符串&IsSuperiorPlatformSend=是否是上级平台发送&CTags=可由前端传入的自定义内容
@@ -35,7 +37,7 @@ RTVS会按照以下规则通过Get请求发送0x9101、0x9201、0x9202、0x9205�
 
 接口参数：
        
-|  字段   | 说明  |例子|
+|  字段   | 说明  |例(确定指令能下发后就应答，不用等设备应答再回复。)|
 |  ----  | ----  | ----  |
 | Content  | 808协议16进制字符串(包头+包体)<br>包头不含7E、未转义、<b>流水号需要808平台替换</b>  | 9101001401377788321025C20C31302E31302E31302E3233304CF40000010001|
 | IsSuperiorPlatformSend  | 是否是上级平台发送，网关可用此字段确定是否由上级平台发起。<br>一般为true才会包含此字段，为false时此字段不传 | true|
