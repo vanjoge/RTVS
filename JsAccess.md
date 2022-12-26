@@ -24,6 +24,17 @@
             * [发送云台变倍控制指令](#发送云台变倍控制指令)
             * [Gov播放](#Gov播放)
          * [其他](#其他)
+            * [截图](#截图)
+            * [刷新](#刷新)
+            * [暂停](#暂停)
+            * [恢复播放](#恢复播放)
+            * [获取音量](#获取音量)
+            * [设置音量](#设置音量)
+            * [全屏](#全屏)
+            * [开始录像](#开始录像)
+            * [停止录像](#停止录像)
+            * [设置视频宽高比](#设置视频宽高比)
+            * [设置播放速度](#设置播放速度)
             * [视频旋转](#视频旋转)
             * [视频镜面反转](#视频镜面反转)
             * [整体全屏](#整体全屏)
@@ -145,6 +156,10 @@ defaultConfig = {
                     //客户端获取麦克风错误，一般多见于无麦克风强行开启对讲的场景
                     //参数 Error
                     onMicError: null,
+                    //时间戳播放回调
+                    //参数1 id 表示第几个分屏 从1开始
+                    //参数2 timestamp 时间戳
+                    onTimeStamp:null,
                 },
                 //初始化完成通知
                 callback: null,
@@ -749,8 +764,132 @@ Capture(filename, captureType, captureQuality, videoId = 0);
 filename:为null时不下载生成文件
 captureType:截图图片类型 0 png, 1 jpeg, 2 webp; 为null时取config.captureType
 captureQuality:截图图片质量 0-1 jpeg和webp时有效; 为null时取config.captureQuality
-videoId:-1为所有窗口，0为选中窗口，其它为窗口索引号从1开始
+videoId:0为选中窗口，其它为窗口索引号从1开始
 return:截图图片base64编码
+```
+#### 刷新
+     接口
+```
+// 刷新(跳到最新画面播放)
+Refreash(videoId = 0);
+
+```
+   参数说明
+```
+videoId:0为选中窗口，其它为窗口索引号从1开始
+```
+
+#### 暂停
+     接口
+```
+// 暂停
+Pause(videoId = 0);
+
+```
+   参数说明
+```
+videoId:0为选中窗口，其它为窗口索引号从1开始
+```
+
+#### 恢复播放
+     接口
+```
+// 恢复播放
+Resume(videoId = 0);
+
+```
+   参数说明
+```
+videoId:0为选中窗口，其它为窗口索引号从1开始
+```
+
+#### 获取音量
+     接口
+```
+// 获取音量
+GetVolume(videoId = 0);
+
+```
+   参数说明
+```
+videoId:0为选中窗口，其它为窗口索引号从1开始
+return:0-100，100最大
+```
+
+#### 设置音量
+     接口
+```
+// 设置音量
+SetVolume(videoId, volume);
+
+```
+   参数说明
+```
+videoId:0为选中窗口，其它为窗口索引号从1开始
+volume:0-100，100最大
+```
+
+#### 全屏
+     接口
+```
+// 设置分屏全屏
+SetFull(videoId, is_full);
+
+```
+   参数说明
+```
+videoId:0为选中窗口，其它为窗口索引号从1开始
+is_full:true 全屏 false 取消全屏
+```
+
+#### 开始录像
+     接口
+```
+// 开始录像
+StartRecord(videoId = 0);
+
+```
+   参数说明
+```
+videoId:0为选中窗口，其它为窗口索引号从1开始
+```
+
+#### 停止录像
+     接口
+```
+// 停止录像
+StopRecord(videoId = 0);
+
+```
+   参数说明
+```
+videoId:0为选中窗口，其它为窗口索引号从1开始
+```
+
+#### 设置视频宽高比
+     接口
+```
+// 设置视频宽高比，WASM和Codec模式暂未支持
+SetAdaptRatio(videoId , is_adapt);
+
+```
+   参数说明
+```
+videoId:0为选中窗口，其它为窗口索引号从1开始
+is_adapt:true 保持视频宽高比;false 铺满分屏
+```
+
+#### 设置播放速度
+     接口
+```
+// 设置播放速度
+SetPlaySpeed(videoId , speed);
+
+```
+   参数说明
+```
+videoId:0为选中窗口，其它为窗口索引号从1开始
+speed:必须大于0，1为正常倍速，支持小数
 ```
 
 #### 视频旋转
