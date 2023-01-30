@@ -91,13 +91,13 @@ function docker_run(){
     docker run  --name $DOCKER_GB2JT_NAME --net $DOCKER_NETWORK --ip $DOCKER_GB2JT_IP --restart always  --privileged=true  -v $DOCKER_GB2JT_PATH:/MyData  -e MyDataPath=/MyData -p $DOCKER_SIP_PORT:$DOCKER_SIP_PORT/tcp -p $DOCKER_SIP_PORT:$DOCKER_SIP_PORT/udp -p $DOCKER_RTP_PORT:$DOCKER_RTP_PORT/tcp -p $DOCKER_RTP_PORT:$DOCKER_RTP_PORT/udp  -d $DOCKER_GB2JT_IMAGE_NAME
 }
 function main(){
-    echo "依耐文件检查...."
+    echo "依赖文件检查...."
     init_system_files_path
     
     #启动镜像
     docker_run
     
-    echo "GB28281服务启动完成"
+    echo "GB28181服务启动完成"
     echo ""
 }
 ###################################脚本入口#######################################

@@ -13,7 +13,7 @@ NGINX_DOCKER_IMAGE_NAME=${NGINX_DOCKER_IMAGE_NAME:-"vanjoge/nginx-rtmp:flvlive"}
 MYSQL_DOCKER_CONTAINER_NAME=${MYSQL_DOCKER_CONTAINER_NAME:-"mysql5.7"}
 MYSQL_DOCKER_PATH=${MYSQL_DOCKER_PATH:-"/etc/mysql"}
 MYSQL_DOCKER_IP=${MYSQL_DOCKER_IP:-"172.29.108.241"}
-#传入有效值时不启动MYSQL实例
+#传入有效值时不启动Mysql实例
 #MYSQL_Server_IP
 #MYSQL_Server_PORT
 
@@ -147,7 +147,7 @@ function init_system_files_path_base()
     if [[ ! -d "$TSDB_DOCKER_PATH/scripts" ]]; then
         mkdir $TSDB_DOCKER_PATH/scripts
     fi
-    # 创建grafana目录
+    # 创建Grafana目录
     if [[ ! -d "$GRAFANA_DOCKER_PATH" ]]; then
         mkdir $GRAFANA_DOCKER_PATH
     fi
@@ -348,7 +348,7 @@ function docker_base_install()
         InfluxdbBaseUrl="http://$TSDB_DOCKER_IP:8086"
     fi
     if [[ "$RUN_GRAFANA" == "true" ]]; then
-        #grafana安装检查
+        #Grafana安装检查
         docker_grafana_checkAndInstall
     fi
 
@@ -379,19 +379,19 @@ function docker_mysql_checkAndInstall(){
     docker_stat $MYSQL_DOCKER_CONTAINER_NAME
     ret=$?
     if [[ ret -eq 2 ]]; then
-        echo "MYSQL未安装，即将安装MYSQL"
+        echo "Mysql未安装，即将安装Mysql"
         cd mysql
         docker_mysql_install
         cd ..
     elif  [[ ret -eq 1 ]]; then
-        echo "MYSQL已启动"
+        echo "Mysql已启动"
     else
-        echo "MYSQL未启动，即将启动MYSQL"
+        echo "Mysql未启动，即将启动Mysql"
         docker start $MYSQL_DOCKER_CONTAINER_NAME
     fi
     
     #创建数据库表检查
-    echo "正在进行MYSQL数据库表检查"
+    echo "正在进行Mysql数据库表检查"
     cd mysql
     cp docker_mysql_create_table.sh $MYSQL_DOCKER_PATH/scripts/docker_mysql_create_table.sh
     chmod a+x $MYSQL_DOCKER_PATH/scripts/docker_mysql_create_table.sh
@@ -488,7 +488,7 @@ function docker_grafana_checkAndInstall(){
     docker_stat $GRAFANA_DOCKER_CONTAINER_NAME
     ret=$?
     if [[ ret -eq 2 ]]; then
-        echo "grafana未安装，即将开始安装"
+        echo "Grafana未安装，即将开始安装"
         cd grafana
         docker_grafana_install
         cd ..

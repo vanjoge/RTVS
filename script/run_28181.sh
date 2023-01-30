@@ -113,7 +113,7 @@ function docker_run(){
     docker run  --name $DOCKER_GBSIP_NAME --net $DOCKER_NETWORK --ip $DOCKER_GBSIP_IP --restart always  --privileged=true  -v $DOCKER_GBSIP_PATH:/MyData  -e MyDataPath=/MyData -p $DOCKER_GBSIP_HTTP_PORT:80 -p $DOCKER_GBSIP_PORT:$DOCKER_GBSIP_PORT/tcp -p $DOCKER_GBSIP_PORT:$DOCKER_GBSIP_PORT/udp -d $DOCKER_GBSIP_IMAGE_NAME
 }
 function main(){
-    echo "依耐文件检查...."
+    echo "依赖文件检查...."
     init_system_files_path
     
     if  [  -n "$MYSQL_Server_IP" ] ;then
@@ -124,7 +124,7 @@ function main(){
     #启动镜像
     docker_run
     
-    echo "GB28281服务启动完成"
+    echo "GB28181服务启动完成"
     echo ""
 }
 ###################################脚本入口#######################################

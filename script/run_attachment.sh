@@ -81,7 +81,7 @@ function docker_run(){
     -d $DOCKER_ATTACHMENT_IMAGE_NAME
 }
 function main(){
-    echo "依耐文件检查...."
+    echo "依赖文件检查...."
     init_system_files_path
     
     #启动镜像

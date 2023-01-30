@@ -145,7 +145,7 @@ function docker_run(){
     docker run  --name $DOCKER_CLUSTER_NAME --net $DOCKER_NETWORK --ip $DOCKER_CVCLUSTER_IP --restart always  --privileged=true  -v $DOCKER_CLUSTER_PATH:/MyData  -e MyDataPath=/MyData -p $DOCKER_HTTP_PORT:80 -p $DOCKER_HTTPS_PORT:443  -p $DOCKER_WEBSOCKET_PORT:17000  -d $DOCKER_CLUSTER_IMAGE_NAME
 }
 function main(){
-    echo "依耐文件检查...."
+    echo "依赖文件检查...."
     init_system_files_path
     
     #启动镜像
