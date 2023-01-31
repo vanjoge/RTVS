@@ -36,7 +36,7 @@ fi
 
 source default_args.sh
 #拉取完所有镜像再更新，减少更新等待时间
-./pull_all_.sh
+./pull_all.sh
 #因为前面已经拉过镜像了，设置不检查更新加快启动速度
 export RTVS_UPDATECHECK_DOCKER=false
 
