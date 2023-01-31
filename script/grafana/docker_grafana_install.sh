@@ -10,19 +10,14 @@ function update_dburl()
 }
 
 echo "当前执行文件......$0"
+
+source ../default_args.sh
+
 IS_EXISTS_GRAFANA_IMAGE_NAME="false"
 IS_EXISTS_GRAFANA_CONTAINER="false"
 IS_EXISTS_GRAFANA_CONTAINER_RUNGING="false"
 START_CONTAINER_CHECK_MAX_TIMES=3
 START_CONTAINER_CHECK_CURRENT=1
-GRAFANA_VERSION=${GRAFANA_VERSION:-"5.4.0"}
-
-DOCKER_NETWORK=${DOCKER_NETWORK:-"cvnetwork"}
-GRAFANA_DOCKER_IP=${GRAFANA_DOCKER_IP:-"172.29.108.243"}
-TSDB_DOCKER_IP=${TSDB_DOCKER_IP:-"172.29.108.242"}
-GRAFANA_DOCKER_CONTAINER_NAME=${GRAFANA_DOCKER_CONTAINER_NAME:-"grafana"}
-GRAFANA_DOCKER_PATH=${GRAFANA_DOCKER_PATH:-"/etc/grafana"}
-GRAFANA_DOCKER_PORT=${GRAFANA_DOCKER_PORT:-33000}
 
 
 # ========================下载镜像======================================
@@ -57,15 +52,15 @@ if [[ $IS_EXISTS_GRAFANA_CONTAINER == "false" ]]; then
         cp -f ./zaixin.json $GRAFANA_DOCKER_PATH/conf/zaixin.json
         if [[ -f "$GRAFANA_DOCKER_PATH/conf/defaults.ini" ]]; then
             echo "检查到$GRAFANA_DOCKER_CONTAINER_NAME容器尚未创建!"
-			#DOCKER_GATEWAY_HOST=` docker inspect --format '{{ .NetworkSettings.Gateway }}' mysql5.7`
-			update_dburl $GRAFANA_DOCKER_PATH/conf/InfluxDB.yaml "http://$TSDB_DOCKER_IP:8086"
+            #DOCKER_GATEWAY_HOST=` docker inspect --format '{{ .NetworkSettings.Gateway }}' mysql5.7`
+            update_dburl $GRAFANA_DOCKER_PATH/conf/InfluxDB.yaml "http://$TSDB_DOCKER_IP:8086"
             # 运行容器实例 --privileged=true 获取管理员权限
             echo "创建$GRAFANA_DOCKER_CONTAINER_NAME容器实例..."
             docker run -d -p $GRAFANA_DOCKER_PORT:3000 \
             --restart always \
             --name $GRAFANA_DOCKER_CONTAINER_NAME \
-	        --net $DOCKER_NETWORK \
-	        --ip $GRAFANA_DOCKER_IP \
+            --net $DOCKER_NETWORK \
+            --ip $GRAFANA_DOCKER_IP \
             --privileged=true \
             -v $GRAFANA_DOCKER_PATH/conf/defaults.ini:/usr/share/grafana/conf/defaults.ini \
             -v $GRAFANA_DOCKER_PATH/conf/InfluxDB.yaml:/etc/grafana/provisioning/datasources/InfluxDB.yaml \

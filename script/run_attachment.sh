@@ -1,23 +1,7 @@
 #! /bin/bash
 echo "当前执行文件......$0"
 
-##################################变量定义##################################
-DOCKER_ATTACHMENT_NAME=${DOCKER_ATTACHMENT_NAME:-"attachment-1"}
-DOCKER_ATTACHMENT_PATH=${DOCKER_ATTACHMENT_PATH:-"/etc/service/$DOCKER_ATTACHMENT_NAME"}
-DOCKER_ATTACHMENT_IMAGE_NAME=${DOCKER_ATTACHMENT_IMAGE_NAME:-"vanjoge/attachment:1.3.7"}
-DOCKER_ATTACHMENT_KafkaTopic=${DOCKER_ATTACHMENT_KafkaTopic:-"media-complete"}
-
-
-#外网IP
-
-#端口  
-
-DOCKER_ATTACHMENT_PORT=${DOCKER_ATTACHMENT_PORT:-6030}
-DOCKER_ATTACHMENT_HTTP_PORT=${DOCKER_ATTACHMENT_HTTP_PORT:-9082}
-
-DOCKER_NETWORK=${DOCKER_NETWORK:-"cvnetwork"}
-DOCKER_ATTACHMENT_IP=${DOCKER_ATTACHMENT_IP:-"172.29.108.246"}
-
+source default_args.sh
  
 if [ ! -n "$LocWebFileUrl" ] ; then
     LocWebFileUrl="http://$IPADDRESS:$DOCKER_ATTACHMENT_HTTP_PORT/alarmfiles"
@@ -66,22 +50,33 @@ function docker_run(){
     updateJson $DOCKER_ATTACHMENT_PATH/AppConfig.json UserToken "$DOCKER_ATTACHMENT_UserToken"
     updateJson $DOCKER_ATTACHMENT_PATH/AppConfig.json ConnectionString "$DOCKER_ATTACHMENT_ConnectionString"
     updateJson $DOCKER_ATTACHMENT_PATH/AppConfig.json RedisConnectionString "$DOCKER_ATTACHMENT_RedisConnectionString"
-    
-    
-    docker pull $DOCKER_ATTACHMENT_IMAGE_NAME
-    #启动
-    docker run  --name $DOCKER_ATTACHMENT_NAME --net $DOCKER_NETWORK --ip $DOCKER_ATTACHMENT_IP --restart always  --privileged=true \
-    -v $DOCKER_ATTACHMENT_PATH/AppConfig.json:/app/AppConfig.json \
-    -v $DOCKER_ATTACHMENT_PATH/media:/app/media  \
-    -v $DOCKER_ATTACHMENT_PATH/logs:/app/logs  \
-    -v $DOCKER_ATTACHMENT_PATH/avlogs:/app/avlogs  \
-    -p $DOCKER_ATTACHMENT_HTTP_PORT:80 \
-    -p $DOCKER_ATTACHMENT_PORT:$DOCKER_ATTACHMENT_PORT/tcp \
-    -p $DOCKER_ATTACHMENT_PORT:$DOCKER_ATTACHMENT_PORT/udp \
-    -d $DOCKER_ATTACHMENT_IMAGE_NAME
+ 
+    if [[ "$RTVS_UPDATECHECK_DOCKER" == "true" ]]; then
+        docker pull $DOCKER_ATTACHMENT_IMAGE_NAME
+    fi
+    #启动附件服务
+    if [[ "$RTVS_NETWORK_HOST" == "true" ]]; then
+        docker run  --name $DOCKER_ATTACHMENT_NAME --net host --restart always  --privileged=true \
+        -v $DOCKER_ATTACHMENT_PATH/AppConfig.json:/app/AppConfig.json \
+        -v $DOCKER_ATTACHMENT_PATH/media:/app/media  \
+        -v $DOCKER_ATTACHMENT_PATH/logs:/app/logs  \
+        -v $DOCKER_ATTACHMENT_PATH/avlogs:/app/avlogs  \
+        -e ASPNETCORE_URLS="http://*:$DOCKER_ATTACHMENT_HTTP_PORT" \
+        -d $DOCKER_ATTACHMENT_IMAGE_NAME
+    else
+        docker run  --name $DOCKER_ATTACHMENT_NAME --net $DOCKER_NETWORK --ip $DOCKER_ATTACHMENT_IP --restart always  --privileged=true \
+        -v $DOCKER_ATTACHMENT_PATH/AppConfig.json:/app/AppConfig.json \
+        -v $DOCKER_ATTACHMENT_PATH/media:/app/media  \
+        -v $DOCKER_ATTACHMENT_PATH/logs:/app/logs  \
+        -v $DOCKER_ATTACHMENT_PATH/avlogs:/app/avlogs  \
+        -p $DOCKER_ATTACHMENT_HTTP_PORT:80 \
+        -p $DOCKER_ATTACHMENT_PORT:$DOCKER_ATTACHMENT_PORT/tcp \
+        -p $DOCKER_ATTACHMENT_PORT:$DOCKER_ATTACHMENT_PORT/udp \
+        -d $DOCKER_ATTACHMENT_IMAGE_NAME
+    fi
 }
 function main(){
-    echo "依耐文件检查...."
+    echo "依赖文件检查...."
     init_system_files_path
     
     #启动镜像

@@ -5,16 +5,10 @@ IS_EXISTS_INFLUXDB_CONTAINER="false"
 IS_EXISTS_INFLUXDB_CONTAINER_RUNGING="false"
 START_CONTAINER_CHECK_MAX_TIMES=3
 START_CONTAINER_CHECK_CURRENT=1
-INFLUXDB_VERSION="1.7"
-
-
-DOCKER_NETWORK=${DOCKER_NETWORK:-"cvnetwork"}
-TSDB_DOCKER_CONTAINER_NAME=${TSDB_DOCKER_CONTAINER_NAME:-"influxdb"}
-TSDB_DOCKER_PATH=${TSDB_DOCKER_PATH:-"/etc/influxdb"}
-TSDB_DOCKER_IP=${TSDB_DOCKER_IP:-"172.29.108.242"}
 
 #传入表示映射出端口
 #TSDB_Server_PORT
+source ../default_args.sh
 
 # ========================下载镜像======================================
 for i in [ `docker images ` ]; do

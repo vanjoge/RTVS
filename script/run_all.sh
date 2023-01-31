@@ -24,10 +24,21 @@ export GB28181API=http://172.29.108.247/api/RTVS/
 #设置redis连接字符串(默认的测试网关未支持RedisExchangeHosts参数，如果使用默认网关请不要更改此参数)
 export RedisExchangeHosts=172.29.108.245:6379,connectTimeout=20000,syncTimeout=20000,responseTimeout=20000,defaultDatabase=0,password=
 
+#以下为host模式需要修改的配置
+#export RTVS_NETWORK_HOST=true
+#export GatewayBaseAPI=http://127.0.0.1:9080/api/
+#export GB28181API=http://127.0.0.1:9081/api/RTVS/
+
 
 if [[ ! -f "./run_cluster.sh" ]]; then
     cd RTVS/script
 fi
+
+source default_args.sh
+#拉取完所有镜像再更新，减少更新等待时间
+./pull_all_.sh
+#因为前面已经拉过镜像了，设置不检查更新加快启动速度
+export RTVS_UPDATECHECK_DOCKER=false
 
 ./clear.sh 2>/dev/null
 

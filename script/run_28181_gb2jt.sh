@@ -1,28 +1,8 @@
 #! /bin/bash
 echo "当前执行文件......$0"
 
-##################################变量定义##################################
-DOCKER_GB2JT_NAME=${DOCKER_GB2JT_NAME:-"gb2jt-1"}
-DOCKER_GB2JT_PATH=${DOCKER_GB2JT_PATH:-"/etc/service/$DOCKER_GB2JT_NAME"}
-DOCKER_GB2JT_IMAGE_NAME=${DOCKER_GB2JT_IMAGE_NAME:-"vanjoge/gb2jt:1.3.4"}
+source default_args.sh
 
-
-#外网IP
-
-#端口  
-
-DOCKER_SIP_PORT=${DOCKER_SIP_PORT:-5060}
-DOCKER_RTP_PORT=${DOCKER_RTP_PORT:-30000}
-
-DOCKER_NETWORK=${DOCKER_NETWORK:-"cvnetwork"}
-DOCKER_GB2JT_IP=${DOCKER_GB2JT_IP:-"172.29.108.248"}
-
-#0 UDP 1 TCP
-GB28181_RTP_TYPE=${GB28181_RTP_TYPE:-"1"}
-
-#808
-Server_808_ADDR=${Server_808_ADDR:-"172.29.108.249"}
-DOCKER_808_PORT=${DOCKER_808_PORT:-"9300"}
  
  
 function updateXml()
@@ -82,22 +62,23 @@ function docker_run(){
     updateXml $DOCKER_GB2JT_PATH/Setting.xml ServerIP "$IPADDRESS"
     updateXml $DOCKER_GB2JT_PATH/Setting.xml SipPort "$DOCKER_SIP_PORT"
     updateXml $DOCKER_GB2JT_PATH/Setting.xml RtpPort "$DOCKER_RTP_PORT"
-    updateXml $DOCKER_GB2JT_PATH/Setting.xml Server808 "$Server_808_ADDR"
+    updateXml $DOCKER_GB2JT_PATH/Setting.xml Server808 "$DOCKER_GW_IP"
     updateXml $DOCKER_GB2JT_PATH/Setting.xml Prot808 "$DOCKER_808_PORT"
     
-    
-    docker pull $DOCKER_GB2JT_IMAGE_NAME
+    if [[ "$RTVS_UPDATECHECK_DOCKER" == "true" ]]; then
+        docker pull $DOCKER_GB2JT_IMAGE_NAME
+    fi
     #启动RTVS
     docker run  --name $DOCKER_GB2JT_NAME --net $DOCKER_NETWORK --ip $DOCKER_GB2JT_IP --restart always  --privileged=true  -v $DOCKER_GB2JT_PATH:/MyData  -e MyDataPath=/MyData -p $DOCKER_SIP_PORT:$DOCKER_SIP_PORT/tcp -p $DOCKER_SIP_PORT:$DOCKER_SIP_PORT/udp -p $DOCKER_RTP_PORT:$DOCKER_RTP_PORT/tcp -p $DOCKER_RTP_PORT:$DOCKER_RTP_PORT/udp  -d $DOCKER_GB2JT_IMAGE_NAME
 }
 function main(){
-    echo "依耐文件检查...."
+    echo "依赖文件检查...."
     init_system_files_path
     
     #启动镜像
     docker_run
     
-    echo "GB28281服务启动完成"
+    echo "GB28181服务启动完成"
     echo ""
 }
 ###################################脚本入口#######################################

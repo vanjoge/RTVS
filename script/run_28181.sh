@@ -1,32 +1,7 @@
 #! /bin/bash
 echo "当前执行文件......$0"
 
-##################################变量定义##################################
-DOCKER_GBSIP_NAME=${DOCKER_GBSIP_NAME:-"gbsip-1"}
-DOCKER_GBSIP_PATH=${DOCKER_GBSIP_PATH:-"/etc/service/$DOCKER_GBSIP_NAME"}
-DOCKER_GBSIP_IMAGE_NAME=${DOCKER_GBSIP_IMAGE_NAME:-"vanjoge/gbsip:latest"}
-
-
-MYSQL_DOCKER_IP=${MYSQL_DOCKER_IP:-"172.29.108.241"}
-
-#外网IP
-
-#端口  
-
-DOCKER_GBSIP_PORT=${DOCKER_GBSIP_PORT:-5060}
-DOCKER_GBSIP_HTTP_PORT=${DOCKER_GBSIP_HTTP_PORT:-9081}
-
-DOCKER_NETWORK=${DOCKER_NETWORK:-"cvnetwork"}
-DOCKER_GBSIP_IP=${DOCKER_GBSIP_IP:-"172.29.108.247"}
-
-
-DOCKER_GBSIP_ENABLESIPLOG=${DOCKER_GBSIP_ENABLESIPLOG:-"true"}
-DOCKER_GBSIP_ALIVETIMEOUTSEC=${DOCKER_GBSIP_ALIVETIMEOUTSEC:-180}
-DOCKER_GBSIP_RTVSAPI=${DOCKER_GBSIP_RTVSAPI:-"http://172.29.108.11/"}
-DOCKER_WEBSOCKET_PORT=${DOCKER_WEBSOCKET_PORT:-17000}
-
-
-APIAuthorization=${APIAuthorization:-"12345678"}
+source default_args.sh
  
 if [ ! -n "$BeianAddress" ] ; then
     BeianAddress=$IPADDRESS
@@ -107,24 +82,33 @@ function docker_run(){
     else
         updateXml $DOCKER_GBSIP_PATH/Setting.xml WebUsrPwd $GBWebUsrPwd
     fi
+
+    if [[ "$RTVS_UPDATECHECK_DOCKER" == "true" ]]; then
+        docker pull $DOCKER_GBSIP_IMAGE_NAME
+    fi
     
-    docker pull $DOCKER_GBSIP_IMAGE_NAME
-    #启动RTVS
-    docker run  --name $DOCKER_GBSIP_NAME --net $DOCKER_NETWORK --ip $DOCKER_GBSIP_IP --restart always  --privileged=true  -v $DOCKER_GBSIP_PATH:/MyData  -e MyDataPath=/MyData -p $DOCKER_GBSIP_HTTP_PORT:80 -p $DOCKER_GBSIP_PORT:$DOCKER_GBSIP_PORT/tcp -p $DOCKER_GBSIP_PORT:$DOCKER_GBSIP_PORT/udp -d $DOCKER_GBSIP_IMAGE_NAME
+    #启动28181
+    if [[ "$RTVS_NETWORK_HOST" == "true" ]]; then
+        docker run  --name $DOCKER_GBSIP_NAME --net host --restart always  --privileged=true  -v $DOCKER_GBSIP_PATH:/MyData  -e MyDataPath=/MyData -e ASPNETCORE_URLS="http://*:$DOCKER_GBSIP_HTTP_PORT" -d $DOCKER_GBSIP_IMAGE_NAME
+    else
+        docker run  --name $DOCKER_GBSIP_NAME --net $DOCKER_NETWORK --ip $DOCKER_GBSIP_IP --restart always  --privileged=true  -v $DOCKER_GBSIP_PATH:/MyData  -e MyDataPath=/MyData -p $DOCKER_GBSIP_HTTP_PORT:80 -p $DOCKER_GBSIP_PORT:$DOCKER_GBSIP_PORT/tcp -p $DOCKER_GBSIP_PORT:$DOCKER_GBSIP_PORT/udp -d $DOCKER_GBSIP_IMAGE_NAME
+    fi
 }
 function main(){
-    echo "依耐文件检查...."
+    echo "依赖文件检查...."
     init_system_files_path
     
     if  [  -n "$MYSQL_Server_IP" ] ;then
         MysqlConnectionString="Database=gbs;Data Source=$MYSQL_Server_IP;port=$MYSQL_Server_PORT;User Id=rtvsweb;Password=rtvs2018;charset=utf8;pooling=true"
+    #elif [[ "$DOCKER_NETWORK" == "host" ]]; then
+    #    MysqlConnectionString="Database=gbs;Data Source=127.0.0.1;port=$MYSQL_DOCKER_PORT;User Id=rtvsweb;Password=rtvs2018;charset=utf8;pooling=true"
     else
-        MysqlConnectionString="Database=gbs;Data Source=$MYSQL_DOCKER_IP;port=3306;User Id=rtvsweb;Password=rtvs2018;charset=utf8;pooling=true"
+        MysqlConnectionString="Database=gbs;Data Source=$MYSQL_DOCKER_IP;port=$MYSQL_DOCKER_PORT;User Id=rtvsweb;Password=rtvs2018;charset=utf8;pooling=true"
     fi
     #启动镜像
     docker_run
     
-    echo "GB28281服务启动完成"
+    echo "GB28181服务启动完成"
     echo ""
 }
 ###################################脚本入口#######################################

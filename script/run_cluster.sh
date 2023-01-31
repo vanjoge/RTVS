@@ -1,35 +1,7 @@
 #! /bin/bash
 echo "当前执行文件......$0"
 
-##################################变量定义##################################
-DOCKER_CLUSTER_NAME=${DOCKER_CLUSTER_NAME:-"cvcluster-1"}
-DOCKER_CLUSTER_PATH=${DOCKER_CLUSTER_PATH:-"/etc/service/$DOCKER_CLUSTER_NAME"}
-DOCKER_CLUSTER_IMAGE_NAME=${DOCKER_CLUSTER_IMAGE_NAME:-"vanjoge/cvcluster:1.3.8"}
-
-#证书
-#兼容之前变量写法
-CV_PFX_PATH=${CV_PFX_PATH:-$CV_PXF_PATH}
-CV_PFX_PWD=${CV_PFX_PWD:-$CV_PXF_PWD}
-CV_PFX_PATH=${CV_PFX_PATH:-""}
-CV_PFX_PWD=${CV_PFX_PWD:-""}
-CV_PEM_PATH=${CV_PEM_PATH:-""}
-CV_PEMKEY_PATH=${CV_PEMKEY_PATH:-""}
-
-#外网IP
-
-#端口  
-
-DOCKER_HTTP_PORT=${DOCKER_HTTP_PORT:-30888}
-DOCKER_HTTPS_PORT=${DOCKER_HTTPS_PORT:-30443}
-DOCKER_WEBSOCKET_PORT=${DOCKER_WEBSOCKET_PORT:-17000}
-
-DOCKER_NETWORK=${DOCKER_NETWORK:-"cvnetwork"}
-DOCKER_CVCLUSTER_IP=${DOCKER_CVCLUSTER_IP:-"172.29.108.254"}
-
-#CDN
-RTVS_CDN_URL=${RTVS_CDN_URL:-"http://cdn.cvnavi.com:38220/api/RequestCdnNode"}
-RTVS_CDN_ID=${RTVS_CDN_ID:-""}
-RTVS_CDN_AKEY=${RTVS_CDN_AKEY:-""}
+source default_args.sh
 
  
  
@@ -130,6 +102,8 @@ function init_system_files_path()
 }
  
 function docker_run(){
+    updateXml $DOCKER_CLUSTER_PATH/ApiServer.xml WsPort "$DOCKER_WEBSOCKET_PORT"
+
     updateXml $DOCKER_CLUSTER_PATH/ApiServer.xml X509FileName "/MyData/certificate.pfx"
     updateXml $DOCKER_CLUSTER_PATH/ApiServer.xml X509Password "$CV_PFX_PWD"
     updateXml $DOCKER_CLUSTER_PATH/ApiServer.xml PemFileName "/MyData/certificate.crt"
@@ -140,12 +114,18 @@ function docker_run(){
     updateXml $DOCKER_CLUSTER_PATH/ApiServer.xml AKey "$RTVS_CDN_AKEY"
     
     
-    docker pull $DOCKER_CLUSTER_IMAGE_NAME
-    #启动RTVS
-    docker run  --name $DOCKER_CLUSTER_NAME --net $DOCKER_NETWORK --ip $DOCKER_CVCLUSTER_IP --restart always  --privileged=true  -v $DOCKER_CLUSTER_PATH:/MyData  -e MyDataPath=/MyData -p $DOCKER_HTTP_PORT:80 -p $DOCKER_HTTPS_PORT:443  -p $DOCKER_WEBSOCKET_PORT:17000  -d $DOCKER_CLUSTER_IMAGE_NAME
+    if [[ "$RTVS_UPDATECHECK_DOCKER" == "true" ]]; then
+        docker pull $DOCKER_CLUSTER_IMAGE_NAME
+    fi
+    #启动集群管理
+    if [[ "$RTVS_NETWORK_HOST" == "true" ]]; then
+        docker run  --name $DOCKER_CLUSTER_NAME --net host --restart always  --privileged=true  -v $DOCKER_CLUSTER_PATH:/MyData  -e MyDataPath=/MyData -e ASPNETCORE_URLS="http://*:$DOCKER_HTTP_PORT" -d $DOCKER_CLUSTER_IMAGE_NAME
+    else
+        docker run  --name $DOCKER_CLUSTER_NAME --net $DOCKER_NETWORK --ip $DOCKER_CVCLUSTER_IP --restart always  --privileged=true  -v $DOCKER_CLUSTER_PATH:/MyData  -e MyDataPath=/MyData -p $DOCKER_HTTP_PORT:80 -p $DOCKER_HTTPS_PORT:443  -p $DOCKER_WEBSOCKET_PORT:$DOCKER_WEBSOCKET_PORT  -d $DOCKER_CLUSTER_IMAGE_NAME
+    fi
 }
 function main(){
-    echo "依耐文件检查...."
+    echo "依赖文件检查...."
     init_system_files_path
     
     #启动镜像

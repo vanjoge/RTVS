@@ -1,20 +1,6 @@
 #! /bin/bash
 
-
-DOCKER_MediaSoup_CONTAINER_NAME=${DOCKER_MediaSoup_CONTAINER_NAME:-"vanjoge/mediasoup-demo:v3"}
-
-DOCKER_NETWORK=${DOCKER_NETWORK:-"cvnetwork"}
-
-WEBRTC_DOCKER_CONTAINER_NAME=${WEBRTC_DOCKER_CONTAINER_NAME:-"sfu-mediasoup"}
-WEBRTC_DOCKER_PATH=${WEBRTC_DOCKER_PATH:-"/etc/service/mediasoup"}
-WEBRTC_DOCKER_IP=${WEBRTC_DOCKER_IP:-"172.29.108.240"}
-
-#证书
-CV_PEM_PATH=${CV_PEM_PATH:-""}
-CV_PEMKEY_PATH=${CV_PEMKEY_PATH:-""}
-
-cvconf_onlyTcp=${cvconf_onlyTcp:-"false"}
-cvconf_onlyUdp=${cvconf_onlyUdp:-"false"}
+source ../default_args.sh
 
 #替换文件字符串
 #参数1.文件 2.查找字符串 3.替换字符串
@@ -64,11 +50,11 @@ function docker_stop_ps(){
 
 #没有则安装镜像
 function docker_mediasoup_checkAndInstall(){
-    docker_is_image_install $DOCKER_MediaSoup_CONTAINER_NAME
+    docker_is_image_install $WEBRTC_DOCKER_IMAGE_NAME
     ret=$?
     if [[ ret -eq 0 ]]; then
-        echo "MediaSoup 未安装，即将安装"$DOCKER_MediaSoup_CONTAINER_NAME
-        docker pull $DOCKER_MediaSoup_CONTAINER_NAME 
+        echo "MediaSoup 未安装，即将安装"$WEBRTC_DOCKER_IMAGE_NAME
+        docker pull $WEBRTC_DOCKER_IMAGE_NAME 
     fi
 
     unset ret
@@ -87,37 +73,66 @@ function docker_mediasoup_checkAndRun(){
         docker rm $WEBRTC_DOCKER_CONTAINER_NAME 
     fi
     
-
-    docker pull $DOCKER_MediaSoup_CONTAINER_NAME
+    
+    if [[ "$RTVS_UPDATECHECK_DOCKER" == "true" ]]; then
+        docker pull $WEBRTC_DOCKER_IMAGE_NAME
+    fi
     echo "即将运行"$WEBRTC_DOCKER_CONTAINER_NAME
-    docker run \
-        --privileged=true \
-        --restart always \
-        --name=$WEBRTC_DOCKER_CONTAINER_NAME \
-        -p ${Webrtc_Port_Start}-${Webrtc_Port_Mapping_End}:${Webrtc_Port_Start}-${Webrtc_Port_Mapping_End}/udp \
-        -p ${Webrtc_Port_Https}-${Webrtc_Port_Http}:${Webrtc_Port_Https}-${Webrtc_Port_Http}/tcp \
-        -v $WEBRTC_DOCKER_PATH/config.js:/server/config.js \
-        -v $WEBRTC_DOCKER_PATH/source/server.js:/server/server.js \
-        -v $WEBRTC_DOCKER_PATH/source/lib/Room.js:/server/lib/Room.js \
-        -v $WEBRTC_DOCKER_PATH/cert/:/server/certs/ \
-        --net $DOCKER_NETWORK \
-        --ip $WEBRTC_DOCKER_IP\
-        --init \
-        -e DEBUG="mediasoup:INFO* *WARN* *ERROR*" \
-        -e INTERACTIVE="true" \
-        -e DOMAIN="$HTTP_DOMAIN" \
-        -e PROTOO_LISTEN_PORT="$Webrtc_Port_Https" \
-        -e PROTOO_LISTEN_PORT_HTTP:="$Webrtc_Port_Http" \
-        -e HTTPS_CERT_FULLCHAIN="/server/certs/certificate.crt" \
-        -e HTTPS_CERT_PRIVKEY="/server/certs/privkey.pem" \
-        -e MEDIASOUP_LISTEN_IP="0.0.0.0" \
-        -e MEDIASOUP_ANNOUNCED_IP="$IPADDRESS" \
-        -e MEDIASOUP_MIN_PORT="$Webrtc_Port_Start" \
-        -e MEDIASOUP_MAX_PORT="$Webrtc_Port_End" \
-        -it \
-        -d \
-        $DOCKER_MediaSoup_CONTAINER_NAME
-
+     #启动webrtc
+    if [[ "$RTVS_NETWORK_HOST" == "true" ]]; then
+        docker run \
+            --privileged=true \
+            --restart always \
+            --name=$WEBRTC_DOCKER_CONTAINER_NAME \
+            -v $WEBRTC_DOCKER_PATH/config.js:/server/config.js \
+            -v $WEBRTC_DOCKER_PATH/source/server.js:/server/server.js \
+            -v $WEBRTC_DOCKER_PATH/source/lib/Room.js:/server/lib/Room.js \
+            -v $WEBRTC_DOCKER_PATH/cert/:/server/certs/ \
+            --net host \
+            --init \
+            -e DEBUG="mediasoup:INFO* *WARN* *ERROR*" \
+            -e INTERACTIVE="true" \
+            -e DOMAIN="$HTTP_DOMAIN" \
+            -e PROTOO_LISTEN_PORT="$Webrtc_Port_Https" \
+            -e PROTOO_LISTEN_PORT_HTTP:="$Webrtc_Port_Http" \
+            -e HTTPS_CERT_FULLCHAIN="/server/certs/certificate.crt" \
+            -e HTTPS_CERT_PRIVKEY="/server/certs/privkey.pem" \
+            -e MEDIASOUP_LISTEN_IP="0.0.0.0" \
+            -e MEDIASOUP_ANNOUNCED_IP="$IPADDRESS" \
+            -e MEDIASOUP_MIN_PORT="$Webrtc_Port_Start" \
+            -e MEDIASOUP_MAX_PORT="$Webrtc_Port_End" \
+            -it \
+            -d \
+            $WEBRTC_DOCKER_IMAGE_NAME
+    else
+        docker run \
+            --privileged=true \
+            --restart always \
+            --name=$WEBRTC_DOCKER_CONTAINER_NAME \
+            -p ${Webrtc_Port_Start}-${Webrtc_Port_Mapping_End}:${Webrtc_Port_Start}-${Webrtc_Port_Mapping_End}/udp \
+            -p ${Webrtc_Port_Https}-${Webrtc_Port_Http}:${Webrtc_Port_Https}-${Webrtc_Port_Http}/tcp \
+            -v $WEBRTC_DOCKER_PATH/config.js:/server/config.js \
+            -v $WEBRTC_DOCKER_PATH/source/server.js:/server/server.js \
+            -v $WEBRTC_DOCKER_PATH/source/lib/Room.js:/server/lib/Room.js \
+            -v $WEBRTC_DOCKER_PATH/cert/:/server/certs/ \
+            --net $DOCKER_NETWORK \
+            --ip $WEBRTC_DOCKER_IP\
+            --init \
+            -e DEBUG="mediasoup:INFO* *WARN* *ERROR*" \
+            -e INTERACTIVE="true" \
+            -e DOMAIN="$HTTP_DOMAIN" \
+            -e PROTOO_LISTEN_PORT="$Webrtc_Port_Https" \
+            -e PROTOO_LISTEN_PORT_HTTP:="$Webrtc_Port_Http" \
+            -e HTTPS_CERT_FULLCHAIN="/server/certs/certificate.crt" \
+            -e HTTPS_CERT_PRIVKEY="/server/certs/privkey.pem" \
+            -e MEDIASOUP_LISTEN_IP="0.0.0.0" \
+            -e MEDIASOUP_ANNOUNCED_IP="$IPADDRESS" \
+            -e MEDIASOUP_MIN_PORT="$Webrtc_Port_Start" \
+            -e MEDIASOUP_MAX_PORT="$Webrtc_Port_End" \
+            -it \
+            -d \
+            $WEBRTC_DOCKER_IMAGE_NAME
+    fi
 }
 
 function init_base(){
@@ -183,9 +198,13 @@ function init_base(){
     #域名
     config_replace config.js.tmp "localhost" $HTTP_DOMAIN
     
-    config_replace config.js.tmp process.env.cvconf_onlyTcp $cvconf_onlyTcp
+    config_replace config.js.tmp process.env.cvconf_onlyTcp $WEBRTC_ONLY_TCP
     
-    config_replace config.js.tmp process.env.cvconf_onlyUdp $cvconf_onlyUdp
+    config_replace config.js.tmp process.env.cvconf_onlyUdp $WEBRTC_ONLY_UDP
+
+    config_replace config.js.tmp process.env.PROTOO_LISTEN_PORT_HTTP_API $WEBRTC_DOCKER_API_PORT
+
+    config_replace config.js.tmp process.env.cvconf_dcHost $RTVS_NETWORK_HOST
     
     #配置和源码是否更新,更新则停止容器进程
     update=0

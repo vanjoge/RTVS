@@ -18,7 +18,7 @@ module.exports =
 	httpApi:
     {
         listenIp: '0.0.0.0',
-        listenPort: process.env.PROTOO_LISTEN_PORT_HTTP_API || 88
+        listenPort: process.env.PROTOO_LISTEN_PORT_HTTP_API || 13188
     },
     http:
     {
@@ -171,6 +171,7 @@ module.exports =
     },
     cvconf: {
         onlyTcp: process.env.cvconf_onlyTcp || false,
-        onlyUdp: process.env.cvconf_onlyUdp || false
+        onlyUdp: process.env.cvconf_onlyUdp || false,
+        dcHost: process.env.cvconf_dcHost || false
     }
 };
