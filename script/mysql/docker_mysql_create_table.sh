@@ -184,6 +184,7 @@ CREATE TABLE IF NOT EXISTS T_SuperiorInfo (
   ServerPort int(11) NOT NULL COMMENT '上级端口',
   ClientID varchar(50) NOT NULL COMMENT '本地SIP国标编码',
   ClientName varchar(50) NOT NULL COMMENT '本地SIP名称',
+  ClientPort int(11) NOT NULL DEFAULT 0 COMMENT '本地端口',
   SIPUsername varchar(50) NOT NULL COMMENT 'SIP认证用户名',
   SIPPassword varchar(50) NOT NULL COMMENT 'SIP认证密码',
   Expiry int(11) NOT NULL COMMENT '注册有效期',
@@ -216,3 +217,21 @@ CREATE TABLE IF NOT EXISTS T_UserInfo (
 "
 
 mysql -u$mysql_root_user_name -p$mysql_root_user_pwd  -P$mysql_port -e"$sql_create_table"
+
+
+
+###########修改表结构，插入列############2023.4.18
+echo "检查gbs 230418更新...."
+sql_columns_is_exits="USE $mysql_gbs_dbname; 
+select 1 from information_schema.columns where table_name='T_SuperiorInfo' and column_name = 'ClientPort';"
+host=$(mysql -u$mysql_root_user_name -p$mysql_root_user_pwd  -P$mysql_port -e"$sql_columns_is_exits")
+if [ ! -n "$host" ] ;then
+	echo "插入列"
+	sql_columns_insert="USE $mysql_gbs_dbname;
+	ALTER TABLE T_SuperiorInfo 
+	ADD COLUMN ClientPort int(11) NOT NULL DEFAULT 0 COMMENT '本地端口' AFTER ClientName;"
+	mysql -u$mysql_root_user_name -p$mysql_root_user_pwd  -P$mysql_port -e"$sql_columns_insert"
+else
+	echo "列已存在"
+fi
+##########################################
