@@ -504,7 +504,7 @@ function update_cluster_conf()
 {
     val=`echo "$2"| sed 's:\/:\\\/:g'`
     echo "正在修改ClusterServer配置文件:$1,Addr:$2"
-    sed -i "s/{\"Addr\":null}/{\"Addr\":\"$val\"}/g" $1
+    sed -i "s/\"Addr\":null/\"Addr\":\"$val\"/g" $1
     unset val
 }
 function get_free_port(){
