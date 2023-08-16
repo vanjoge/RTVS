@@ -947,7 +947,6 @@ function docker_run(){
         -v /etc/service/rtvsvideocache:/VideoCache \
         -e MyDataPath=/MyData \
         -p $DOCKER_RTVSWEBHTTP_PORT:80 \
-        #-p $DOCKER_RTVSWEBHTTPS_PORT:443 \
         -p $DOCKER_RTSP_PORT:$DOCKER_RTSP_PORT \
         -p $DOCKER_GOV_PORT:$DOCKER_GOV_PORT \
         -p $DOCKER_OCX_PORT:$DOCKER_OCX_PORT \
