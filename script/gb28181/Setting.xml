@@ -12,4 +12,5 @@
   <WebUsrName>gbsip</WebUsrName>
   <WebUsrPwd>admin</WebUsrPwd>
   <APIAuthorization>12345678</APIAuthorization>
+  <SwaggerDoc>true</SwaggerDoc>
 </Setting>

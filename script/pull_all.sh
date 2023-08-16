@@ -47,10 +47,12 @@ function main(){
     auto_pull_docker_image $DOCKER_GW_IMAGE_NAME $PL_RTVS
 
     auto_pull_docker_image $RTVSWEB_DOCKER_IMAGE_NAME:$RTVSWEB_VERSION $PL_RTVS
+    
+    auto_pull_docker_image $NGINX_DOCKER_IMAGE_NAME $PL_RTVS
 
     auto_pull_docker_image $WEBRTC_DOCKER_IMAGE_NAME $PL_RTVS
 
-    
+
 }
 ###################################脚本入口#######################################
 PL_BASE=0

@@ -55,9 +55,13 @@ Webrtc_Port_Start=${Webrtc_Port_Start:-14001}
 Webrtc_Port_End=${Webrtc_Port_End:-65535}
 PORT_DEV_BINDPORT_START=${PORT_DEV_BINDPORT_START:-0}
 
+DOCKER_RTSP_PORT_RANGE_UDP=${DOCKER_RTSP_PORT_RANGE_UDP:-"14100-14200"}
+
 #其他
 APIAuthorization=${APIAuthorization:-"12345678"}
 RTVS_UPDATECHECK_DOCKER=${RTVS_UPDATECHECK_DOCKER:-"true"}
+SwaggerUI=${SwaggerUI:-"true"}
+VerifyHttpVideo=${VerifyHttpVideo:-"false"}
 
 #
 DOCKER_CLUSTER_NAME=${DOCKER_CLUSTER_NAME:-"cvcluster-1"}

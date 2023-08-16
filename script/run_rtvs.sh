@@ -15,6 +15,7 @@ DOCKER_RTVS_IP=11
 DOCKER_RTMP_IP=12
 DOCKER_RTVSWEBHTTP_PORT=17000 #
 DOCKER_RTVSWEBHTTPS_PORT=17001 #
+DOCKER_RTSP_PORT=6002 #
 DOCKER_RTMP_PORT=17002
 DOCKER_RTMP_STATE_PORT=17003
 DOCKER_GOV_PORT=17004
@@ -535,8 +536,12 @@ function update_config(){
     DOCKER_RTVSWEBHTTP_PORT=$PORT_DEV_START
     let "PORT_DEV_START++"
     
+    #get_free_port
+    #DOCKER_RTVSWEBHTTPS_PORT=$PORT_DEV_START
+    #let "PORT_DEV_START++"
+
     get_free_port
-    DOCKER_RTVSWEBHTTPS_PORT=$PORT_DEV_START
+    DOCKER_RTSP_PORT=$PORT_DEV_START
     let "PORT_DEV_START++"
     
     get_free_port
@@ -675,21 +680,23 @@ function update_config(){
     
     
     echo "http端口:$DOCKER_RTVSWEBHTTP_PORT"
-    export DOCKER_RTVSWEBHTTP_PORT
-    echo "https端口:$DOCKER_RTVSWEBHTTPS_PORT"
-    export DOCKER_RTVSWEBHTTPS_PORT
+    #export DOCKER_RTVSWEBHTTP_PORT
+    echo "rtsp端口:$DOCKER_RTSP_PORT"
+    #export DOCKER_RTSP_PORT
+    #echo "https端口:$DOCKER_RTVSWEBHTTPS_PORT"
+    #export DOCKER_RTVSWEBHTTPS_PORT
     echo "上级平台端口:$DOCKER_GOV_PORT"
-    export DOCKER_GOV_PORT
+    #export DOCKER_GOV_PORT
     echo "ocx端口:$DOCKER_OCX_PORT"
-    export DOCKER_OCX_PORT
+    #export DOCKER_OCX_PORT
     echo "Websocket端口:$DOCKER_WS_PORT"
-    export DOCKER_WS_PORT
+    #export DOCKER_WS_PORT
     echo "fmp4端口:$DOCKER_FMP4_PORT"
-    export DOCKER_FMP4_PORT
+    #export DOCKER_FMP4_PORT
     echo "rtmp端口:$DOCKER_RTMP_PORT"
-    export DOCKER_RTMP_PORT
+    #export DOCKER_RTMP_PORT
     echo "rtmp统计页面:$DOCKER_RTMP_STATE_PORT"
-    export DOCKER_RTMP_STATE_PORT
+    #export DOCKER_RTMP_STATE_PORT
     echo "设备端口:$DOCKER_DEV_PORT1 $DOCKER_DEV_PORT2 $DOCKER_DEV_PORT3 $DOCKER_DEV_PORT4 $DOCKER_DEV_PORT5 $DOCKER_DEV_PORT6 $DOCKER_DEV_PORT7 $DOCKER_DEV_PORT8 $DOCKER_DEV_PORT9 $DOCKER_DEV_PORT10 $DOCKER_DEV_PORT11 $DOCKER_DEV_PORT12 $DOCKER_DEV_PORT13 $DOCKER_DEV_PORT14 $DOCKER_DEV_PORT15 $DOCKER_DEV_PORT16 $DOCKER_DEV_PORT17 $DOCKER_DEV_PORT18 $DOCKER_DEV_PORT19 $DOCKER_DEV_PORT20"
  
     
@@ -784,7 +791,12 @@ function update_config(){
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml WebRTCSslPort "$Webrtc_Port_Start"
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml WebRTCPort "$((Webrtc_Port_Start+1))"
     
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml SwaggerDoc $SwaggerUI
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml IsVerifyTimePassword $VerifyHttpVideo
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml RTSPRtpRtcpUdpPort $DOCKER_RTSP_PORT_RANGE_UDP
+
     #
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml RTSPPort $DOCKER_RTSP_PORT
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml FDTCPPort $DOCKER_OCX_PORT
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml FDWebSocketPort $DOCKER_WS_PORT
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml FDFMP4Port $DOCKER_FMP4_PORT
@@ -935,7 +947,8 @@ function docker_run(){
         -v /etc/service/rtvsvideocache:/VideoCache \
         -e MyDataPath=/MyData \
         -p $DOCKER_RTVSWEBHTTP_PORT:80 \
-        -p $DOCKER_RTVSWEBHTTPS_PORT:443 \
+        #-p $DOCKER_RTVSWEBHTTPS_PORT:443 \
+        -p $DOCKER_RTSP_PORT:$DOCKER_RTSP_PORT \
         -p $DOCKER_GOV_PORT:$DOCKER_GOV_PORT \
         -p $DOCKER_OCX_PORT:$DOCKER_OCX_PORT \
         -p $DOCKER_WS_PORT:$DOCKER_WS_PORT \
@@ -980,6 +993,7 @@ function docker_run(){
         -p $DOCKER_DEV_PORT18:$DOCKER_DEV_PORT18/udp \
         -p $DOCKER_DEV_PORT19:$DOCKER_DEV_PORT19/udp \
         -p $DOCKER_DEV_PORT20:$DOCKER_DEV_PORT20/udp \
+        -p $DOCKER_RTSP_PORT_RANGE_UDP:$DOCKER_RTSP_PORT_RANGE_UDP/udp \
         -d $RTVSWEB_DOCKER_IMAGE_NAME:$RTVSWEB_VERSION
 
     fi

@@ -70,6 +70,7 @@ function docker_run(){
     updateXml $DOCKER_GBSIP_PATH/Setting.xml RTVSVideoPort "$DOCKER_WEBSOCKET_PORT"
     updateXml $DOCKER_GBSIP_PATH/Setting.xml MysqlConnectionString "$MysqlConnectionString"
     updateXml $DOCKER_GBSIP_PATH/Setting.xml APIAuthorization "$APIAuthorization"
+    updateXml $DOCKER_GBSIP_PATH/Setting.xml SwaggerDoc $SwaggerUI
     
     if  [ ! -n "$GBWebUsrName" ] ;then
         echo "WebUsrName无需修改"
