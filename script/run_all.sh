@@ -10,7 +10,10 @@ export PORT_DEV_END=65535
 #webrtc连接端口范围(此范围找CPU核心数+2个端口)
 export Webrtc_Port_Start=14001
 export Webrtc_Port_End=65535
-
+#RTSP服务端口
+export DOCKER_RTSP_PORT_RANGE_UDP="14100-14200"
+#是否启用SwaggerUI，某些安全扫描对SwaggerUI有报警，可在此禁用
+export SwaggerUI=true
 
 #设置服务器IP地址或域名(内网测试无需映射端口 外网请映射端口)
 #此配置是RTVS下发给设备的连接地址和客户端连接服务器的地址，请注意公网时的端口映射

@@ -115,6 +115,8 @@
                             <option value="3">音频或视频</option>
                         </select>
                     </td>
+                    <td><button onclick="Snapshot()" disabled>获取快照</button></td>
+                    <td><input type="checkbox" id="forceSnapshot" style="width: 20px;" />重新抓拍模式</td>
                 </tr>
                 <tr>
                     <td>
@@ -210,8 +212,9 @@
                             <option value="5">16倍</option>
                         </select>
                     </td>
-                    <td>
-                        <button onclick="StartDownload()" disabled>开始下载</button>
+                    <td colspan="2">
+                        <button onclick="StartDownload(0)" disabled>开始下载(MP4)</button>
+                        <button onclick="StartDownload(1)" disabled>开始下载(FLV)</button>
                     </td>
                 </tr>
                 <tr>
@@ -330,6 +333,7 @@
                             <option value="4">fmp4</option>
                             <option value="5">webrtc</option>
                             <option value="6">hls</option>
+                            <option value="7">codec(需HTTPS)</option>
                         </select>
                     </td>
                     <td>实时视频追帧:</td>
@@ -364,6 +368,11 @@
                             <option value="0.8">0.8</option>
                             <option value="0.9">0.9</option>
                             <option value="1.0" selected="selected">1.0</option>
+                            <option value="1.5">1.5</option>
+                            <option value="2.0">2.0</option>
+                            <option value="3.0">3.0</option>
+                            <option value="5.0">5.0</option>
+                            <option value="10.0">10.0</option>
                         </select>
                     </td>
                 </tr>
@@ -412,7 +421,7 @@
 
             document.getElementById("txtDragPlaybackPosition").value = GetDateStr(now, -55 * 60);
 
-            document.getElementById("txtEndtime").value = GetDateStr(now, -50 * 60);
+            document.getElementById("txtEndtime").value = GetDateStr(now, -57 * 60);
 
 
         };
@@ -708,6 +717,22 @@
                 parseInt(document.querySelector('#cmbDataSource').value)
             );
         }
+        function Snapshot() {
+            CvNetVideo.Snapshot(
+                document.querySelector('#txtsim').value,
+                GetChannel(),
+                document.querySelector('#forceSnapshot').checked,
+                function (is_success, url, reason) {
+                    console.log("is_success:" + is_success + " url:" + url + " reason:" + reason)
+                },
+                {
+                    clusterHost: document.querySelector("#txtserveradd").value,
+                    clusterPort: document.querySelector("#txtport").value,
+                    protocol: document.querySelector("#protocol").value,
+                    isUseCdn: document.querySelector("#isUseCdn").value === 'true'
+                },
+            );
+        }
         function AVTransferControl(id) {
             CvNetVideo.AVTransferControl(
                 document.querySelector('#txtsim').value,
@@ -724,9 +749,9 @@
                 }
             );
         }
-        function StartDownload() {
+        function StartDownload(videoFormat) {
 
-            CvNetVideo.DownLoadFmp4(
+            CvNetVideo.DownLoadVideo(
                 document.querySelector('#txtsim').value,
                 GetChannel(),
                 parseInt(document.querySelector('#cmbMideaType').value),
@@ -742,7 +767,9 @@
                     protocol: document.querySelector("#protocol").value,
                     isUseCdn: document.querySelector("#isUseCdn").value === 'true'
                 },
-                parseInt(document.querySelector('#cmbDataSource').value)
+                parseInt(document.querySelector('#cmbDataSource').value),
+                4,
+                videoFormat
             )
         }
         function PlaybackVideo(id) {

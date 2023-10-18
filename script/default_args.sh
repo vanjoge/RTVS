@@ -55,9 +55,13 @@ Webrtc_Port_Start=${Webrtc_Port_Start:-14001}
 Webrtc_Port_End=${Webrtc_Port_End:-65535}
 PORT_DEV_BINDPORT_START=${PORT_DEV_BINDPORT_START:-0}
 
+DOCKER_RTSP_PORT_RANGE_UDP=${DOCKER_RTSP_PORT_RANGE_UDP:-"14100-14200"}
+
 #其他
 APIAuthorization=${APIAuthorization:-"12345678"}
 RTVS_UPDATECHECK_DOCKER=${RTVS_UPDATECHECK_DOCKER:-"true"}
+SwaggerUI=${SwaggerUI:-"true"}
+VerifyHttpVideo=${VerifyHttpVideo:-"false"}
 
 #
 DOCKER_CLUSTER_NAME=${DOCKER_CLUSTER_NAME:-"cvcluster-1"}
@@ -129,7 +133,7 @@ RUN_GRAFANA=${RUN_GRAFANA:-"false"}
 RTVSWEB_DOCKER_CONTAINER_NAME_TEMPLATE=${RTVSWEB_DOCKER_CONTAINER_NAME_TEMPLATE:-"rtvsweb-publish-"}
 RTVSWEB_DOCKER_PATH_TEMPLATE=${RTVSWEB_DOCKER_PATH_TEMPLATE:-"/etc/service/rtvs-"}
 RTVSWEB_DOCKER_IMAGE_NAME=${RTVSWEB_DOCKER_IMAGE_NAME:-"vanjoge/rtvs"}
-RTVSWEB_VERSION=${RTVSWEB_VERSION:-"1.3.9"}
+RTVSWEB_VERSION=${RTVSWEB_VERSION:-"1.3.10"}
 MatchSim12And20=${MatchSim12And20:-"true"}
 QueryVideoListTimeOutSec=${QueryVideoListTimeOutSec:-"60"}
 DomainToIP=${DomainToIP:-"true"}

@@ -965,7 +965,30 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
     http://[GOV服务地址]/[SIM]_[通道]_[开始UTC时间]_[结束UTC时间].mp4?MediaType=[音视频类型]&StreamType=[码流类型]&PlaybackMode=[回放方式]&Multiple=[倍数]&DataSource=[来源]&CTags=[CTags]
 
 
-    例:http://10.10.10.228:6035/111111111112_1_1651745996_0?MediaType=0&StreamType=1&PlaybackMode=0&Multiple=1&DataSource=1&CTags=test
+    例:http://10.10.10.228:6035/111111111112_1_1651745996_0.mp4?MediaType=0&StreamType=1&PlaybackMode=0&Multiple=1&DataSource=1&CTags=test
+
+
+    MediaType、StreamType、PlaybackMode和Multiple数值定义见1078协议9201，DataSource为来源 0自动 1设备 2服务端缓存
+    
+### GOV服务获取FLV HTTP流(实时)
+
+接口地址：
+
+    http://[GOV服务地址]/[SIM]_[通道]_real.flv?DataType=[数据类型]&StreamType=[码流类型]&CTags=[CTags]
+
+
+    例:http://10.10.10.228:6035/111111111112_1_real.flv?DataType=0&StreamType=0&CTags=test
+
+    DataType和StreamType数值定义见1078协议9101
+
+### GOV服务获取FLV HTTP流(历史)
+
+接口地址：
+
+    http://[GOV服务地址]/[SIM]_[通道]_[开始UTC时间]_[结束UTC时间].flv?MediaType=[音视频类型]&StreamType=[码流类型]&PlaybackMode=[回放方式]&Multiple=[倍数]&DataSource=[来源]&CTags=[CTags]
+
+
+    例:http://10.10.10.228:6035/111111111112_1_1651745996_0.flv?MediaType=0&StreamType=1&PlaybackMode=0&Multiple=1&DataSource=1&CTags=test
 
 
     MediaType、StreamType、PlaybackMode和Multiple数值定义见1078协议9201，DataSource为来源 0自动 1设备 2服务端缓存

@@ -65,6 +65,8 @@ function docker_run(){
     if [[ "$RTVS_NETWORK_HOST" == "true" ]]; then
         docker run  --name $DOCKER_GW_NAME --net host --restart always  --privileged=true \
         --log-opt max-size=500m --log-opt max-file=3 \
+        -v $DOCKER_GW_PATH:/MyData \
+        -e MyDataPath=/MyData \
         -e ASPNETCORE_URLS="http://*:$DOCKER_808_HTTP_PORT" \
         -d $DOCKER_GW_IMAGE_NAME
     else

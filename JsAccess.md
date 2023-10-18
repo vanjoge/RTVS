@@ -728,6 +728,30 @@ CvNetVideo.GovPlay(
             );
 ```
 
+#### 下载历史视频文件
+     接口
+```
+DownLoadVideo(Sim, Channel, MediaType, StreamType = 0, StorageType = 0, PlaybackMode = 0, Multiple = 0, StartTime, EndTime, config = {}, DataSource = 0, Speed = 4, VideoFormat = 0) ;
+
+```
+   参数说明
+```
+Sim:sim卡号
+Channel:通道号不支持0
+MediaType：音视频资源类型（0：音视频，1：音频，2：视频，3：视频或音视频）
+StreamType：码流类型（0：主码流或子码流，1：主码流，2：子码流）
+StorageType：存储器类型（0：主存储器或灾备存储器，1：主存储器，2：灾备存储器）
+PlaybackMode:回放模式（0：正常回放，1：快进回放，2：关键帧快退回放，3：关键帧播放，4：单帧上传）
+Multiple:倍速（0：无效，1：1倍，2：2倍，3：4倍，4：8倍，5：16倍）
+StartTime:开始时间
+EndTime:结束时间
+config:配置项 与Init一致
+DataSource:0自动 1设备 2服务端缓存
+Speed:下载倍速，仅28181有效
+VideoFormat:文件格式（0：FMP4格式，1：FLV格式）
+```
+
+
 #### 下载FMP4文件
      接口
 ```
