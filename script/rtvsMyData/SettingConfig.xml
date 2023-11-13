@@ -160,4 +160,8 @@
 	<RTSPRtpRtcpUdpPort>14100-14200</RTSPRtpRtcpUdpPort>
 	<IsVerifyTimePassword>false</IsVerifyTimePassword>
 	<SwaggerDoc>true</SwaggerDoc>
+	<ClientAuth>false</ClientAuth>
+	<CARsaPem></CARsaPem>
+	<CARsaTimeoutSec>60</CARsaTimeoutSec>
+	<TokenTimeoutSec>300</TokenTimeoutSec>
 </ConfigModel>

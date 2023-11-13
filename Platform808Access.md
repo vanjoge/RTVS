@@ -945,16 +945,16 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
 
     [IP地址]:[端口]
 
-    例: 10.10.10.228:6035
+    例: 10.10.10.228:6006
 
 ### GOV服务获取FMP4 HTTP流(实时)
 
 接口地址：
 
-    http://[GOV服务地址]/[SIM]_[通道]_real.mp4?DataType=[数据类型]&StreamType=[码流类型]&CTags=[CTags]
+    http://[GOV服务地址]/[SIM]_[通道]_real.mp4?DataType=[数据类型]&StreamType=[码流类型]&CTags=[CTags]&TokenType=[TokenType]&Token=[Token]
 
 
-    例:http://10.10.10.228:6035/111111111112_1_real.mp4?DataType=0&StreamType=0&CTags=test
+    例:http://10.10.10.228:6006/111111111112_1_real.mp4?DataType=0&StreamType=0&CTags=test
 
     DataType和StreamType数值定义见1078协议9101
 
@@ -962,10 +962,10 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
 
 接口地址：
 
-    http://[GOV服务地址]/[SIM]_[通道]_[开始UTC时间]_[结束UTC时间].mp4?MediaType=[音视频类型]&StreamType=[码流类型]&PlaybackMode=[回放方式]&Multiple=[倍数]&DataSource=[来源]&CTags=[CTags]
+    http://[GOV服务地址]/[SIM]_[通道]_[开始UTC时间]_[结束UTC时间].mp4?MediaType=[音视频类型]&StreamType=[码流类型]&PlaybackMode=[回放方式]&Multiple=[倍数]&DataSource=[来源]&CTags=[CTags]&TokenType=[TokenType]&Token=[Token]
 
 
-    例:http://10.10.10.228:6035/111111111112_1_1651745996_0.mp4?MediaType=0&StreamType=1&PlaybackMode=0&Multiple=1&DataSource=1&CTags=test
+    例:http://10.10.10.228:6006/111111111112_1_1651745996_0.mp4?MediaType=0&StreamType=1&PlaybackMode=0&Multiple=1&DataSource=1&CTags=test
 
 
     MediaType、StreamType、PlaybackMode和Multiple数值定义见1078协议9201，DataSource为来源 0自动 1设备 2服务端缓存
@@ -974,10 +974,10 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
 
 接口地址：
 
-    http://[GOV服务地址]/[SIM]_[通道]_real.flv?DataType=[数据类型]&StreamType=[码流类型]&CTags=[CTags]
+    http://[GOV服务地址]/[SIM]_[通道]_real.flv?DataType=[数据类型]&StreamType=[码流类型]&CTags=[CTags]&TokenType=[TokenType]&Token=[Token]
 
 
-    例:http://10.10.10.228:6035/111111111112_1_real.flv?DataType=0&StreamType=0&CTags=test
+    例:http://10.10.10.228:6006/111111111112_1_real.flv?DataType=0&StreamType=0&CTags=test
 
     DataType和StreamType数值定义见1078协议9101
 
@@ -985,10 +985,10 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
 
 接口地址：
 
-    http://[GOV服务地址]/[SIM]_[通道]_[开始UTC时间]_[结束UTC时间].flv?MediaType=[音视频类型]&StreamType=[码流类型]&PlaybackMode=[回放方式]&Multiple=[倍数]&DataSource=[来源]&CTags=[CTags]
+    http://[GOV服务地址]/[SIM]_[通道]_[开始UTC时间]_[结束UTC时间].flv?MediaType=[音视频类型]&StreamType=[码流类型]&PlaybackMode=[回放方式]&Multiple=[倍数]&DataSource=[来源]&CTags=[CTags]&TokenType=[TokenType]&Token=[Token]
 
 
-    例:http://10.10.10.228:6035/111111111112_1_1651745996_0.flv?MediaType=0&StreamType=1&PlaybackMode=0&Multiple=1&DataSource=1&CTags=test
+    例:http://10.10.10.228:6006/111111111112_1_1651745996_0.flv?MediaType=0&StreamType=1&PlaybackMode=0&Multiple=1&DataSource=1&CTags=test
 
 
     MediaType、StreamType、PlaybackMode和Multiple数值定义见1078协议9201，DataSource为来源 0自动 1设备 2服务端缓存
@@ -1068,3 +1068,75 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
 
 
 
+### 获取Token
+
+接口地址：
+
+    [集群管理地址]ProxyTag/[Tag]/1004/api/Server/GetToken
+	
+	获取Token，5分钟后或使用后失效。
+
+    例:http://127.0.0.1:30888/ProxyTag/013300001111/1004/api/Server/GetToken
+
+
+
+
+返回数据格式如下
+
+
+
+
+ | 字段名 | 类型 | 说明  |
+ | ----  | ----  | ----  |
+|token| string |  |
+|expires |long | 过期UTC时间戳 |
+
+
+例
+```
+{
+  "token": "c27b02e4c9c84231a73c109f594a83a2",
+  "expires": 1699869390
+}
+```
+
+
+
+
+### 获取FlvToken
+
+接口地址：
+
+    [集群管理地址]ProxyTag/[Tag]/1004/api/Server/GetFlvToken
+	
+	与GetToken类似，只是多输出服务器信息。
+
+    例:http://127.0.0.1:30888/ProxyTag/013300001111/1004/api/Server/GetFlvToken
+
+
+
+
+返回数据格式如下
+
+
+
+
+ | 字段名 | 类型 | 说明  |
+ | ----  | ----  | ----  |
+|token| string |  |
+|expires |long | 过期UTC时间戳 |
+|ip |string | 服务器IP地址 |
+|port |int | 服务器端口 |
+|domain |string | 服务器域名 |
+
+
+例
+```
+{
+  "ip": "10.10.10.228",
+  "port": 6006,
+  "domain": "10.10.10.228",
+  "token": "c27b02e4c9c84231a73c109f594a83a2",
+  "expires": 1699869390
+}
+```
