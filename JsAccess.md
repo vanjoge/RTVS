@@ -160,6 +160,16 @@ defaultConfig = {
                     //参数1 id 表示第几个分屏 从1开始
                     //参数2 timestamp 时间戳
                     onTimeStamp:null,
+                    //分屏双击回调，
+                    //参数1 id 表示第几个分屏 从1开始
+                    //参数2 UCVideo对象
+                    //返回值 true表示取消双击放大
+                    onUcDbclick: null,
+                    //流量统计回调，
+                    //参数1 KBps 数值，建议toFixed(2)后再显示
+                    //参数2 id 表示第几个分屏 从1开始
+                    //参数3 UCVideo对象
+                    onKBpsChange: null,
                 },
                 //初始化完成通知
                 callback: null,
@@ -172,7 +182,14 @@ defaultConfig = {
 
                 //以下参数可调用方法时修改
 
-
+                //token类型 0:不启用 1:一次有效随机码，需先通过后端接口申请 2:RSA加密当前时间戳
+                tokenType: 0,
+                //token
+                token: null,
+                //选中时取消分屏静音
+                unmuteBySelected: true,
+                //选中分屏zindex
+                selectedZIndex: 999,
                 //启用双击放大单窗口
                 enableDbcZoom: true,
                 //0 自动 1 WASM软解(canvas+audioAPI) 2 js封装FMP4(h264Demuxer+audioAPI) 3 WASM封装FMP4(WASM2FMP4) 4 服务器推fmp4流 5 webrtc 6 hls 7 webrtc(srs)
