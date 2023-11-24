@@ -170,6 +170,13 @@ defaultConfig = {
                     //参数2 id 表示第几个分屏 从1开始
                     //参数3 UCVideo对象
                     onKBpsChange: null,
+                    //本地录像完成回调，
+                    //参数1 录像Blob
+                    //参数2 录像信息 { type, sim, channel, startTime, stopTime}
+                    //参数3 id 表示第几个分屏 从1开始
+                    //参数4 UCVideo对象
+                    //返回值 true表示取消自动下载
+                    onEndRecord: null,
                 },
                 //初始化完成通知
                 callback: null,
@@ -237,6 +244,8 @@ defaultConfig = {
                 protocol: 0,
                 //默认ctags
                 defaultCtags: null,
+                //录像起播缓存(ms)
+                playbackStartCache: 2000
                 //添加菜单
                 /*addMenu:[
                     { title: "567", onClicked: function (index) { console.log("clicked 567-" + index) } },
