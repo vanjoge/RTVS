@@ -177,6 +177,11 @@ defaultConfig = {
                     //参数4 UCVideo对象
                     //返回值 true表示取消自动下载
                     onEndRecord: null,
+                    //回放缓存时间回调
+                    //参数1 {playedMs,waitingPlayMs} playedMs:已播放时长(毫秒) waitingPlayMs:已缓冲未播放时长(毫秒)
+                    //参数2 id 表示第几个分屏 从1开始
+                    //参数3 UCVideo对象
+                    onPlayBackCacheTime: null,
                 },
                 //初始化完成通知
                 callback: null,
@@ -245,7 +250,24 @@ defaultConfig = {
                 //默认ctags
                 defaultCtags: null,
                 //录像起播缓存(ms)
-                playbackStartCache: 2000
+                playbackStartCache: 2000,
+                //多语言配置
+                language: {
+                    timeout: "超时",
+                    connect_failed:"连接失败",
+                    connect_error: "连接错误",
+                    connect_close: "连接关闭",
+                    connect_down: "传输完成",
+                    device_connected: "设备连接",
+                    device_disconnect: "设备断开",
+                    gov_player_http_request_failed: "URL请求失败",
+                    gov_player_http_request_error: "URL请求发生错误",
+                    gov_player_limited_connection: "超过允许最大连接数，断开连接",
+                    gov_player_limited_play_time: "超过允许播放时长，断开连接",
+                    gov_player_protocol_error: "协议错误，请确认流格式是否正确",
+                    loading_page_wait_video: "等待视频...",
+                    loading_page_wait_search_record: "等待搜索录像",
+                },
                 //添加菜单
                 /*addMenu:[
                     { title: "567", onClicked: function (index) { console.log("clicked 567-" + index) } },
@@ -618,7 +640,7 @@ TaskExecutionCondition：任务执行条件（bit0：WIFI，为1时表示WI-FI�
 
      接口
 ```
-FtpVideoFileUploadControl(Sim, SerialNumber, UploadControl, videoId = 0, config = {});
+FtpVideoFileUploadControl(Sim, Channel, SerialNumber, UploadControl, videoId = 0, config = {});
 
 ```
    参数说明
@@ -706,6 +728,27 @@ InfraredControl(Sim, Channel, Flag, videoId = 0, config = {});
 ```
 Flag:0:停止 1:启动
 ```
+#### 获取历史流播放缓存
+     接口
+```
+GetPlayBackCacheTime(videoId = 0);
+
+```
+   参数说明
+```
+videoId:窗口ID 0表示当前选中窗口 其他按顺序选择
+```
+     返回
+```
+ {
+     //已播放时长(毫秒)
+     playedMs,
+     //已缓冲未播放时长(毫秒)
+     waitingPlayMs
+ }
+```
+
+
 #### 发送云台变倍控制指令
      接口
 ```
