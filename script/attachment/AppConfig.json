@@ -15,7 +15,8 @@
     "AliOssBucketName": "",
     //需返回JSON
     "AliOssCallbackUrl": "",
-    "AliOssCallbackBody": "bucket=${bucket}&object=${object}&etag=${etag}&size=${size}&mimeType=${mimeType}&AlarmID=${x:AlarmID}"
+    "AliOssCallbackBody": "bucket=${bucket}&object=${object}&etag=${etag}&size=${size}&mimeType=${mimeType}&AlarmID=${x:AlarmID}",
+    "AlarmIDType": 0
   }
 
 }
