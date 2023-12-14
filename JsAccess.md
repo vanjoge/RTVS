@@ -270,13 +270,42 @@ defaultConfig = {
                     gov_player_protocol_error: "协议错误，请确认流格式是否正确",
                     loading_page_wait_video: "等待视频...",
                     loading_page_wait_search_record: "等待搜索录像",
+                    menu_stop: "停止",
+                    menu_screen_full: "全屏",
+                    menu_stretch: "伸缩",
+                    menu_capture: "截图",
+                    menu_rotate: "视频旋转",
+                    menu_mirrorinver: "镜面反转",
+                    control_tip_refresh: "刷新",
+                    control_tip_play: "播放",
+                    control_tip_stop: "停止",
+                    control_tip_sound: "声音",
+                    control_tip_screen_full: "全屏",
+                    control_tip_capture: "截图",
+                    control_tip_record: "录像",
+                    control_tip_stretch: "伸缩",
                 },
                 //添加菜单
-                /*addMenu:[
-                    { title: "567", onClicked: function (index) { console.log("clicked 567-" + index) } },
-                    { title: "123", onClicked: function (index) { console.log("clicked 123-" + index) } },
-                ],*/
-
+                //addMenu:[
+                //    {
+                //        title: "测试1", child:
+                //        [
+                //                { title: "111", onClicked: function (index) { console.log("clicked 111-" + index) } },
+                //                { title: "222", onClicked: function (index) { console.log("clicked 222-" + index) } },
+                //                { title: "333", onClicked: function (index) { console.log("clicked 333-" + index) } }
+                //        ]
+                //    },
+                //    {
+                //        title: "测试2", onClicked: function (index) { console.log("clicked 测试2-" + index) }
+                //    },
+                //    {
+                //        title: "测试3", child:
+                //        [
+                //                { title: "555", onClicked: function (index) { console.log("clicked 555-" + index) } },
+                //        ]
+                //    },
+                //],
+                
                 //添加按钮 需在class中指定按钮图标和位置
                 /*addButtons:[
                     { title: "add1", class: "addbuton-1", onClicked: function (index) { console.log("addbuton-1-" + index) } },
