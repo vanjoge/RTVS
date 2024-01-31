@@ -68,51 +68,9 @@ GET /Record/Stop
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|[RecordRet](#schemarecordret)|
 
-## POST /Record/Open
-
-POST /Record/Open
-
-> Body Parameters
-
-```json
-[
-  {
-    "sim": "string",
-    "channel": [
-      "string"
-    ],
-    "protocol": 0
-  }
-]
-```
-
-### Params
-
-|Name|Location|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[DeviceInfo](#schemadeviceinfo)| no |none|
-
-> Response Examples
-
-> 200 Response
-
-```json
-{
-  "result": 0,
-  "resultNote": "string",
-  "detail": "string"
-}
-```
-
-### Responses
-
-|HTTP Status Code |Meaning|Description|Data schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|[RecordRet](#schemarecordret)|
-
 ## POST /Record/BatchStart
 
-POST /Record/BatchStart
+POST /Record/BatchStart or /Record/Open
 
 > Body Parameters
 
@@ -151,52 +109,11 @@ POST /Record/BatchStart
 |HTTP Status Code |Meaning|Description|Data schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|[RecordRet](#schemarecordret)|
+
 
 ## POST /Record/BatchStop
 
-POST /Record/BatchStop
-
-> Body Parameters
-
-```json
-[
-  {
-    "sim": "string",
-    "channel": [
-      "string"
-    ],
-    "protocol": 0
-  }
-]
-```
-
-### Params
-
-|Name|Location|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[DeviceInfo](#schemadeviceinfo)| no |none|
-
-> Response Examples
-
-> 200 Response
-
-```json
-{
-  "result": 0,
-  "resultNote": "string",
-  "detail": "string"
-}
-```
-
-### Responses
-
-|HTTP Status Code |Meaning|Description|Data schema|
-|---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|[RecordRet](#schemarecordret)|
-
-## POST /Record/Close
-
-POST /Record/Close
+POST /Record/BatchStop or /Record/Close
 
 > Body Parameters
 
