@@ -1081,6 +1081,26 @@ function docker_run(){
     fi
     
 }
+function startcdvr()
+{
+    if [[ "$CDVR_ENABLE" == "true" ]]; then
+        cd cdvr
+        if [[ -f "./startcdvr.sh" ]]; then
+            chmod a+x startcdvr.sh
+            ./startcdvr.sh -i $LocIP -p $DOCKER_WS_PORT
+            if [[ $? -eq 0 ]]; then
+                echo "./startcdvr.sh 执行完成!"
+            else
+                echo "./startcdvr.sh 执行过程中出现错误，已退出安装!"
+                exit 1
+            fi
+        else
+            echo "缺少./startcdvr.sh 文件...已退出安装!"
+            exit 1
+        fi
+        cd ..
+    fi
+}
 function main(){
     #安装基础docker镜像
     docker_base_install
@@ -1108,6 +1128,9 @@ function main(){
     #启动镜像
     docker_run
     
+    #启动CDVR
+    startcdvr
+
     echo "RTVS启动完成"
     echo ""
 }

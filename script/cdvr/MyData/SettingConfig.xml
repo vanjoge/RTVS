@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Setting xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Server>172.29.108.11</Server>
+  <Port>6008</Port>
+  <RecordPath>/MyData/Videos</RecordPath>
+  <Prefix>ydr</Prefix>
+  <SwaggerDoc>true</SwaggerDoc>
+</Setting>
