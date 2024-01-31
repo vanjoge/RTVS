@@ -117,7 +117,7 @@ function docker_run(){
             -v $CDVR_DOCKER_PATH:/MyData \
             -v $CDVR_DOCKER_RECORD_PATH:$RecordPath \
             -e MyDataPath=/MyData \
-            -e ASPNETCORE_URLS="http://*:$DOCKER_CDVRHTTP_PORT" \
+            -e ASPNETCORE_URLS="http://*:$CDVR_DOCKER_HTTP_PORT" \
             -d $CDVR_DOCKER_IMAGE_NAME:$CDVR_VERSION
         else
             docker run  \
@@ -128,7 +128,7 @@ function docker_run(){
             -v $CDVR_DOCKER_PATH:/MyData \
             -v $CDVR_DOCKER_RECORD_PATH:$RecordPath \
             -e MyDataPath=/MyData \
-            -e ASPNETCORE_URLS="http://*:$DOCKER_CDVRHTTP_PORT" \
+            -e ASPNETCORE_URLS="http://*:$CDVR_DOCKER_HTTP_PORT" \
             -d $CDVR_DOCKER_IMAGE_NAME:$CDVR_VERSION
         fi
 
@@ -148,7 +148,7 @@ function docker_run(){
             -v $CDVR_DOCKER_PATH:/MyData \
             -v $CDVR_DOCKER_RECORD_PATH:$RecordPath \
             -e MyDataPath=/MyData \
-            -p $DOCKER_CDVRHTTP_PORT:80 \
+            -p $CDVR_DOCKER_HTTP_PORT:80 \
             -d $CDVR_DOCKER_IMAGE_NAME:$CDVR_VERSION
         else
             docker run  \
@@ -160,7 +160,7 @@ function docker_run(){
             -v $CDVR_DOCKER_PATH:/MyData \
             -v $CDVR_DOCKER_RECORD_PATH:$RecordPath \
             -e MyDataPath=/MyData \
-            -p $DOCKER_CDVRHTTP_PORT:80 \
+            -p $CDVR_DOCKER_HTTP_PORT:80 \
             -d $CDVR_DOCKER_IMAGE_NAME:$CDVR_VERSION
         fi
 
