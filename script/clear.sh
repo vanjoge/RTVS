@@ -33,6 +33,9 @@ function main(){
     echo "清理28181"
     docker rm -f $DOCKER_GB2JT_NAME
     docker rm -f $DOCKER_GBSIP_NAME
+
+    echo "清理CDVR"
+    docker rm -f $CDVR_DOCKER_CONTAINER_NAME
     
     if [[ $RM_ALL == 1 ]]; then
         echo "清理redis"

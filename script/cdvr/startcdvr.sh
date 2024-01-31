@@ -21,19 +21,19 @@ function init_system_files_path()
         mkdir $CDVR_DOCKER_PATH
     fi
     # 需要的时候复制服务配置文件
-    if [[ -f "./cdvrMyData/SettingConfig.xml" ]]; then
+    if [[ -f "./MyData/SettingConfig.xml" ]]; then
         rm -f $CDVR_DOCKER_PATH/SettingConfig.xml 2>/dev/null
-        echo "拷贝一份XML配置文件：cp ./cdvrMyData/SettingConfig.xml $CDVR_DOCKER_PATH/SettingConfig.xml"
-        cp ./cdvrMyData/SettingConfig.xml $CDVR_DOCKER_PATH/SettingConfig.xml
+        echo "拷贝一份XML配置文件：cp ./MyData/SettingConfig.xml $CDVR_DOCKER_PATH/SettingConfig.xml"
+        cp ./MyData/SettingConfig.xml $CDVR_DOCKER_PATH/SettingConfig.xml
         
     else
-        echo "缺少./cdvrMyData/SettingConfig.xml文件...已退出安装!"
+        echo "缺少./MyData/SettingConfig.xml文件...已退出安装!"
         exit 1
     fi
     # 复制log4.config（第一次做完全复制，若有变动需要手动修改）
-    if [[ -f "./cdvrMyData/log4.config" ]]; then
-        echo "拷贝一份日志配置文件： ./cdvrMyData/log4.config $CDVR_DOCKER_PATH/log4.config"
-        cp  -f ./cdvrMyData/log4.config $CDVR_DOCKER_PATH/log4.config
+    if [[ -f "./MyData/log4.config" ]]; then
+        echo "拷贝一份日志配置文件： ./MyData/log4.config $CDVR_DOCKER_PATH/log4.config"
+        cp  -f ./MyData/log4.config $CDVR_DOCKER_PATH/log4.config
     else
         echo "缺少./log4.config文件...已退出安装!"
         exit 1
@@ -43,10 +43,10 @@ function init_system_files_path()
     if [[ ! -d $CDVR_DOCKER_PATH/Config ]]; then
         mkdir $CDVR_DOCKER_PATH/Config
     fi
-    if [[ -f "./cdvrMyData/Config/ClusterServer.json" ]]; then
+    if [[ -f "./MyData/Config/ClusterServer.json" ]]; then
         rm -f $CDVR_DOCKER_PATH/Config/ClusterServer.json 2>/dev/null
-        echo "拷贝ClusterServer.json：./cdvrMyData/Config/ClusterServer.json $CDVR_DOCKER_PATH/Config/ClusterServer.json"
-        cp ./cdvrMyData/Config/ClusterServer.json $CDVR_DOCKER_PATH/Config/ClusterServer.json
+        echo "拷贝ClusterServer.json：./MyData/Config/ClusterServer.json $CDVR_DOCKER_PATH/Config/ClusterServer.json"
+        cp ./MyData/Config/ClusterServer.json $CDVR_DOCKER_PATH/Config/ClusterServer.json
     else
         echo "缺少./Config/ClusterServer.json文件...已退出安装!"
         exit 1

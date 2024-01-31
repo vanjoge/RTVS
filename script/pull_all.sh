@@ -52,6 +52,11 @@ function main(){
 
     auto_pull_docker_image $WEBRTC_DOCKER_IMAGE_NAME $PL_RTVS
 
+    
+    if [[ "$CDVR_ENABLE" == "true" ]]; then
+        auto_pull_docker_image $CDVR_DOCKER_IMAGE_NAME:$CDVR_VERSION $PL_RTVS
+    fi
+
 
 }
 ###################################脚本入口#######################################
