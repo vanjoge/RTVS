@@ -5,4 +5,5 @@
   <RecordPath>/MyData/Videos</RecordPath>
   <Prefix>ydr</Prefix>
   <SwaggerDoc>true</SwaggerDoc>
+  <DiskReserveSpace>3</DiskReserveSpace>
 </Setting>

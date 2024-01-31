@@ -88,6 +88,7 @@ function update_config(){
     updateXml $CDVR_DOCKER_PATH/SettingConfig.xml RecordPath "$RecordPath"
     updateXml $CDVR_DOCKER_PATH/SettingConfig.xml Prefix "$CDVR_PREFIX"
     updateXml $CDVR_DOCKER_PATH/SettingConfig.xml SwaggerDoc $SwaggerUI
+    updateXml $CDVR_DOCKER_PATH/SettingConfig.xml DiskReserveSpace $CDVR_KEEP_GB
 
     
     if  [ ! -n "$ClusterServer" ] ;then
