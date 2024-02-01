@@ -955,8 +955,11 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
 
 
     例:http://10.10.10.228:6006/111111111112_1_real.mp4?DataType=0&StreamType=0&CTags=test
+    
+    TokenType: 1:一次有效随机码，需先通过接口申请 2:RSA加密当前时间戳
 
     DataType和StreamType数值定义见1078协议9101
+
 
 ### GOV服务获取FMP4 HTTP流(历史)
 
@@ -967,6 +970,8 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
 
     例:http://10.10.10.228:6006/111111111112_1_1651745996_0.mp4?MediaType=0&StreamType=1&PlaybackMode=0&Multiple=1&DataSource=1&CTags=test
 
+    
+    TokenType: 1:一次有效随机码，需先通过接口申请 2:RSA加密当前时间戳
 
     MediaType、StreamType、PlaybackMode和Multiple数值定义见1078协议9201，DataSource为来源 0自动 1设备 2服务端缓存
     
@@ -978,6 +983,8 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
 
 
     例:http://10.10.10.228:6006/111111111112_1_real.flv?DataType=0&StreamType=0&CTags=test
+    
+    TokenType: 1:一次有效随机码，需先通过接口申请 2:RSA加密当前时间戳
 
     DataType和StreamType数值定义见1078协议9101
 
@@ -990,6 +997,8 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
 
     例:http://10.10.10.228:6006/111111111112_1_1651745996_0.flv?MediaType=0&StreamType=1&PlaybackMode=0&Multiple=1&DataSource=1&CTags=test
 
+    
+    TokenType: 1:一次有效随机码，需先通过接口申请 2:RSA加密当前时间戳
 
     MediaType、StreamType、PlaybackMode和Multiple数值定义见1078协议9201，DataSource为来源 0自动 1设备 2服务端缓存
 
