@@ -16,9 +16,10 @@ GET /Record/Start
 
 |Name|Location|Type|Required|Description|
 |---|---|---|---|---|
-|Sim|query|string| no |none|
-|Channel|query|string| no |none|
-|Protocol|query|integer| no |none|
+|Sim|query|string| yes |none|
+|Channel|query|string| yes |none|
+|Protocol|query|integer| no |0 808-2013 1 808-2019 2 GB28181|
+|CTags|query|string| no |none|
 
 > Response Examples
 
@@ -46,9 +47,9 @@ GET /Record/Stop
 
 |Name|Location|Type|Required|Description|
 |---|---|---|---|---|
-|Sim|query|string| no |none|
-|Channel|query|string| no |none|
-|Protocol|query|integer| no |none|
+|Sim|query|string| yes |none|
+|Channel|query|string| yes |none|
+|Protocol|query|integer| no |0 808-2013 1 808-2019 2 GB28181|
 
 > Response Examples
 
@@ -81,7 +82,8 @@ POST /Record/BatchStart or /Record/Open
     "channel": [
       "string"
     ],
-    "protocol": 0
+    "protocol": 0,
+    "cTags": "string"
   }
 ]
 ```
