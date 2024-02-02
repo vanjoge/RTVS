@@ -143,6 +143,8 @@ function init_system_files_path()
     fi
     
     
+
+    
     # 创建rtvs目录
     if [[ ! -d $DOCKER_RTVSWEB_PATH ]]; then
         mkdir $DOCKER_RTVSWEB_PATH
@@ -186,6 +188,19 @@ function init_system_files_path()
         fi
     else
         rm $DOCKER_RTVSWEB_PATH/certificate.pfx 2>/dev/null
+    fi
+    
+    # 复制CARsaPem
+    if [ -n "$RTVS_CARSA_PEMKEY_PATH" ]; then
+        if [[ -f "$RTVS_CARSA_PEMKEY_PATH" ]]; then
+            echo "拷贝RSA文件： $RTVS_CARSA_PEMKEY_PATH $DOCKER_RTVSWEB_PATH/token2rsa.pem"
+            cp -f $RTVS_CARSA_PEMKEY_PATH $DOCKER_RTVSWEB_PATH/token2rsa.pem
+        else
+            echo "缺少$RTVS_CARSA_PEMKEY_PATH文件...已退出安装!"
+            exit 1
+        fi
+    else
+        rm $DOCKER_RTVSWEB_PATH/token2rsa.pem 2>/dev/null
     fi
     
     # 复制集群管理文件
@@ -797,7 +812,7 @@ function update_config(){
     
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml ClientAuth $RTVS_CLIENT_AUTH
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml TokenTimeoutSec $RTVS_TOKEN_TIMEOUT_SEC
-    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml CARsaPem $RTVS_CARSA_PEMKEY_PATH
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml CARsaPem "/MyData/token2rsa.pem"
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml CARsaTimeoutSec $RTVS_CARSA_TIMEOUT_SEC
 
 
