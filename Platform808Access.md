@@ -1149,3 +1149,344 @@ RTVS转码MP4并上传FTP完成后，会通过TranscodeUploadStart指定的方�
   "expires": 1699869390
 }
 ```
+
+
+### 设备音视频属性
+
+接口地址：
+
+    [集群管理地址]ProxyTag/[Tag]/1004/api/Server/SetAVParam
+	
+	808平台需要在设备上线时候发送查询音视频属性指令，收到结果后将结果按照下面调用此接口。
+
+    
+    
+
+#### 参数
+
+|参数名|位置|类型|必须|说明|
+|---|---|---|---|---|
+|sim|query|string| yes ||
+|body|body|[JTRTAVParametersUpload](#schemajtrtavparametersupload)| yes |json|
+
+> Body 参数
+
+```json
+{
+  "audioCodeType": 0,
+  "audioChannels": 0,
+  "audioSamplingRate": 0,
+  "audioSamplingDigit": 0,
+  "audioFrameLength": 0,
+  "audioOut": 0,
+  "videoCodeType": 0,
+  "audioMaxChannels": 0,
+  "videoMaxChannels": 0
+}
+```
+
+#### 返回数据
+
+|HTTP状态码 ||说明|数据类型|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|boolean|
+> 例
+
+> 200 Response
+
+```json
+true
+```
+
+
+
+
+### 录像列表应答
+
+接口地址：
+
+    [集群管理地址]ProxyTag/[Tag]/1004/api/Server/SetOrderAck
+	
+    RTVS向808平台发送查询录像列表指令后，808平台收到设备应答后，应当将应答结果调用此接口写入。
+
+#### 参数
+
+|参数名|位置|类型|必须|说明|
+|---|---|---|---|---|
+|msg_id|query|string| yes |指令id|
+|body|body|[VideoOrderAck](#schemavideoorderack)| yes |json|
+
+> Body 参数
+
+```json
+{
+  "status": 0,
+  "videoList": {
+    "serialNumber": 0,
+    "fileCount": 0,
+    "fileList": [
+      {
+        "channel": 0,
+        "startTime": "2019-08-24 14:15:22",
+        "endTime": "2019-08-24 14:15:22",
+        "alarm": 0,
+        "mediaType": 0,
+        "streamType": 0,
+        "storageType": 0,
+        "fileSize": 0
+      }
+    ]
+  },
+  "data": "string",
+  "errMessage": "string"
+}
+```
+
+
+#### 返回数据
+
+|HTTP状态码 ||说明|数据类型|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|boolean|
+> 例
+
+> 200 Response
+
+```json
+true
+```
+
+
+### 设备能力配置
+
+接口地址：
+
+    [集群管理地址]ProxyTag/[Tag]/1004/api/Server/SetDeviceConfig
+	
+	此处主要是为了解决不同厂家设备实现不一致的问题，可按照设备配置对讲数据是否需要海思头，同时支持多少路实时或历史视频传输等。
+    
+
+#### 参数
+
+|参数名|位置|类型|必须|说明|
+|---|---|---|---|---|
+|sim|query|string| yes ||
+|body|body|[SimLimiteConfig](#schemasimlimiteconfig)| yes |json|
+
+> Body 参数
+
+```json
+{
+  "m_sim_max_connection_all": 0,
+  "m_sim_max_connection_realplay": 0,
+  "m_sim_max_connection_backplay": 0,
+  "m_sim_max_connection_talk": 0,
+  "m_sim_max_connection_listen": 0,
+  "m_channel_max_connection_all": 0,
+  "m_channel_max_connection_realplay": 0,
+  "m_channel_max_connection_backplay": 0,
+  "m_channel_max_connection_talk": 0,
+  "m_channel_max_connection_listen": 0,
+  "m_is_talkback_listen_meanwhile": true,
+  "m_is_channel_real_back_meanwhile": true,
+  "m_is_channel_real_streamtype_meanwhile": true,
+  "m_is_absolute_timestamp": true,
+  "m_start_absolute_timestamp": 0,
+  "m_protocol_type": 0,
+  "m_b_frame_type": 0,
+  "m_force_pt_video_main": 0,
+  "m_force_pt_video_sub": 0,
+  "m_force_pt_audio_main": 0,
+  "m_force_pt_audio_sub": 0,
+  "m_cache_vdt": true,
+  "m_last_pt_video_main": 0,
+  "m_last_pt_audio_main": 0,
+  "m_audio_frame_length_main": 0,
+  "m_is_audio_have_haisi_header_main": true,
+  "m_last_pt_video_sub": 0,
+  "m_last_pt_audio_sub": 0,
+  "m_audio_frame_length_sub": 0,
+  "m_is_audio_have_haisi_header_sub": true,
+  "m_last_talk_pt": 0,
+  "m_talk_frame_length": 0,
+  "m_is_talk_have_haisi_header": true
+}
+```
+
+
+#### 返回数据
+
+|HTTP状态码 ||说明|数据类型|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|boolean|
+> 例
+
+> 200 Response
+
+```json
+true
+```
+
+
+### 磁盘空间配置
+
+接口地址：
+
+    [集群管理地址]ProxyTag/[Tag]/1004/api/Server/SetStorageSetting
+	
+    此处按照1077功能要求配置磁盘空间使用规则，需要平台将配置写入，RTVS会按照配置的值进行磁盘空间管理。
+
+
+#### 参数
+
+|参数名|位置|类型|必须|说明|
+|---|---|---|---|---|
+|body|body|[JTStorageSettings](#schemajtstoragesettings)| yes |json|
+
+> Body 参数
+
+```json
+{
+  "beyondFlag": 0,
+  "alarmThreshold": 0
+}
+```
+
+
+#### 返回数据
+
+|HTTP状态码 ||说明|数据类型|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|boolean|
+> 例
+
+> 200 Response
+
+```json
+true
+```
+
+
+### 时效口令
+
+
+接口地址：
+
+    [集群管理地址]ProxyTag/[Tag]/1004/api/Server/SetAuthorizeCode1 
+    [集群管理地址]ProxyTag/[Tag]/1004/api/Server/SetAuthorizeCode2 
+
+	
+	与政府平台交互的时效口令信息，需要平台在更新时写入
+
+    
+
+#### 参数
+
+|参数名|位置|类型|必须|说明|
+|---|---|---|---|---|
+|authorizeCode|query|string| yes |时效口令|
+
+
+#### 返回数据
+
+|HTTP状态码 ||说明|数据类型|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|boolean|
+> 例
+
+> 200 Response
+
+```json
+true
+```
+
+
+### 政府平台音实时音视频请求
+
+接口地址：
+
+    [集群管理地址]ProxyTag/[Tag]/1004/api/Server/SetGovRealVideoRequest
+	
+	政府平台音视频请求会先从809链路发送消息，网关返回服务器信息后政府平台才会请求视频流，RTVS收到的请求无法确认是实时还是历史，所以需要网关调用此接口将其他信息写入。
+
+
+#### 参数
+
+|参数名|位置|类型|必须|说明|
+|---|---|---|---|---|
+|body|body|[GovRealVideoMsg](#schemagovrealvideomsg)| yes |json|
+
+> Body 参数
+
+```json
+{
+  "plateCode": "string",
+  "plateColor": 0,
+  "channel": 0,
+  "dataType": 0,
+  "avitemType": 0,
+  "sim": "string",
+  "cTags": "string"
+}
+```
+
+
+#### 返回数据
+
+|HTTP状态码 ||说明|数据类型|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|boolean|
+> 例
+
+> 200 Response
+
+```json
+true
+```
+
+
+### 政府平台音历史音视频请求
+
+接口地址：
+
+    [集群管理地址]ProxyTag/[Tag]/1004/api/Server/SetGovRealVideoRequest
+	
+	政府平台音视频请求会先从809链路发送消息，网关返回服务器信息后政府平台才会请求视频流，RTVS收到的请求无法确认是实时还是历史，所以需要网关调用此接口将其他信息写入。
+
+
+#### 参数
+
+|参数名|位置|类型|必须|说明|
+|---|---|---|---|---|
+|body|body|[GovPlayBackMsg](#schemagovplaybackmsg)| yes |json|
+
+> Body 参数
+
+```json
+{
+  "plateCode": "string",
+  "plateColor": 0,
+  "channel": 0,
+  "dataType": 0,
+  "streamType": 0,
+  "playbackStartTime": 0,
+  "playbackEndTime": 0,
+  "sim": "string",
+  "avitemType": 0,
+  "cTags": "string"
+}
+```
+
+
+#### 返回数据
+
+|HTTP状态码 ||说明|数据类型|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|boolean|
+> 例
+
+> 200 Response
+
+```json
+true
+```
