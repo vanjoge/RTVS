@@ -6,4 +6,5 @@
   <Prefix>ydr</Prefix>
   <SwaggerDoc>true</SwaggerDoc>
   <DiskReserveSpace>3</DiskReserveSpace>
+  <CARsaPem></CARsaPem>
 </Setting>

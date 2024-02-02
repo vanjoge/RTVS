@@ -89,6 +89,7 @@ function update_config(){
     updateXml $CDVR_DOCKER_PATH/SettingConfig.xml Prefix "$CDVR_PREFIX"
     updateXml $CDVR_DOCKER_PATH/SettingConfig.xml SwaggerDoc $SwaggerUI
     updateXml $CDVR_DOCKER_PATH/SettingConfig.xml DiskReserveSpace $CDVR_KEEP_GB
+    updateXml $CDVR_DOCKER_PATH/SettingConfig.xml CARsaPem $RTVS_CARSA_PEMKEY_PATH
 
     
     if  [ ! -n "$ClusterServer" ] ;then
