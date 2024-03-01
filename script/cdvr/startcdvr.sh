@@ -156,7 +156,7 @@ function docker_run(){
             docker run  \
             --name $CDVR_DOCKER_CONTAINER_NAME \
             --net $DOCKER_NETWORK \
-            --ip $LocIP\
+            --ip $DOCKER_CDVR_IP\
             --restart always  \
             --privileged=true  \
             -m $CDVR_MEMORY_LIMIT \
@@ -169,7 +169,7 @@ function docker_run(){
             docker run  \
             --name $CDVR_DOCKER_CONTAINER_NAME \
             --net $DOCKER_NETWORK \
-            --ip $LocIP\
+            --ip $DOCKER_CDVR_IP\
             --restart always  \
             --privileged=true  \
             -v $CDVR_DOCKER_PATH:/MyData \
