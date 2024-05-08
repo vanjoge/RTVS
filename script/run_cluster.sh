@@ -2,6 +2,7 @@
 echo "当前执行文件......$0"
 
 source default_args.sh
+unalias cp
 
  
  
@@ -93,7 +94,7 @@ function init_system_files_path()
     # 复制log4.config
     if [[ -f "./log4.config" ]]; then
         echo "拷贝一份日志配置文件： ./log4.config $DOCKER_CLUSTER_PATH/log4.config"
-        cp  -f ./log4.config $DOCKER_CLUSTER_PATH/log4.config
+        cp -f ./log4.config $DOCKER_CLUSTER_PATH/log4.config
     else
         echo "缺少./log4.config文件...已退出安装!"
         exit

@@ -3,6 +3,7 @@ echo "当前执行文件......$0"
 
 
 source default_args.sh
+unalias cp
 
 ##################################临时变量定义##################################
 DOCKER_RUN_ID=0
@@ -122,7 +123,7 @@ function init_system_files_path()
         # 复制nginx.conf文件
         if [[ -f "./nginx/nginx.conf" ]]; then
             echo "拷贝一份nginx.conf：cp ./nginx/nginx.conf $DOCKER_NGINX_PATH/nginx.conf"
-            cp ./nginx/nginx.conf $DOCKER_NGINX_PATH/nginx.conf
+            cp -f ./nginx/nginx.conf $DOCKER_NGINX_PATH/nginx.conf
         else
             echo "缺少./nginx/nginx.conf文件...已退出安装!"
             exit 1
@@ -135,7 +136,7 @@ function init_system_files_path()
         # 复制未加密nginx.conf文件
         if [[ -f "./nginx/nginx_nowss.conf" ]]; then
             echo "拷贝一份nginx_nowss.conf：cp ./nginx/nginx_nowss.conf $DOCKER_NGINX_PATH/nginx.conf"
-            cp ./nginx/nginx_nowss.conf $DOCKER_NGINX_PATH/nginx.conf
+            cp -f ./nginx/nginx_nowss.conf $DOCKER_NGINX_PATH/nginx.conf
         else
             echo "缺少./nginx/nginx_nowss.conf文件...已退出安装!"
             exit 1
@@ -153,7 +154,7 @@ function init_system_files_path()
     if [[ -f "./rtvsMyData/VersionConfig.xml" ]]; then
         rm -f $DOCKER_RTVSWEB_PATH/VersionConfig.xml 2>/dev/null
         echo "拷贝一份XML配置文件：cp ./rtvsMyData/VersionConfig.xml $DOCKER_RTVSWEB_PATH/VersionConfig.xml"
-        cp ./rtvsMyData/VersionConfig.xml $DOCKER_RTVSWEB_PATH/VersionConfig.xml
+        cp -f ./rtvsMyData/VersionConfig.xml $DOCKER_RTVSWEB_PATH/VersionConfig.xml
     else
         echo "缺少./rtvsMyData/VersionConfig.xml文件...已退出安装!"
         exit 1
@@ -162,7 +163,7 @@ function init_system_files_path()
     if [[ -f "./rtvsMyData/SettingConfig.xml" ]]; then
         rm -f $DOCKER_RTVSWEB_PATH/SettingConfig.xml 2>/dev/null
         echo "拷贝一份XML配置文件：cp ./rtvsMyData/SettingConfig.xml $DOCKER_RTVSWEB_PATH/SettingConfig.xml"
-        cp ./rtvsMyData/SettingConfig.xml $DOCKER_RTVSWEB_PATH/SettingConfig.xml
+        cp -f ./rtvsMyData/SettingConfig.xml $DOCKER_RTVSWEB_PATH/SettingConfig.xml
         
     else
         echo "缺少./rtvsMyData/SettingConfig.xml文件...已退出安装!"
@@ -171,7 +172,7 @@ function init_system_files_path()
     # 复制log4.config（第一次做完全复制，若有变动需要手动修改）
     if [[ -f "./rtvsMyData/log4.config" ]]; then
         echo "拷贝一份日志配置文件： ./rtvsMyData/log4.config $DOCKER_RTVSWEB_PATH/log4.config"
-        cp  -f ./rtvsMyData/log4.config $DOCKER_RTVSWEB_PATH/log4.config
+        cp -f ./rtvsMyData/log4.config $DOCKER_RTVSWEB_PATH/log4.config
     else
         echo "缺少./log4.config文件...已退出安装!"
         exit 1
@@ -210,7 +211,7 @@ function init_system_files_path()
     if [[ -f "./rtvsMyData/Config/ClusterServer.json" ]]; then
         rm -f $DOCKER_RTVSWEB_PATH/Config/ClusterServer.json 2>/dev/null
         echo "拷贝ClusterServer.json：./rtvsMyData/Config/ClusterServer.json $DOCKER_RTVSWEB_PATH/Config/ClusterServer.json"
-        cp ./rtvsMyData/Config/ClusterServer.json $DOCKER_RTVSWEB_PATH/Config/ClusterServer.json
+        cp -f ./rtvsMyData/Config/ClusterServer.json $DOCKER_RTVSWEB_PATH/Config/ClusterServer.json
     else
         echo "缺少./Config/ClusterServer.json文件...已退出安装!"
         exit 1
@@ -325,7 +326,7 @@ function docker_mysql_checkAndInstall(){
     #创建数据库表检查
     echo "正在进行MYSQL数据库表检查"
     cd mysql
-    cp docker_mysql_create_table.sh $MYSQL_DOCKER_PATH/scripts/docker_mysql_create_table.sh
+    cp -f docker_mysql_create_table.sh $MYSQL_DOCKER_PATH/scripts/docker_mysql_create_table.sh
     chmod a+x $MYSQL_DOCKER_PATH/scripts/docker_mysql_create_table.sh
     docker exec -it $MYSQL_DOCKER_CONTAINER_NAME  /bin/bash -c "sh /etc/mysql/scripts/docker_mysql_create_table.sh"
     rm -f $MYSQL_DOCKER_PATH/scripts/docker_mysql_create_table.sh
@@ -359,7 +360,7 @@ function docker_mysql_install_test()
     echo "脚本执行Mysql信息验证:..."
     if [[ -f "./docker_mysql_validator.sh" ]]; then
         # 复制脚本到验证路径并授权
-        cp  docker_mysql_validator.sh $MYSQL_DOCKER_PATH/scripts/docker_mysql_validator.sh
+        cp -f docker_mysql_validator.sh $MYSQL_DOCKER_PATH/scripts/docker_mysql_validator.sh
         chmod a+x $MYSQL_DOCKER_PATH/scripts/docker_mysql_validator.sh
         # 进入容器执行脚本
         docker exec -it $MYSQL_DOCKER_CONTAINER_NAME  /bin/bash -c "sh /etc/mysql/scripts/docker_mysql_validator.sh"

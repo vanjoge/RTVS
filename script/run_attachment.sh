@@ -2,6 +2,7 @@
 echo "当前执行文件......$0"
 
 source default_args.sh
+unalias cp
  
 if [ ! -n "$LocWebFileUrl" ] ; then
     LocWebFileUrl="http://$IPADDRESS:$DOCKER_ATTACHMENT_HTTP_PORT/alarmfiles"

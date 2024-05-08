@@ -2,6 +2,7 @@
 echo "当前执行文件......$0"
 
 source ../default_args.sh
+unalias cp
 
 IS_EXISTS_MYSQL_IMAGE_NAME="false"
 IS_EXISTS_MYSQL_IMAGE_TAG="false"
@@ -45,7 +46,7 @@ if [[ $IS_EXISTS_MYSQL_CONTAINER == "false" ]]; then
         echo "检查到$MYSQL_DOCKER_CONTAINER_NAME容器尚未创建!"
         echo "创建$MYSQL_DOCKER_CONTAINER_NAME容器......."
         # 拷贝可执行文件并授权
-        cp docker_mysql_db_init.sh $MYSQL_DOCKER_PATH/scripts/docker_mysql_db_init.sh
+        cp -f docker_mysql_db_init.sh $MYSQL_DOCKER_PATH/scripts/docker_mysql_db_init.sh
         chmod a+x $MYSQL_DOCKER_PATH/scripts/docker_mysql_db_init.sh
         # 执行容器创建
         if [[ -f "$MYSQL_DOCKER_PATH/scripts/docker_mysql_db_init.sh" ]]; then
@@ -127,7 +128,7 @@ fi
 if [[ $IS_EXISTS_MYSQL_CONTAINER == "true" && $IS_EXISTS_MYSQL_CONTAINER_RUNGING == "true" ]]; then
     if [[ -f "./docker_mysql_upgrade.sh" ]]; then
         echo "检查到MySQL升级脚本，即将执行....."
-        cp docker_mysql_upgrade.sh $MYSQL_DOCKER_PATH/scripts/docker_mysql_upgrade.sh
+        cp -f docker_mysql_upgrade.sh $MYSQL_DOCKER_PATH/scripts/docker_mysql_upgrade.sh
         chmod a+x $MYSQL_DOCKER_PATH/scripts/docker_mysql_upgrade.sh
         echo "进入$MYSQL_DOCKER_CONTAINER_NAME容器执行升级脚本: docker exec -it $MYSQL_DOCKER_CONTAINER_NAME  /bin/bash -c 'sh /etc/mysql/scripts/docker_mysql_upgrade.sh'"
         # 进入容器并执行脚本：

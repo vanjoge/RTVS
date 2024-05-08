@@ -3,7 +3,7 @@ echo "当前执行文件......$0"
 
 
 source ../default_args.sh
-
+unalias cp
 RecordPath="/records"
 
 ###################################函数定义#######################################
@@ -24,7 +24,7 @@ function init_system_files_path()
     if [[ -f "./MyData/SettingConfig.xml" ]]; then
         rm -f $CDVR_DOCKER_PATH/SettingConfig.xml 2>/dev/null
         echo "拷贝一份XML配置文件：cp ./MyData/SettingConfig.xml $CDVR_DOCKER_PATH/SettingConfig.xml"
-        cp ./MyData/SettingConfig.xml $CDVR_DOCKER_PATH/SettingConfig.xml
+        cp -f ./MyData/SettingConfig.xml $CDVR_DOCKER_PATH/SettingConfig.xml
         
     else
         echo "缺少./MyData/SettingConfig.xml文件...已退出安装!"
@@ -33,7 +33,7 @@ function init_system_files_path()
     # 复制log4.config（第一次做完全复制，若有变动需要手动修改）
     if [[ -f "./MyData/log4.config" ]]; then
         echo "拷贝一份日志配置文件： ./MyData/log4.config $CDVR_DOCKER_PATH/log4.config"
-        cp  -f ./MyData/log4.config $CDVR_DOCKER_PATH/log4.config
+        cp -f ./MyData/log4.config $CDVR_DOCKER_PATH/log4.config
     else
         echo "缺少./log4.config文件...已退出安装!"
         exit 1
@@ -59,7 +59,7 @@ function init_system_files_path()
     if [[ -f "./MyData/Config/ClusterServer.json" ]]; then
         rm -f $CDVR_DOCKER_PATH/Config/ClusterServer.json 2>/dev/null
         echo "拷贝ClusterServer.json：./MyData/Config/ClusterServer.json $CDVR_DOCKER_PATH/Config/ClusterServer.json"
-        cp ./MyData/Config/ClusterServer.json $CDVR_DOCKER_PATH/Config/ClusterServer.json
+        cp -f ./MyData/Config/ClusterServer.json $CDVR_DOCKER_PATH/Config/ClusterServer.json
     else
         echo "缺少./Config/ClusterServer.json文件...已退出安装!"
         exit 1
@@ -92,6 +92,9 @@ function update_config(){
     
     if [[ "$RTVS_NETWORK_HOST" == "true" ]]; then
         RTVSIP="127.0.0.1"
+        updateXml $CDVR_DOCKER_PATH/SettingConfig.xml WebUrl "http://127.0.0.1:$CDVR_DOCKER_HTTP_PORT"
+    else
+        updateXml $CDVR_DOCKER_PATH/SettingConfig.xml WebUrl "http://$DOCKER_GATEWAY_HOST:$CDVR_DOCKER_HTTP_PORT"
     fi
 
 
@@ -103,6 +106,7 @@ function update_config(){
     updateXml $CDVR_DOCKER_PATH/SettingConfig.xml SwaggerDoc $SwaggerUI
     updateXml $CDVR_DOCKER_PATH/SettingConfig.xml DiskReserveSpace $CDVR_KEEP_GB
     updateXml $CDVR_DOCKER_PATH/SettingConfig.xml CARsaPem "/MyData/token2rsa.pem"
+    updateXml $CDVR_DOCKER_PATH/SettingConfig.xml Ver $RTVSWEB_VERSION
 
     
     if  [ ! -n "$ClusterServer" ] ;then

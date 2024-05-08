@@ -12,6 +12,7 @@ function update_dburl()
 echo "当前执行文件......$0"
 
 source ../default_args.sh
+unalias cp
 
 IS_EXISTS_GRAFANA_IMAGE_NAME="false"
 IS_EXISTS_GRAFANA_CONTAINER="false"

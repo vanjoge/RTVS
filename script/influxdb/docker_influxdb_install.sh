@@ -9,6 +9,7 @@ START_CONTAINER_CHECK_CURRENT=1
 #传入表示映射出端口
 #TSDB_Server_PORT
 source ../default_args.sh
+unalias cp
 
 # ========================下载镜像======================================
 for i in [ `docker images ` ]; do
@@ -36,8 +37,8 @@ if [[ $IS_EXISTS_INFLUXDB_CONTAINER == "false" ]]; then
         fi
     done
     if [[ $IS_EXISTS_INFLUXDB_CONTAINER == "false" ]]; then
-        cp docker_influxdb_create_user.sh $TSDB_DOCKER_PATH/scripts/docker_influxdb_create_user.sh
-        cp influxdb.conf $TSDB_DOCKER_PATH/influxdb.conf
+        cp -f docker_influxdb_create_user.sh $TSDB_DOCKER_PATH/scripts/docker_influxdb_create_user.sh
+        cp -f influxdb.conf $TSDB_DOCKER_PATH/influxdb.conf
         chmod a+x $TSDB_DOCKER_PATH/scripts/docker_influxdb_create_user.sh
         if [[ -f "$TSDB_DOCKER_PATH/scripts/docker_influxdb_create_user.sh" ]]; then
             echo "检查到influxdb容器尚未创建!"

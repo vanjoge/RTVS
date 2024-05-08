@@ -1,6 +1,7 @@
 #! /bin/bash
 
 source ../default_args.sh
+unalias cp
 
 #替换文件字符串
 #参数1.文件 2.查找字符串 3.替换字符串
@@ -210,34 +211,34 @@ function init_base(){
     update=0
     if [ ! -f "$WEBRTC_DOCKER_PATH/config.js" ]; then
         update=1
-        cp config.js.tmp $WEBRTC_DOCKER_PATH/config.js
+        cp -f config.js.tmp $WEBRTC_DOCKER_PATH/config.js
     else
         diff config.js.tmp $WEBRTC_DOCKER_PATH/config.js
         if [ $? -ne 0 ]; then
             update=1
-            cp config.js.tmp $WEBRTC_DOCKER_PATH/config.js
+            cp -f config.js.tmp $WEBRTC_DOCKER_PATH/config.js
         fi
     fi
     
     if [ ! -f "$WEBRTC_DOCKER_PATH/source/server.js" ]; then
         update=1
-        cp server.js $WEBRTC_DOCKER_PATH/source/server.js
+        cp -f server.js $WEBRTC_DOCKER_PATH/source/server.js
     else
         diff server.js $WEBRTC_DOCKER_PATH/source/server.js
         if [ $? -ne 0 ]; then
             update=1
-            cp server.js $WEBRTC_DOCKER_PATH/source/server.js
+            cp -f server.js $WEBRTC_DOCKER_PATH/source/server.js
         fi
     fi
     
     if [ ! -f "$WEBRTC_DOCKER_PATH/source/lib/Room.js" ]; then
         update=1
-        cp Room.js $WEBRTC_DOCKER_PATH/source/lib/Room.js
+        cp -f Room.js $WEBRTC_DOCKER_PATH/source/lib/Room.js
     else
         diff Room.js $WEBRTC_DOCKER_PATH/source/lib/Room.js
         if [ $? -ne 0 ]; then
             update=1
-            cp Room.js $WEBRTC_DOCKER_PATH/source/lib/Room.js
+            cp -f Room.js $WEBRTC_DOCKER_PATH/source/lib/Room.js
         fi
     fi
     if [[ $update -eq 1 ]]; then

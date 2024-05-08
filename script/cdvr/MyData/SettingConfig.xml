@@ -7,4 +7,6 @@
   <SwaggerDoc>true</SwaggerDoc>
   <DiskReserveSpace>3</DiskReserveSpace>
   <CARsaPem></CARsaPem>
+  <WebUrl></WebUrl>
+  <Ver></Ver>
 </Setting>

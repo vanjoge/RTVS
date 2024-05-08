@@ -2,6 +2,7 @@
 echo "当前执行文件......$0"
 
 source default_args.sh
+unalias cp
 
   
 function updateXml()
