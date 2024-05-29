@@ -497,6 +497,7 @@ function update_nginx()
     val7=`echo "$8"| sed 's:\/:\\\/:g'`
     val8=`echo "$9"| sed 's:\/:\\\/:g'`
     val9=`echo "${10}"| sed 's:\/:\\\/:g'`
+    val10=`echo "${11}"| sed 's:\/:\\\/:g'`
     echo "正在修改nginx配置文件:$1,on_play:$2,on_play_done:$3"
     sed -i "s/on_play .*/on_play $val1/g" $1
     sed -i "s/on_play_done .*/on_play_done $val2/g" $1
@@ -507,6 +508,7 @@ function update_nginx()
     sed -i "s/172.29.108.247/$val7/g" $1
     sed -i "s/listen 1935;/listen $val8;/g" $1
     sed -i "s/listen 8080;/listen $val9;/g" $1
+    sed -i "s/server wss17000;/server $val10;/g" $1
     unset val1
     unset val2
     unset val3
@@ -516,6 +518,7 @@ function update_nginx()
     unset val7
     unset val8
     unset val9
+    unset val10
 }
 function update_cluster_conf()
 {
@@ -783,11 +786,13 @@ function update_config(){
         LocPort="$DOCKER_RTVSWEBHTTP_PORT"
         GbSipUrl="127.0.0.1:$DOCKER_GBSIP_HTTP_PORT"
         RtmpIP=$LocIP
+        Wss17000="127.0.0.1:$DOCKER_WEBSOCKET_PORT"
     else
         LocIP="$DOCKER_NETWORK_IPS.$DOCKER_RTVS_IP"
         LocPort="80"
         GbSipUrl=$DOCKER_GBSIP_IP
         RtmpIP=$DOCKER_NETWORK_IPS.$DOCKER_RTMP_IP
+        Wss17000="$DOCKER_CVCLUSTER_IP:$DOCKER_WEBSOCKET_PORT"
     fi
 
 
@@ -836,7 +841,8 @@ function update_config(){
     "$LocIP:$DOCKER_FMP4_PORT" \
     "$LocIP:$DOCKER_GOV_PORT" \
     "$GbSipUrl" \
-    $DOCKER_RTMP_PORT $DOCKER_RTMP_STATE_PORT
+    $DOCKER_RTMP_PORT $DOCKER_RTMP_STATE_PORT \
+    "$Wss17000"
 
 
     
