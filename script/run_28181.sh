@@ -91,8 +91,10 @@ function docker_run(){
     
     #启动28181
     if [[ "$RTVS_NETWORK_HOST" == "true" ]]; then
+        updateXml $DOCKER_GBSIP_PATH/Setting.xml RTVSAPI "http://127.0.0.1:$PORT_DEV_START/"
         docker run  --name $DOCKER_GBSIP_NAME --net host --restart always  --privileged=true  -v $DOCKER_GBSIP_PATH:/MyData  -e MyDataPath=/MyData -e ASPNETCORE_URLS="http://*:$DOCKER_GBSIP_HTTP_PORT" -d $DOCKER_GBSIP_IMAGE_NAME
     else
+        updateXml $DOCKER_GBSIP_PATH/Setting.xml RTVSAPI "http://172.29.108.11/"
         docker run  --name $DOCKER_GBSIP_NAME --net $DOCKER_NETWORK --ip $DOCKER_GBSIP_IP --restart always  --privileged=true  -v $DOCKER_GBSIP_PATH:/MyData  -e MyDataPath=/MyData -p $DOCKER_GBSIP_HTTP_PORT:80 -p $DOCKER_GBSIP_PORT:$DOCKER_GBSIP_PORT/tcp -p $DOCKER_GBSIP_PORT:$DOCKER_GBSIP_PORT/udp -d $DOCKER_GBSIP_IMAGE_NAME
     fi
 }

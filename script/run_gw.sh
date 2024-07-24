@@ -64,6 +64,7 @@ function docker_run(){
     fi
     #启动gw
     if [[ "$RTVS_NETWORK_HOST" == "true" ]]; then
+        updateXml $DOCKER_GW_PATH/SettingConfig.xml RTVSAPI "http://127.0.0.1:$PORT_DEV_START/api/GB/"
         docker run  --name $DOCKER_GW_NAME --net host --restart always  --privileged=true \
         --log-opt max-size=500m --log-opt max-file=3 \
         -v $DOCKER_GW_PATH:/MyData \
@@ -71,6 +72,7 @@ function docker_run(){
         -e ASPNETCORE_URLS="http://*:$DOCKER_808_HTTP_PORT" \
         -d $DOCKER_GW_IMAGE_NAME
     else
+        updateXml $DOCKER_GW_PATH/SettingConfig.xml RTVSAPI "http://172.29.108.11/api/GB/"
         docker run  --name $DOCKER_GW_NAME --net $DOCKER_NETWORK --ip $DOCKER_GW_IP --restart always  --privileged=true \
         --log-opt max-size=500m --log-opt max-file=3 \
         -p $DOCKER_808_PORT:9300 \
