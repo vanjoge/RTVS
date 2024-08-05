@@ -79,7 +79,7 @@ mysql_gbs_dbname="gbs"
 
 ###########移除旧版gbs############2022.11.11
 sql_table_is_exits="USE $mysql_gbs_dbname; 
-select 1  FROM information_schema.TABLES WHERE table_name ='T_SuperiorChannel';"
+select 1  FROM information_schema.TABLES WHERE table_name ='T_SuperiorChannel' AND TABLE_SCHEMA='$mysql_gbs_dbname';"
 host=$(mysql -u$mysql_root_user_name -p$mysql_root_user_pwd  -P$mysql_port -e"$sql_table_is_exits")
 if [ ! -n "$host" ] ;then
 	echo "移除旧版gbs...."
@@ -233,5 +233,49 @@ if [ ! -n "$host" ] ;then
 	mysql -u$mysql_root_user_name -p$mysql_root_user_pwd  -P$mysql_port -e"$sql_columns_insert"
 else
 	echo "列已存在"
+fi
+##########################################
+
+###########修改表结构############2024.8.15
+echo "检查gbs 240815更新...."
+
+
+sql_table_is_exits="USE $mysql_gbs_dbname; 
+select 1  FROM information_schema.TABLES WHERE table_name ='T_Group' AND TABLE_SCHEMA='$mysql_gbs_dbname';"
+host=$(mysql -u$mysql_root_user_name -p$mysql_root_user_pwd  -P$mysql_port -e"$sql_table_is_exits")
+if [ ! -n "$host" ] ;then
+	echo "执行240815更新"
+
+	sql_create_table="set character_set_results=utf8; set character_set_client=utf8; set collation_connection= utf8_general_ci; USE $mysql_gbs_dbname;
+	CREATE TABLE IF NOT EXISTS T_Group (
+	  GroupID varchar(50) NOT NULL COMMENT '分组ID(215业务分组 216虚拟组织)',
+	  ParentID varchar(50) NOT NULL COMMENT '上级ID',
+	  Name varchar(50) NOT NULL COMMENT '分组名称',
+	  Path varchar(1000) NOT NULL COMMENT '查询路径 /分割',
+	  PRIMARY KEY (GroupID) USING BTREE,
+	  INDEX `idx_path`(Path) USING BTREE
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '系统目录分组';
+
+	CREATE TABLE IF NOT EXISTS T_GroupBind (
+	  GroupID varchar(50) NOT NULL COMMENT '分组ID',
+	  DeviceID varchar(50) NOT NULL COMMENT '绑定设备ID',
+	  ChannelID varchar(50) NOT NULL COMMENT '绑定通道ID(0代表所有)',
+	  CustomChannelID varchar(50) NOT NULL COMMENT '自定义通道ID(上报用，如不自定义需与ChannelID保持一致)',
+	  PRIMARY KEY (GroupID, CustomChannelID) USING BTREE
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '分组绑定通道';
+
+	CREATE TABLE IF NOT EXISTS T_SuperiorGroup (
+	  SuperiorID varchar(50) NOT NULL COMMENT '上级ID',
+	  GroupID varchar(50) NOT NULL COMMENT '分组ID',
+	  HasChild bit(1) NOT NULL COMMENT '包含下级分组',
+	  PRIMARY KEY (SuperiorID, GroupID) USING BTREE
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT = '上级绑定分组';
+
+	ALTER TABLE T_Catalog MODIFY COLUMN ParentID varchar(255) NOT NULL COMMENT '上级ID' AFTER DeviceID;
+
+	ALTER TABLE T_Catalog ADD COLUMN DType int(11) NOT NULL DEFAULT 0 COMMENT '类型 0设备/1系统目录/2业务分组/3虚拟组织/1001 JT2GB' AFTER OfflineTime;
+	"
+
+	mysql -u$mysql_root_user_name -p$mysql_root_user_pwd  -P$mysql_port -e"$sql_create_table"
 fi
 ##########################################
