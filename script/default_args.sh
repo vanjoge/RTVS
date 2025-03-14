@@ -2,6 +2,9 @@
 
 ##################################变量定义##################################
 
+#DOCKERHUB
+DOCKER_IMG_PREFIX=${DOCKER_IMG_PREFIX:-""} #镜像前缀，可用来指定镜像服务器或代理地址，未指定时从dockerhub拉取
+
 #证书
 
 CV_PFX_PATH=${CV_PFX_PATH:-$CV_PXF_PATH} #兼容之前变量
@@ -74,11 +77,11 @@ RTVS_CARSA_TIMEOUT_SEC=${RTVS_CARSA_TIMEOUT_SEC:-"60"} #客户端RSA认证超时
 #
 DOCKER_CLUSTER_NAME=${DOCKER_CLUSTER_NAME:-"cvcluster-1"} #集群管理容器名称
 DOCKER_CLUSTER_PATH=${DOCKER_CLUSTER_PATH:-"/etc/service/$DOCKER_CLUSTER_NAME"} #集群管理容器配置文件路径
-DOCKER_CLUSTER_IMAGE_NAME=${DOCKER_CLUSTER_IMAGE_NAME:-"vanjoge/cvcluster:1.3.12"} #集群管理镜像名称和版本
+DOCKER_CLUSTER_IMAGE_NAME=${DOCKER_CLUSTER_IMAGE_NAME:-"${DOCKER_IMG_PREFIX}vanjoge/cvcluster:1.3.12"} #集群管理镜像名称和版本
 
 DOCKER_GBSIP_NAME=${DOCKER_GBSIP_NAME:-"gbsip-1"} #GBSIP容器名称
 DOCKER_GBSIP_PATH=${DOCKER_GBSIP_PATH:-"/etc/service/$DOCKER_GBSIP_NAME"} #GBSIP容器配置文件路径
-DOCKER_GBSIP_IMAGE_NAME=${DOCKER_GBSIP_IMAGE_NAME:-"vanjoge/gbsip:latest"} #GBSIP镜像名称和版本
+DOCKER_GBSIP_IMAGE_NAME=${DOCKER_GBSIP_IMAGE_NAME:-"${DOCKER_IMG_PREFIX}vanjoge/gbsip:latest"} #GBSIP镜像名称和版本
 DOCKER_GBSIP_ENABLESIPLOG=${DOCKER_GBSIP_ENABLESIPLOG:-"true"} #是否启用SIP日志
 DOCKER_GBSIP_ALIVETIMEOUTSEC=${DOCKER_GBSIP_ALIVETIMEOUTSEC:-180} #SIP信令超时时长
 DOCKER_GBSIP_RTVSAPI=${DOCKER_GBSIP_RTVSAPI:-"http://$DOCKER_NETWORK_IPS.11/"} #GBSIP访问RTVSAPI地址
@@ -86,7 +89,7 @@ DOCKER_GBSIP_RTVSAPI=${DOCKER_GBSIP_RTVSAPI:-"http://$DOCKER_NETWORK_IPS.11/"} #
 
 DOCKER_GW_NAME=${DOCKER_GW_NAME:-"tstgw808-1"} #808网关容器名称
 DOCKER_GW_PATH=${DOCKER_GW_PATH:-"/etc/service/$DOCKER_GW_NAME"} #808网关容器配置文件路径
-DOCKER_GW_IMAGE_NAME=${DOCKER_GW_IMAGE_NAME:-"vanjoge/gw808"} #808网关镜像名称和版本
+DOCKER_GW_IMAGE_NAME=${DOCKER_GW_IMAGE_NAME:-"${DOCKER_IMG_PREFIX}vanjoge/gw808"} #808网关镜像名称和版本
 
 
 DOCKER_REDIS_NAME=${DOCKER_REDIS_NAME:-"tstgw_redis"} #redis容器名称
@@ -94,27 +97,28 @@ DOCKER_REDIS_IMAGE_NAME=${DOCKER_REDIS_IMAGE_NAME:-"redis:4.0.10-alpine"} #redis
 
 DOCKER_GB2JT_NAME=${DOCKER_GB2JT_NAME:-"gb2jt-1"} #(已废弃)gb2jt容器名称
 DOCKER_GB2JT_PATH=${DOCKER_GB2JT_PATH:-"/etc/service/$DOCKER_GB2JT_NAME"} #(已废弃)gb2jt容器配置文件路径
-DOCKER_GB2JT_IMAGE_NAME=${DOCKER_GB2JT_IMAGE_NAME:-"vanjoge/gb2jt:1.3.4"} #(已废弃)gb2jt镜像名称和版本
+DOCKER_GB2JT_IMAGE_NAME=${DOCKER_GB2JT_IMAGE_NAME:-"${DOCKER_IMG_PREFIX}vanjoge/gb2jt:1.3.4"} #(已废弃)gb2jt镜像名称和版本
 #0 UDP 1 TCP
 GB28181_RTP_TYPE=${GB28181_RTP_TYPE:-"1"} #(已废弃)gb2jt的RTP用UDP还是TCP
 
 
 DOCKER_ATTACHMENT_NAME=${DOCKER_ATTACHMENT_NAME:-"attachment-1"} #主动安全附件服务容器名称
 DOCKER_ATTACHMENT_PATH=${DOCKER_ATTACHMENT_PATH:-"/etc/service/$DOCKER_ATTACHMENT_NAME"} #主动安全附件服务容器配置文件路径
-DOCKER_ATTACHMENT_IMAGE_NAME=${DOCKER_ATTACHMENT_IMAGE_NAME:-"vanjoge/attachment:1.3.11"} #主动安全附件服务镜像名称和版本
+DOCKER_ATTACHMENT_IMAGE_NAME=${DOCKER_ATTACHMENT_IMAGE_NAME:-"${DOCKER_IMG_PREFIX}vanjoge/attachment:1.3.11"} #主动安全附件服务镜像名称和版本
 DOCKER_ATTACHMENT_KafkaTopic=${DOCKER_ATTACHMENT_KafkaTopic:-"media-complete"} #主动安全附件服务KafkaTopic通知名称
 #KafkaServer KafkaServer连接字符串
 
 NGINX_DOCKER_PATH_TEMPLATE=${NGINX_DOCKER_PATH_TEMPLATE:-"/etc/service/nginx-rtmp-"} #nginx容器配置文件地址模板
 NGINX_DOCKER_CONTAINER_NAME_TEMPLATE=${NGINX_DOCKER_CONTAINER_NAME_TEMPLATE:-"nginx-rtmp-"} #nginx容器名称模板
-NGINX_DOCKER_IMAGE_NAME=${NGINX_DOCKER_IMAGE_NAME:-"vanjoge/nginx-rtmp:flvlive"} #nginx镜像名称和版本
+NGINX_DOCKER_IMAGE_NAME=${NGINX_DOCKER_IMAGE_NAME:-"${DOCKER_IMG_PREFIX}vanjoge/nginx-rtmp:flvlive"} #nginx镜像名称和版本
 
 MYSQL_DOCKER_PATH=${MYSQL_DOCKER_PATH:-"/etc/mysql"} #mysql容器配置文件地址
 MYSQL_DOCKER_CONTAINER_NAME=${MYSQL_DOCKER_CONTAINER_NAME:-"mysql5.7"} #mysql容器名称
 MYSQL_DOCKER_IMAGE_VERSION=${MYSQL_DOCKER_IMAGE_VERSION:-"5.7"} #mysql镜像版本
 #MYSQL_DOCKER_IMAGE_NAME mysql镜像名称 不传入会自动配置
 
-#以下传入有效值时不启动MYSQL实例，使用已有MYSQL服务
+#传入MYSQL_Server_IP和MYSQL_Server_PORT有效值时不启动MYSQL实例
+#仅传入MYSQL_Server_PORT表示映射出端口
 #MYSQL_Server_IP    mysql服务器地址
 #MYSQL_Server_PORT  mysql服务器端口
 
@@ -128,7 +132,7 @@ INFLUXDB_VERSION=${INFLUXDB_VERSION:-"1.7"} #tsdb镜像版本
 
 WEBRTC_DOCKER_CONTAINER_NAME=${WEBRTC_DOCKER_CONTAINER_NAME:-"sfu-mediasoup"} #webrtc容器名称
 WEBRTC_DOCKER_PATH=${WEBRTC_DOCKER_PATH:-"/etc/service/mediasoup"} #webrtc容器配置文件地址
-WEBRTC_DOCKER_IMAGE_NAME=${WEBRTC_DOCKER_IMAGE_NAME:-"vanjoge/mediasoup-demo:v3"} #webrtc镜像名称和版本
+WEBRTC_DOCKER_IMAGE_NAME=${WEBRTC_DOCKER_IMAGE_NAME:-"${DOCKER_IMG_PREFIX}vanjoge/mediasoup-demo:v3"} #webrtc镜像名称和版本
 WEBRTC_ONLY_TCP=${WEBRTC_ONLY_TCP:-"false"} #webrtc仅用TCP通信
 WEBRTC_ONLY_UDP=${WEBRTC_ONLY_UDP:-"false"} #webrtc仅用UDP通信
 
@@ -142,7 +146,7 @@ RUN_GRAFANA=${RUN_GRAFANA:-"false"} #是否启用grafana
 
 RTVSWEB_DOCKER_CONTAINER_NAME_TEMPLATE=${RTVSWEB_DOCKER_CONTAINER_NAME_TEMPLATE:-"rtvsweb-publish-"} #rtvsweb容器名称模板
 RTVSWEB_DOCKER_PATH_TEMPLATE=${RTVSWEB_DOCKER_PATH_TEMPLATE:-"/etc/service/rtvs-"} #rtvsweb容器配置文件地址模板
-RTVSWEB_DOCKER_IMAGE_NAME=${RTVSWEB_DOCKER_IMAGE_NAME:-"vanjoge/rtvs"} #rtvsweb镜像名称
+RTVSWEB_DOCKER_IMAGE_NAME=${RTVSWEB_DOCKER_IMAGE_NAME:-"${DOCKER_IMG_PREFIX}vanjoge/rtvs"} #rtvsweb镜像名称
 RTVSWEB_VERSION=${RTVSWEB_VERSION:-"1.3.12"} #rtvsweb镜像版本
 MatchSim12And20=${MatchSim12And20:-"true"} #是否自动视频12和20位SIM，为false时表示严格模式，12位和20位车机会认为是两个不同车机
 QueryVideoListTimeOutSec=${QueryVideoListTimeOutSec:-"60"} #查询历史视频列表超时时长(秒)
@@ -153,7 +157,7 @@ DomainToIP=${DomainToIP:-"true"} #下发给设备服务器信息时，是否自�
 CDVR_ENABLE=${CDVR_ENABLE:-"false"} #是否启用云端录像
 CDVR_DOCKER_PATH=${CDVR_DOCKER_PATH:-"/etc/service/rtvscdvr"} #云端录像容器配置文件地址
 CDVR_PREFIX=${CDVR_PREFIX:-"ydr"} #云端录像文件名前缀
-CDVR_DOCKER_IMAGE_NAME=${CDVR_DOCKER_IMAGE_NAME:-"vanjoge/rtvscdvr"} #云端录像镜像名称
+CDVR_DOCKER_IMAGE_NAME=${CDVR_DOCKER_IMAGE_NAME:-"${DOCKER_IMG_PREFIX}vanjoge/rtvscdvr"} #云端录像镜像名称
 CDVR_VERSION=${CDVR_VERSION:-"1.3.12"} #云端录像镜像版本
 #CDVR_MEMORY_LIMIT=${CDVR_MEMORY_LIMIT:-"8g"} #云端录像内存限制配置
 CDVR_DOCKER_CONTAINER_NAME=${CDVR_DOCKER_CONTAINER_NAME:-"rtvscdvr"} #云端录像容器名称

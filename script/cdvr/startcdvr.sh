@@ -92,9 +92,15 @@ function update_config(){
     
     if [[ "$RTVS_NETWORK_HOST" == "true" ]]; then
         RTVSIP="127.0.0.1"
-        updateXml $CDVR_DOCKER_PATH/SettingConfig.xml WebUrl "http://127.0.0.1:$CDVR_DOCKER_HTTP_PORT"
+    fi
+    if  [ ! -n "$FDWebIP" ] ;then
+        if [[ "$RTVS_NETWORK_HOST" == "true" ]]; then
+            updateXml $CDVR_DOCKER_PATH/SettingConfig.xml WebUrl "http://127.0.0.1:$CDVR_DOCKER_HTTP_PORT"
+        else
+            updateXml $CDVR_DOCKER_PATH/SettingConfig.xml WebUrl "http://$DOCKER_GATEWAY_HOST:$CDVR_DOCKER_HTTP_PORT"
+        fi
     else
-        updateXml $CDVR_DOCKER_PATH/SettingConfig.xml WebUrl "http://$DOCKER_GATEWAY_HOST:$CDVR_DOCKER_HTTP_PORT"
+        updateXml $CDVR_DOCKER_PATH/SettingConfig.xml WebUrl "http://$FDWebIP:$CDVR_DOCKER_HTTP_PORT"
     fi
 
 

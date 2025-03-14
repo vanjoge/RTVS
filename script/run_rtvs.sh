@@ -531,7 +531,9 @@ function get_free_port(){
     #获取可用端口
     while [ $PORT_DEV_START -lt $PORT_DEV_END ]
     do
-        lsof -i:$PORT_DEV_START
+        #lsof -i:$PORT_DEV_START
+        lsof -Pi:"$PORT_DEV_START" | awk 'NR>1 {print $(NF - 1)}' | grep -v "\->.*:$PORT_DEV_START"
+
         if [[ $? -eq 0 ]]; then
             #端口被占 继续寻找
             let "PORT_DEV_START++"
