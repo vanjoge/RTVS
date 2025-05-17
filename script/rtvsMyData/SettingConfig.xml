@@ -164,5 +164,7 @@
 	<CARsaPem></CARsaPem>
 	<CARsaTimeoutSec>60</CARsaTimeoutSec>
 	<TokenTimeoutSec>300</TokenTimeoutSec>
-	<CARsaPem></CARsaPem>
+	<IsEnableSnapshotService>true</IsEnableSnapshotService>
+	<GBPortMin>0</GBPortMin>
+	<GBPortMax>0</GBPortMax>
 </ConfigModel>

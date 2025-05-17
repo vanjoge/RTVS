@@ -824,6 +824,11 @@ function update_config(){
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml CARsaTimeoutSec $RTVS_CARSA_TIMEOUT_SEC
 
 
+    
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml GBPortMin $DOCKER_GB_SEND_PORT_MIN
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml GBPortMax $DOCKER_GB_SEND_PORT_MAX
+
+
     #
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml RTSPPort $DOCKER_RTSP_PORT
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml FDTCPPort $DOCKER_OCX_PORT
