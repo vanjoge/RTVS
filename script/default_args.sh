@@ -3,7 +3,7 @@
 ##################################变量定义##################################
 
 #DOCKERHUB
-DOCKER_IMG_PREFIX=${DOCKER_IMG_PREFIX:-""} #镜像前缀，可用来指定镜像服务器或代理地址，未指定时从dockerhub拉取
+DOCKER_IMG_PREFIX=${DOCKER_IMG_PREFIX:-"docker.cnb.cool/rtvsmirror/"} #镜像前缀，可用来指定镜像服务器或代理地址，未指定时从dockerhub拉取
 
 #证书
 

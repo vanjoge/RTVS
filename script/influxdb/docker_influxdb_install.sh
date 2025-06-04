@@ -5,12 +5,12 @@ IS_EXISTS_INFLUXDB_CONTAINER="false"
 IS_EXISTS_INFLUXDB_CONTAINER_RUNGING="false"
 START_CONTAINER_CHECK_MAX_TIMES=3
 START_CONTAINER_CHECK_CURRENT=1
-V_INFLUXDB_IMAGE_NAME=${INFLUXDB_IMAGE_NAME}:$INFLUXDB_VERSION
 
 #传入表示映射出端口
 #TSDB_Server_PORT
 source ../default_args.sh
 unalias cp
+V_INFLUXDB_IMAGE_NAME=${INFLUXDB_IMAGE_NAME}:$INFLUXDB_VERSION
 
 # ========================下载镜像======================================
 for i in [ `docker images ` ]; do
