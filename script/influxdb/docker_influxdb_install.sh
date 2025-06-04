@@ -15,7 +15,7 @@ unalias cp
 # ========================下载镜像======================================
 for i in [ `docker images ` ]; do
     
-    if [[ "$i" == "docker.io/influxdb" ||  "$i" == "influxdb" ||  "$i" == "$INFLUXDB_IMAGE_NAME"]]; then
+    if [[ "$i" == "docker.io/influxdb" ||  "$i" == "influxdb" ||  "$i" == "$INFLUXDB_IMAGE_NAME" ]]; then
         echo "$i"
         IS_EXISTS_INFLUXDB_IMAGE_NAME="true"
         break
