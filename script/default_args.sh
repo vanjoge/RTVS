@@ -128,6 +128,7 @@ MYSQL_DOCKER_IMAGE_VERSION=${MYSQL_DOCKER_IMAGE_VERSION:-"5.7"} #mysql镜像版�
 TSDB_DOCKER_CONTAINER_NAME=${TSDB_DOCKER_CONTAINER_NAME:-"influxdb"} #tsdb容器名称
 TSDB_DOCKER_PATH=${TSDB_DOCKER_PATH:-"/etc/influxdb"} #tsdb容器配置文件地址
 INFLUXDB_VERSION=${INFLUXDB_VERSION:-"1.7"} #tsdb镜像版本
+INFLUXDB_IMAGE_NAME=${INFLUXDB_IMAGE_NAME:-"${DOCKER_IMG_PREFIX}influxdb"} #tsdb镜像名称
 #传入TSDB_Server_IP和TSDB_Server_PORT有效值时不启动influxdb实例
 #仅传入TSDB_Server_PORT表示映射出端口
 #TSDB_Server_IP
@@ -203,10 +204,10 @@ if  [ ! -n "$MYSQL_DOCKER_IMAGE_NAME" ] ;then
     get_arch=`arch`
     if [[ $get_arch =~ "x86_64" ]];then
         echo "$get_arch"
-        MYSQL_DOCKER_IMAGE_NAME="mysql"
+        MYSQL_DOCKER_IMAGE_NAME="${DOCKER_IMG_PREFIX}mysql"
     else
         echo "$get_arch"
-        MYSQL_DOCKER_IMAGE_NAME="biarms/mysql"
+        MYSQL_DOCKER_IMAGE_NAME="${DOCKER_IMG_PREFIX}biarms/mysql"
         GRAFANA_VERSION="5.4.4"
     fi
 fi
