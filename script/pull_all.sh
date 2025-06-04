@@ -30,7 +30,7 @@ function main(){
         auto_pull_docker_image grafana/grafana:$GRAFANA_VERSION $PL_BASE
     fi
     
-    auto_pull_docker_image influxdb:$INFLUXDB_VERSION $PL_BASE
+    auto_pull_docker_image $INFLUXDB_IMAGE_NAME:$INFLUXDB_VERSION $PL_BASE
 
     auto_pull_docker_image $MYSQL_DOCKER_IMAGE_NAME:$MYSQL_DOCKER_IMAGE_VERSION $PL_BASE
 
