@@ -31,7 +31,7 @@ mysql -u$mysql_root_user_name -p$mysql_root_user_pwd -P$mysql_port -e"$sql_flush
 
 # 添加远程登录用户
 echo "Docker Mysql控制台创建远程用户....$mysql_remote_user_name"
-sql_create_user="CREATE USER '$mysql_remote_user_name'@'%' IDENTIFIED WITH mysql_native_password BY '$mysql_remote_user_pwd'"
+sql_create_user="CREATE USER '$mysql_remote_user_name'@'%' IDENTIFIED BY '$mysql_remote_user_pwd'"
 mysql -u$mysql_root_user_name -p$mysql_root_user_pwd -P$mysql_port -e"$sql_create_user"
 
 #为远程账号添加权限
