@@ -66,6 +66,7 @@ APIAuthorization=${APIAuthorization:-"12345678"} #API请求时添加的Authoriza
 RTVS_UPDATECHECK_DOCKER=${RTVS_UPDATECHECK_DOCKER:-"true"} #是否启动容器前自动pull一次(更新)镜像
 SwaggerUI=${SwaggerUI:-"true"} #是否开启SwaggerUI，当前SwaggerUI均需要登录才能访问，不会有未授权访问等安全扫描问题
 VerifyHttpVideo=${VerifyHttpVideo:-"false"} #控制http-flv,http-fmp4是否验证时效口令
+FlexCrossXml=${FlexCrossXml:-"false"} #是否启用GOV端口输出crossdomain.xml，主要Flex客户端使用
 
 #客户端认证
 RTVS_CLIENT_AUTH=${RTVS_CLIENT_AUTH:-"false"} #强制启用客户端认证

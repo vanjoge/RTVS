@@ -167,4 +167,5 @@
 	<IsEnableSnapshotService>true</IsEnableSnapshotService>
 	<GBPortMin>0</GBPortMin>
 	<GBPortMax>0</GBPortMax>
+	<CrossXml>false</CrossXml>
 </ConfigModel>

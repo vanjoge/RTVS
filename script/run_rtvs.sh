@@ -817,6 +817,7 @@ function update_config(){
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml SwaggerDoc $SwaggerUI
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml IsVerifyTimePassword $VerifyHttpVideo
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml RTSPRtpRtcpUdpPort $DOCKER_RTSP_PORT_RANGE_UDP
+    updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml CrossXml $FlexCrossXml
     
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml ClientAuth $RTVS_CLIENT_AUTH
     updateXml $DOCKER_RTVSWEB_PATH/SettingConfig.xml TokenTimeoutSec $RTVS_TOKEN_TIMEOUT_SEC
